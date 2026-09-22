@@ -1,72 +1,115 @@
 # WELLS — walkerwells.com
 
-An explorable personal-world website: part English estate, part adventure map, part cabinet of curiosities, part tiny game collection.
+WELLS is not an About Me page. It is an explorable personal world: part English estate, part capability archive, part map, part game, part cabinet of curiosities.
 
-## Current V1
+## Current world
 
-The homepage is not an About Me page. It is a place.
+### Estate
+- Rainy manor grounds with clickable destinations
+- Garage, Capability Archive, Map Room, Campfire clearing
+- Persistent collectibles and lore fragments
+- Hidden manual season control concealed in the moon
+- Winter, spring, summer and autumn palettes
+- Optional Storm Mode with lightning and heavier rain
+- Procedural ambient sound
 
-Visitors enter a rainy estate and explore:
+### Manor
+- Study / Bad Ideas Board
+- Dressing Room / Suit Up interaction
+- North Wing / winter world
+- South Wing / island world
+- Old lift to New York
+- Playable piano
+- Hidden armor room
+- Fireplace interaction and environmental lore
 
-- **Manor** — fire, piano, Library, Vault, and the deliberately unhelpful “Who is Walker?” terminal
-- **Library** — Field Notes, weather, routes, rituals, and oddities
-- **Vault** — Boss Fight / Adventure / Skill Unlock
-- **Garage** — track car, grand tourer, Range Rover, dirt bike, bike
-- **Mountain** — interactive ski backflip
-- **Water** — dive deeper toward a wreck and a hidden shark tooth
-- **Grounds** — sporting clays, archery, golf, and stable
-- **Hangar** — checklist switches and engine start
-- **Observatory** — constellation puzzle
-- **Collection** — 12 persistent artifacts saved in localStorage
+### Bad Ideas Board
+Each idea can be clicked through:
+- IDEA
+- APPROVED
+- ACTIVE
+- DONE
 
-## Run locally
+Statuses persist in localStorage.
 
-No build step is required.
+### Dressing Room
+Persistent outfit selection:
+- Dinner Jacket
+- Race Suit
+- Ski Kit
+- Wetsuit
+- Western
+- Spider Suit
 
-```bash
-python3 -m http.server 8080
-```
+### Capability Archive
+The original roadmap philosophy is expressed as physical relic drawers instead of presentation slides:
+- Boss Fights
+- Adventures
+- Skill Unlocks
+- Completed Santa Cruz 70.3 relic
+- Ski backflip relic
+- Locked future drawers
 
-Then open `http://localhost:8080`.
+### Map Room
+Pins for:
+- New York
+- California
+- Alaska
+- Hawaii
+- St. Moritz
+- BVI
+- Thailand
+- Mongolia
+
+New York opens into a hidden Upper East Side Christmas penthouse with a Bond-style mission terminal. The ship's wheel opens a hidden pirate chart room.
+
+### Garage
+Hierarchy of machines:
+- Ferrari / track
+- Aston / night
+- Range Rover / estate
+- Dirt bike / desert
+- Road bike
+- Kart / race school
+
+Cars open interactive night-drive scenes. The dirt bike opens a playable desert run.
+
+### Hidden worlds
+- Armory / knights / swords / blacksmithing
+- Pirate chart room
+- NYC Christmas penthouse
+- Weather controls hidden in the moon
+- Lore fragments scattered through the property
+
+### Campfire
+A deliberately non-competitive space with stars and small philosophical fragments.
+
+## State
+
+V3 intentionally uses localStorage for visitor-specific state:
+- collection
+- lore discovered
+- bad-idea statuses
+- current outfit
+- selected season
+- storm setting
+
+Supabase will be added when the site needs shared/global state rather than merely because a database is available.
 
 ## Deploy
 
-This is intentionally static, so it can be deployed directly to:
+GitHub Pages deploys automatically from `main` via `.github/workflows/pages.yml`.
 
-- Vercel
-- Netlify
-- Cloudflare Pages
-- GitHub Pages
+Custom domain:
 
-There is no framework and no backend requirement for V1.
+`walkerwells.com`
 
-## Domain
+The repository includes `CNAME`.
 
-Connect both:
+## Design law
 
-- `walkerwells.com`
-- `www.walkerwells.com`
+Do not turn this into a résumé.
 
-to the chosen hosting provider after deployment.
+Do not explain Walker when the visitor can infer him from the world.
 
-## Design principle
-
-**Do not turn this into an About Me website.**
-
-The world is the biography.
-
-The aesthetic target is somewhere between an English country estate, James Bond, Ralph Lauren, expedition travel, winter in the Alps, California, old money materials, machines, maps, firelight, rain, and things that are fun for no defensible reason.
-
-## Next build ideas
-
-- more detailed art and richer transitions
-- audio soundscape
-- day/night and seasonal changes
-- hidden passage behind the fireplace
-- NYC-at-Christmas elevator
-- dirt-bike microgame
-- proper constellation lines
-- global visitor discoveries
-- admin panel for adding rooms and artifacts
-- friend/family private unlocks
-- Supabase-backed global state where it actually adds value
+**The world is the biography.**
