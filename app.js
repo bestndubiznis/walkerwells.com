@@ -1,7 +1,7 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js';
-import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const state={
@@ -133,7 +133,7 @@ function estate(){
  clickable(box(1.2,7,.2,new THREE.MeshBasicMaterial({transparent:true,opacity:0}),0,3.5,.7),'manor','manor entrance');
  light('directional',0x8da6af,1.8,[10,18,12]);light('point',0xf2a65b,55,[0,4,2],18);
  particles('rain',state.storm?3200:1900);
- clickable(makeTextPanel('MAP ROOM',3.6,1.15),'map','map room').position.set(15,1.2,7);
+ const mp=makeTextPanel('MAP ROOM',3.6,1.15);mp.position.set(15,1.2,7);worldRoot.add(mp);clickable(mp,'map','map room');
 }
 function manor(){
  clearWorld();scene.background=new THREE.Color(0x0a0908);scene.fog.color.set(0x0a0908);scene.fog.density=.025;
@@ -152,7 +152,7 @@ function manor(){
  const doorData=[[-10,-6,'study','STUDY'],[10,-6,'wardrobe','DRESSING ROOM'],[-12,3,'archive','ARCHIVE'],[12,3,'map','MAP ROOM']];
  doorData.forEach(([x,z,a,l])=>{const d=box(3.2,5.6,.35,mat(0x3a2418,.72),x,2.8,z);clickable(d,a,l)});
  clickable(box(2.2,4,.5,mat(0x3d372e,.88),-4,2,-7.2),'armory','old armor');
- clickable(makeTextPanel('OLD LIFT',3.5,1.2),'nyc','old lift').position.set(8,2,-7.15);
+ const liftPanel=makeTextPanel('OLD LIFT',3.5,1.2);liftPanel.position.set(8,2,-7.15);worldRoot.add(liftPanel);clickable(liftPanel,'nyc','old lift');
  light('directional',0x718087,.8,[5,12,8]);light('point',0xa67842,20,[-10,4,-3],8);light('point',0xa67842,20,[10,4,-3],8);
 }
 function car(x,z,color,label,action){
@@ -168,8 +168,8 @@ function garage(){
  for(let x=-14;x<=14;x+=7)box(4.4,.12,1.1,new THREE.MeshBasicMaterial({color:0xe9e3cf}),x,7,-2);
  car(-9,-3,0x7d1717,'Ferrari / track','ride-race');car(0,-3,0x111313,'Aston / night','ride-aston');car(9,-3,0x1f3626,'Range Rover / estate','ride-rover');
  const moto=new THREE.Group();const frame=box(2.7,.35,.35,mat(0xc26424,.32,.45),-6,.9,4);const w1=sphere(.55,mat(0x090909,.85),-7.1,.55,4);w1.scale.z=.25;const w2=sphere(.55,mat(0x090909,.85),-4.9,.55,4);w2.scale.z=.25;clickable(frame,'moto','dirt bike');
- clickable(makeTextPanel('ROAD / CARBON',3.7,1.25),'bike','road bike').position.set(2,1.6,4);
- clickable(makeTextPanel('KART / SCHOOL',3.7,1.25),'kart','kart').position.set(9,1.6,4);
+ const bikePanel=makeTextPanel('ROAD / CARBON',3.7,1.25);bikePanel.position.set(2,1.6,4);worldRoot.add(bikePanel);clickable(bikePanel,'bike','road bike');
+ const kartPanel=makeTextPanel('KART / SCHOOL',3.7,1.25);kartPanel.position.set(9,1.6,4);worldRoot.add(kartPanel);clickable(kartPanel,'kart','kart');
  light('directional',0x78868b,1.4,[5,14,10]);light('point',0xffffff,26,[-9,5,-2],9);light('point',0xffffff,26,[0,5,-2],9);light('point',0xffffff,26,[9,5,-2],9);
 }
 function archive(){
