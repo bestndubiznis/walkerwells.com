@@ -36,17 +36,17 @@ renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.05;
+renderer.toneMappingExposure=1.28;
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 $('#world').appendChild(renderer.domElement);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x0a1010);
-scene.fog=new THREE.FogExp2(0x0b1110,.018);
+scene.fog=new THREE.FogExp2(0x17201d,.0135);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,1000);
 const composer=new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene,camera));
-const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.55,.72,.9);
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.38,.68,.92);
 composer.addPass(bloom);
 
 const clock=new THREE.Clock();
@@ -108,8 +108,8 @@ function particles(type='rain',count=2200){
  const pts=new THREE.Points(g,m);worldRoot.add(pts);if(type==='snow')snow=pts;else rain=pts;
 }
 function estate(){
- clearWorld();scene.background=new THREE.Color(state.storm?0x070b0d:0x101a1c);scene.fog.color.set(state.storm?0x080b0d:0x0d1616);scene.fog.density=.018;
- plane(90,70,mat(state.season==='winter'?0xc3c9c5:0x16231a,1),0,-.1,0);
+ clearWorld();scene.background=new THREE.Color(state.storm?0x141a1d:(state.season==='winter'?0x77888b:0x364b49));scene.fog.color.set(state.storm?0x151a1c:(state.season==='winter'?0x839092:0x40504c));scene.fog.density=state.storm?.016:.0105;
+ plane(90,70,mat(state.season==='winter'?0xd5dad5:(state.season==='summer'?0x345237:state.season==='spring'?0x405a43:0x314231),1),0,-.1,0);
  plane(70,22,new THREE.MeshPhysicalMaterial({color:0x122424,roughness:.18,metalness:.08,transparent:true,opacity:.9}),0,.05,18);
  // manor body
  box(20,6,4.8,mat(0x4b4942,.95),0,3,-2);
@@ -131,12 +131,12 @@ function estate(){
  const archive=box(8,4,6,mat(0x292a25,.92),19,2,3);clickable(archive,'archive','capability archive');
  const camp=new THREE.Group();for(let i=0;i<7;i++){const l=box(2.4,.22,.22,mat(0x3b2618,1),-22,0.35,-12);l.rotation.y=i*Math.PI/7}clickable(box(2.5,.2,2.5,mat(0x442716,1),-22,.25,-12),'camp','campfire');
  clickable(box(1.2,7,.2,new THREE.MeshBasicMaterial({transparent:true,opacity:0}),0,3.5,.7),'manor','manor entrance');
- light('directional',0x8da6af,1.8,[10,18,12]);light('point',0xf2a65b,55,[0,4,2],18);
+ light('directional',0xffe5bb,3.1,[-10,19,15]);light('directional',0x9ab8c1,1.35,[13,12,-8]);light('point',0xf2a65b,62,[0,4,2],18);
  particles('rain',state.storm?3200:1900);
  const mp=makeTextPanel('MAP ROOM',3.6,1.15);mp.position.set(15,1.2,7);worldRoot.add(mp);clickable(mp,'map','map room');
 }
 function manor(){
- clearWorld();scene.background=new THREE.Color(0x0a0908);scene.fog.color.set(0x0a0908);scene.fog.density=.025;
+ clearWorld();scene.background=new THREE.Color(0x211b16);scene.fog.color.set(0x211b16);scene.fog.density=.014;
  plane(30,26,mat(0x2b2119,.72),0,0,0);
  box(30,10,.4,mat(0x2c241d,.9),0,5,-8);box(.4,10,18,mat(0x2d251e,.9),-15,5,0);box(.4,10,18,mat(0x2d251e,.9),15,5,0);
  // wood paneling
@@ -153,7 +153,7 @@ function manor(){
  doorData.forEach(([x,z,a,l])=>{const d=box(3.2,5.6,.35,mat(0x3a2418,.72),x,2.8,z);clickable(d,a,l)});
  clickable(box(2.2,4,.5,mat(0x3d372e,.88),-4,2,-7.2),'armory','old armor');
  const liftPanel=makeTextPanel('OLD LIFT',3.5,1.2);liftPanel.position.set(8,2,-7.15);worldRoot.add(liftPanel);clickable(liftPanel,'nyc','old lift');
- light('directional',0x718087,.8,[5,12,8]);light('point',0xa67842,20,[-10,4,-3],8);light('point',0xa67842,20,[10,4,-3],8);
+ light('directional',0xffe3b5,2.25,[7,13,10]);light('directional',0xa7bec3,.8,[-8,10,5]);light('point',0xffb968,34,[-10,4,-3],9);light('point',0xffb968,34,[10,4,-3],9);
 }
 function car(x,z,color,label,action){
  const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(4.8,.9,2),mat(color,.25,.65));body.position.y=.9;body.castShadow=true;g.add(body);
@@ -162,7 +162,7 @@ function car(x,z,color,label,action){
  g.position.set(x,0,z);worldRoot.add(g);clickable(g,action,label);return g;
 }
 function garage(){
- clearWorld();scene.background=new THREE.Color(0x070909);scene.fog.color.set(0x070909);scene.fog.density=.018;
+ clearWorld();scene.background=new THREE.Color(0x1a1f1d);scene.fog.color.set(0x1a1f1d);scene.fog.density=.011;
  plane(34,26,new THREE.MeshPhysicalMaterial({color:0x111413,roughness:.24,metalness:.38}),0,0,0);
  box(34,9,.5,mat(0x171a18,.82),0,4.5,-8);box(.5,9,20,mat(0x151715,.85),-17,4.5,0);box(.5,9,20,mat(0x151715,.85),17,4.5,0);
  for(let x=-14;x<=14;x+=7)box(4.4,.12,1.1,new THREE.MeshBasicMaterial({color:0xe9e3cf}),x,7,-2);
@@ -170,29 +170,29 @@ function garage(){
  const moto=new THREE.Group();const frame=box(2.7,.35,.35,mat(0xc26424,.32,.45),-6,.9,4);const w1=sphere(.55,mat(0x090909,.85),-7.1,.55,4);w1.scale.z=.25;const w2=sphere(.55,mat(0x090909,.85),-4.9,.55,4);w2.scale.z=.25;clickable(frame,'moto','dirt bike');
  const bikePanel=makeTextPanel('ROAD / CARBON',3.7,1.25);bikePanel.position.set(2,1.6,4);worldRoot.add(bikePanel);clickable(bikePanel,'bike','road bike');
  const kartPanel=makeTextPanel('KART / SCHOOL',3.7,1.25);kartPanel.position.set(9,1.6,4);worldRoot.add(kartPanel);clickable(kartPanel,'kart','kart');
- light('directional',0x78868b,1.4,[5,14,10]);light('point',0xffffff,26,[-9,5,-2],9);light('point',0xffffff,26,[0,5,-2],9);light('point',0xffffff,26,[9,5,-2],9);
+ light('directional',0xf3dfbd,2.35,[6,14,10]);light('directional',0xa3b8bb,.7,[-9,10,-5]);light('point',0xffffff,26,[-9,5,-2],9);light('point',0xffffff,26,[0,5,-2],9);light('point',0xffffff,26,[9,5,-2],9);
 }
 function archive(){
- clearWorld();scene.background=new THREE.Color(0x090b09);scene.fog.color.set(0x090b09);scene.fog.density=.024;
+ clearWorld();scene.background=new THREE.Color(0x1b211b);scene.fog.color.set(0x1b211b);scene.fog.density=.014;
  plane(30,24,mat(0x151814,.72,.15),0,0,0);box(30,9,.4,mat(0x1a1c18,.84),0,4.5,-8);
  // vault
  const ring=new THREE.Mesh(new THREE.TorusGeometry(3.2,.45,24,64),mat(0x635f50,.34,.75));ring.position.set(-8,4,-7.5);worldRoot.add(ring);const disk=sphere(3,mat(0x242722,.45,.58),-8,4,-7.7);disk.scale.z=.12;
  for(let a=0;a<8;a++){const ang=a/8*Math.PI*2;box(.2,2.2,.2,mat(0x8f7a4c,.3,.8),-8+Math.cos(ang)*1.2,4+Math.sin(ang)*1.2,-7.1).rotation.z=-ang}
  for(let i=0;i<9;i++){const col=i%3,row=Math.floor(i/3);const x=-1+col*5.2,z=-4+row*4.2;const ped=box(4.3,1.1,3.2,mat(0x20251e,.55,.25),x,.55,z);const top=box(3.4,.22,2.4,mat(i===0||i===6?0x6e5e35:0x32362f,.35,.42),x,1.2,z);clickable(top,'relic-'+i,relics[i][1])}
- light('directional',0x6f7c74,.85,[8,12,6]);light('point',0xc7a45d,40,[-8,5,-3],10);
+ light('directional',0xe5d5ae,1.85,[8,12,6]);light('point',0xc7a45d,40,[-8,5,-3],10);
 }
 function mapRoom(){
- clearWorld();scene.background=new THREE.Color(0x0e0e0b);scene.fog.color.set(0x0e0e0b);scene.fog.density=.02;
+ clearWorld();scene.background=new THREE.Color(0x29251d);scene.fog.color.set(0x29251d);scene.fog.density=.012;
  plane(32,25,mat(0x2b2118,.82),0,0,0);box(32,9,.4,mat(0x241e17,.9),0,4.5,-8);
  const table=box(16,.7,9,mat(0x513923,.58),0,1.8,0);box(1,1.8,1,mat(0x382719,.8),-6.8,.9,-3);box(1,1.8,1,mat(0x382719,.8),6.8,.9,-3);box(1,1.8,1,mat(0x382719,.8),-6.8,.9,3);box(1,1.8,1,mat(0x382719,.8),6.8,.9,3);
  const map=plane(13,7,new THREE.MeshStandardMaterial({color:0xb7a27a,roughness:.94}),0,2.17,0, -Math.PI/2);
  const coords=[[-4,-1,'nyc'],[-6,1,'california'],[-6.3,-1.8,'alaska'],[-6,2.6,'hawaii'],[1.5,-1.4,'stmoritz'],[4,1.7,'mongolia'],[5.5,2.7,'thailand'],[-1.5,2.1,'bvi']];
  coords.forEach(([x,z,a])=>{const pin=sphere(.16,new THREE.MeshBasicMaterial({color:0x8b201b}),x,2.42,z);clickable(pin,'place-'+a,a)});
  const globe=sphere(1.8,mat(0x263e3b,.55,.18),10,3,-3);clickable(globe,'chartroom','chart room');
- light('directional',0x7c8174,.7,[6,12,8]);light('point',0xe0bb75,45,[0,7,0],18);
+ light('directional',0xf0dfb7,1.75,[6,12,8]);light('point',0xe0bb75,45,[0,7,0],18);
 }
 function nyc(){
- clearWorld();scene.background=new THREE.Color(0x0d1320);scene.fog.color.set(0x0d1320);scene.fog.density=.012;
+ clearWorld();scene.background=new THREE.Color(0x202d3c);scene.fog.color.set(0x202d3c);scene.fog.density=.009;
  plane(30,24,mat(0x251c15,.55),0,0,0);box(30,9,.4,mat(0x2b2119,.72),0,4.5,-8);
  // window
  box(15,7,.3,mat(0x111315,.3,.65),-5,4,-7.7);
@@ -204,10 +204,10 @@ function nyc(){
  const trunk=box(.35,2,.35,mat(0x382516,1),-8,1,1);for(let i=0;i<3;i++){const t=new THREE.Mesh(new THREE.ConeGeometry(2.2-i*.45,3.2,18),mat(0x17321d,.85));t.position.set(-8,2+i*1.35,1);worldRoot.add(t)}for(let i=0;i<28;i++){const l=sphere(.06,new THREE.MeshBasicMaterial({color:i%2?0xffd47a:0xb9312d}),-8+(Math.random()-.5)*3.1,1.5+Math.random()*4.3,1+(Math.random()-.5)*2);cityLights.push(l)}
  clickable(sphere(.24,mat(0xc9ad63,.25,.7),-7.6,4.6,1.6),'collect-ornament','ornament');
  particles('snow',1200);
- light('point',0xffbd75,55,[5,5,-1],15);light('directional',0x7a8aa1,.8,[-6,10,8]);
+ light('point',0xffc77f,72,[5,5,-1],17);light('directional',0xb7c8d7,1.25,[-6,10,8]);
 }
 function camp(){
- clearWorld();scene.background=new THREE.Color(0x040708);scene.fog.color.set(0x040708);scene.fog.density=.03;
+ clearWorld();scene.background=new THREE.Color(0x111a1a);scene.fog.color.set(0x111a1a);scene.fog.density=.018;
  plane(36,28,mat(0x0f1b13,1),0,0,0);for(let i=0;i<30;i++)tree(-17+Math.random()*34,-11+Math.random()*22,.7+Math.random()*.65);
  for(let i=0;i<7;i++){const a=i*Math.PI/7;const log=box(2.5,.3,.3,mat(0x3d281a,1),Math.cos(a)*.4,.25,Math.sin(a)*.4);log.rotation.y=a}
  const f=sphere(.8,new THREE.MeshBasicMaterial({color:0xff8436}),0,.9,0);f.scale.set(1,1.9,1);fireLights.push(f);light('point',0xff8b42,115,[0,2,0],16);
