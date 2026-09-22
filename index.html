@@ -10,7 +10,7 @@
 :root{--ink:#090b09;--cream:#efe7d4;--muted:#a79e8c;--green:#17231b;--gold:#b99a5d;--red:#7d2420;--wood:#2e2118;--line:rgba(239,231,212,.15);--glass:rgba(8,10,8,.54);--sky:#141d20;--ground:#111711;--accent:#b99a5d}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--ink);color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button{font:inherit;color:inherit}button:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
 body[data-season="winter"]{--sky:#7d8e96;--ground:#d2d6d1;--accent:#d6cab0}
-body[data-season="summer"]{--sky:#273d43;--ground:#213924;--accent:#d1aa62}
+body[data-season="summer"]{--sky:#273d43;--ground:#213924;--accent:#d1aa62}\nbody[data-season="spring"]{--sky:#53666a;--ground:#26392b;--accent:#c8b887}
 body[data-season="autumn"]{--sky:#27231f;--ground:#342719;--accent:#c28043}
 body[data-storm="true"]{--sky:#080d11;--ground:#0b110e;--accent:#c6c8ba}
 #boot{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:radial-gradient(circle at 50% 32%,#1e211d,#080908 62%,#030403);transition:.85s}
@@ -224,7 +224,7 @@ $('#missionTerminal').onclick=()=>openModal('MISSION TERMINAL','OPERATION: WINTE
 const campLines=['Family before mythology.','Capability > hobby.','Stories > stats.','A good plan can still contain chaos.','Learn enough things to become difficult to categorize.'];
 campLines.forEach((q,i)=>{const b=document.createElement('button');b.style.left=(14+i*17)+'%';b.style.top=(20+(i%2)*13)+'%';b.onclick=()=>{$('#campQuote').textContent=q;if(i===4)collect('star-map')};$('#campStars').appendChild(b)});
 
-addEventListener('keydown',e=>{const k=e.key.toLowerCase();if($('#ride').classList.contains('active')){if(k==='a'||e.key==='ArrowLeft')state.rideX=Math.max(32,state.rideX-4);if(k==='d'||e.key==='ArrowRight')state.rideX=Math.min(68,state.rideX+4);$('#rideCar').style.left=state.rideX+'%';if((k==='w'||e.key==='ArrowUp')&&state.speed<state.rideType==='race'?140:95)state.speed+=2;$('#speed').textContent=state.speed}
+addEventListener('keydown',e=>{const k=e.key.toLowerCase();if($('#ride').classList.contains('active')){if(k==='a'||e.key==='ArrowLeft')state.rideX=Math.max(32,state.rideX-4);if(k==='d'||e.key==='ArrowRight')state.rideX=Math.min(68,state.rideX+4);$('#rideCar').style.left=state.rideX+'%';if((k==='w'||e.key==='ArrowUp') && state.speed < (state.rideType==='race'?140:95)) state.speed+=2;$('#speed').textContent=state.speed}
 if($('#moto').classList.contains('active')&&state.moto.running){if(k==='w'||e.key==='ArrowUp')state.moto.y=Math.min(55,state.moto.y+4);if(k==='s'||e.key==='ArrowDown')state.moto.y=Math.max(18,state.moto.y-4);if(k==='d'||e.key==='ArrowRight')state.moto.d+=5;if(k==='a'||e.key==='ArrowLeft')state.moto.d=Math.max(0,state.moto.d-2);$('#rider').style.left=(10+Math.min(72,state.moto.d*.7))+'%';$('#rider').style.bottom=state.moto.y+'%';$('#motoDistance').textContent=Math.floor(state.moto.d);if(state.moto.d>=100){state.moto.running=false;$('#motoStart').textContent='RUN AGAIN';toast('TRAIL COMPLETE — MONGOLIA IS FARTHER.');collect('race-token')}}});
 $('#motoStart').onclick=()=>{state.moto={running:true,d:0,y:26};$('#rider').style.left='10%';$('#rider').style.bottom='26%';$('#motoDistance').textContent='0';$('#motoStart').textContent='RUNNING';toast('GO.')};
 
