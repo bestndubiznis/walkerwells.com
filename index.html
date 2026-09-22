@@ -4,237 +4,95 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#090b09"/>
-<meta name="description" content="WELLS — an explorable estate of capabilities, machines, weather, places, relics and bad ideas."/>
-<title>WELLS</title>\n<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>\n<link rel="shortcut icon" href="/favicon.svg"/>\n<meta name="apple-mobile-web-app-title" content="WELLS"/>
-<style>
-:root{--ink:#090b09;--cream:#efe7d4;--muted:#a79e8c;--green:#17231b;--gold:#b99a5d;--red:#7d2420;--wood:#2e2118;--line:rgba(239,231,212,.15);--glass:rgba(8,10,8,.54);--sky:#141d20;--ground:#111711;--accent:#b99a5d}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--ink);color:var(--cream);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button{font:inherit;color:inherit}button:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
-body[data-season="winter"]{--sky:#7d8e96;--ground:#d2d6d1;--accent:#d6cab0}
-body[data-season="summer"]{--sky:#273d43;--ground:#213924;--accent:#d1aa62}\nbody[data-season="spring"]{--sky:#53666a;--ground:#26392b;--accent:#c8b887}
-body[data-season="autumn"]{--sky:#27231f;--ground:#342719;--accent:#c28043}
-body[data-storm="true"]{--sky:#080d11;--ground:#0b110e;--accent:#c6c8ba}
-#boot{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:radial-gradient(circle at 50% 32%,#1e211d,#080908 62%,#030403);transition:.85s}
-#boot.hide{opacity:0;transform:scale(1.025);pointer-events:none}.boot-inner{text-align:center}.monogram{font:104px/1 Georgia,serif;letter-spacing:-.08em}.boot-inner h1{font-size:10px;letter-spacing:.48em;font-weight:500;margin:10px 0}.boot-inner p{font:italic 15px Georgia,serif;color:#9f9786;margin:28px 0}.enter{background:none;border:1px solid #71664f;padding:12px 30px;letter-spacing:.24em;font-size:9px;cursor:pointer}.enter:hover{background:var(--cream);color:#10120f}
-#app{display:none;position:fixed;inset:0}.scene{position:absolute;inset:0;display:none;overflow:hidden}.scene.active{display:block;animation:sceneIn .65s ease both}@keyframes sceneIn{from{opacity:0;transform:scale(1.012)}to{opacity:1;transform:none}}
-.top{position:fixed;z-index:80;left:0;right:0;top:0;padding:18px 22px;display:flex;justify-content:space-between;pointer-events:none}.brand,.hudbtn{pointer-events:auto;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);cursor:pointer}.brand{font:19px Georgia,serif;letter-spacing:.18em;padding:7px 10px}.hud{display:flex;gap:7px}.hudbtn{font-size:8px;letter-spacing:.16em;padding:8px 10px}
-.back{position:absolute;z-index:35;top:70px;left:22px;border:0;background:none;font-size:8px;letter-spacing:.2em;cursor:pointer}.scene-title{position:absolute;z-index:16;left:6.5vw;top:14vh;max-width:560px}.scene-title small{font-size:8px;letter-spacing:.28em;color:#b9aa88}.scene-title h2{font:46px/1.04 Georgia,serif;font-weight:400;margin:8px 0}.scene-title p{font:italic 14px Georgia,serif;color:#b4aa95;line-height:1.6}
-.hot{position:absolute;z-index:20;background:rgba(8,10,8,.62);border:1px solid rgba(239,231,212,.2);padding:8px 10px;font-size:7px;letter-spacing:.2em;cursor:pointer;backdrop-filter:blur(10px);transition:.2s;opacity:.7}.hot:hover{opacity:1;transform:translateY(-2px);border-color:#b99a5d}
-.tiny{position:absolute;z-index:30;background:none;border:0;color:#d4ba79;cursor:pointer;font-size:20px;filter:drop-shadow(0 0 8px #000)}.lore{position:absolute;z-index:28;background:rgba(16,15,12,.72);border:1px solid #564b39;color:#c7bda5;padding:7px 9px;font:italic 11px Georgia,serif;cursor:pointer;transform:rotate(-2deg);box-shadow:0 8px 28px #0007}
-.rain{pointer-events:none;position:fixed;inset:0;z-index:70;opacity:.22;background:repeating-linear-gradient(105deg,transparent 0 19px,rgba(218,226,221,.16) 20px 21px);background-size:38px 130px;animation:rain .56s linear infinite}@keyframes rain{to{background-position:-19px 130px}}body[data-storm="true"] .rain{opacity:.55;animation-duration:.34s}
-.lightning{position:fixed;inset:0;z-index:69;pointer-events:none;background:white;opacity:0}body[data-storm="true"] .lightning{animation:flash 7s infinite}@keyframes flash{0%,91%,94%,100%{opacity:0}92%{opacity:.4}93%{opacity:.08}}
-/* estate */
-#estate{background:linear-gradient(var(--sky) 0 44%,#1b211e 45% 63%,var(--ground) 64% 100%)}.estate-stars{position:absolute;inset:0 0 48% 0;background-image:radial-gradient(circle,#d8ded7 0 1px,transparent 1.3px);background-size:82px 82px;opacity:.18}.moon{position:absolute;right:10%;top:10%;width:68px;height:68px;border:0;border-radius:50%;background:#ded5bd;box-shadow:0 0 55px #ded5bd66;cursor:pointer}.mountains{position:absolute;left:-8%;right:-8%;bottom:31%;height:46%;background:#27312e;clip-path:polygon(0 100%,0 68%,10% 47%,17% 62%,29% 24%,39% 58%,50% 12%,59% 48%,69% 26%,80% 59%,92% 28%,100% 52%,100% 100%);opacity:.72}.lake{position:absolute;left:0;right:0;bottom:0;height:29%;background:linear-gradient(#172220,#08100e)}.lake:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 8px,rgba(228,236,226,.04) 9px 10px)}
-.manor{position:absolute;left:34%;bottom:21%;width:35vw;min-width:360px;height:28vh;background:#171612;box-shadow:0 0 90px #000;border-bottom:12px solid #090a08}.manor:before{content:"";position:absolute;left:-8%;right:-8%;top:-40%;height:45%;background:#12120f;clip-path:polygon(0 100%,13% 39%,50% 0,88% 40%,100% 100%)}.window{position:absolute;width:7%;height:16%;background:#c88c43;box-shadow:0 0 22px #bd713d99}.door{position:absolute;bottom:0;left:45%;width:10%;height:36%;background:#60452f}.garage-shape,.archive-shape,.map-shape,.camp-shape{position:absolute;background:#10120f;border:1px solid #34372f}.garage-shape{left:12%;bottom:19%;width:15%;height:10%}.archive-shape{right:8%;bottom:18%;width:16%;height:10%}.map-shape{right:16%;bottom:42%;width:9%;height:9%;border-radius:50% 50% 0 0}.camp-shape{left:8%;bottom:43%;width:10%;height:5%;border-radius:50%}
-.estate-copy{position:absolute;z-index:12;left:6vw;bottom:7vh}.estate-copy small{font-size:8px;letter-spacing:.28em}.estate-copy h1{font:54px Georgia,serif;font-weight:400;margin:6px 0}.estate-copy p{font:italic 14px Georgia,serif;color:#aaa18d}.season-chip{position:absolute;right:22px;bottom:20px;z-index:20;font-size:7px;letter-spacing:.18em;color:#928a7a}
-/* manor */
-#manor{background:radial-gradient(circle at 50% 38%,#463424,#1d1712 43%,#080908 84%)}.fireplace{position:absolute;left:38%;bottom:12%;width:24%;height:31%;background:#17130f;border:12px solid #3b2b1f;cursor:pointer}.fire{position:absolute;left:28%;right:28%;bottom:7%;height:47%;background:radial-gradient(ellipse at 50% 90%,#ffd780,#b45229 48%,transparent 72%);animation:flicker .4s infinite alternate}@keyframes flicker{to{transform:scale(.96,1.09);filter:brightness(1.22)}}.portrait{position:absolute;left:42%;top:24%;width:16%;height:24%;border:9px solid #352819;background:linear-gradient(150deg,#162019,#8a6b43 58%,#111);cursor:pointer}.rug{position:absolute;left:23%;right:23%;bottom:2%;height:16%;background:repeating-linear-gradient(90deg,#351c19 0 34px,#1b231a 35px 70px);clip-path:polygon(6% 0,94% 0,100% 100%,0 100%)}.manor-door{position:absolute;bottom:18%;width:13%;height:40%;background:#211913;border:1px solid #6b5134}.md1{left:8%}.md2{left:24%}.md3{right:24%}.md4{right:8%}.door-label{position:absolute;bottom:29%;z-index:6;background:none;border:0;font-size:7px;letter-spacing:.18em;cursor:pointer}.dl1{left:10.5%}.dl2{left:26.5%}.dl3{right:26.5%}.dl4{right:10.5%}.armor{position:absolute;right:43%;bottom:14%;font-size:74px;cursor:pointer;background:none;border:0;filter:grayscale(1) brightness(.8)}.piano{position:absolute;left:3%;bottom:4%;display:flex}.key{width:25px;height:76px;border:1px solid #1a1916;background:#e4ddcd;cursor:pointer}.key:nth-child(even){height:49px;background:#151614;margin-left:-7px;margin-right:-7px;z-index:2}.lift{position:absolute;right:3%;bottom:5%;border:1px solid #6c5d43;background:#18130e;padding:8px 11px;font-size:7px;letter-spacing:.18em;cursor:pointer}
-/* study + board */
-#study{background:linear-gradient(90deg,#0c0d0b,#291f17 48%,#0b0c0a)}.desk{position:absolute;left:9%;bottom:8%;width:34%;height:23%;background:#2f2116;border-top:12px solid #57402a}.board{position:absolute;right:7%;top:20%;width:49%;height:66%;background:#6c5638;border:16px solid #2e2218;box-shadow:0 16px 60px #0009;padding:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start}.idea{position:relative;min-height:110px;background:#d8c59d;color:#292218;border:0;padding:14px 12px;text-align:left;cursor:pointer;transform:rotate(var(--r));box-shadow:0 5px 14px #0005}.idea strong{display:block;font:15px Georgia,serif;margin-bottom:10px}.idea .stamp{position:absolute;right:7px;bottom:7px;border:2px solid currentColor;padding:4px 6px;font:700 8px ui-monospace,monospace;letter-spacing:.12em;transform:rotate(-8deg);opacity:.7}.idea[data-status="ACTIVE"] .stamp{color:#195b36}.idea[data-status="DONE"] .stamp{color:#7c241e}.idea[data-status="APPROVED"] .stamp{color:#3e4d68}.typewriter{position:absolute;left:16%;bottom:28%;font-size:66px;filter:grayscale(1)}.study-note{position:absolute;left:9%;top:29%;width:31%;font:italic 14px Georgia,serif;color:#b7aa90;line-height:1.7}
-/* wardrobe */
-#wardrobe{background:radial-gradient(circle at 50% 30%,#39322a,#15130f 65%,#080907)}.wardrobes{position:absolute;left:7%;right:7%;top:27%;bottom:10%;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.outfit{position:relative;border:1px solid #4b4438;background:linear-gradient(#161612,#0c0d0b);cursor:pointer;padding:15px;text-align:left}.outfit .sil{display:grid;place-items:center;height:70%;font-size:64px;filter:grayscale(.35)}.outfit strong{font:16px Georgia,serif}.outfit small{display:block;margin-top:5px;color:#8f8777;font-size:7px;letter-spacing:.12em}.outfit.on{border-color:#c0a468;box-shadow:inset 0 0 40px #c0a4681d}.mirror{position:absolute;right:7%;bottom:3%;font-size:8px;letter-spacing:.14em;color:#938a77}
-/* archive */
-#archive{background:radial-gradient(circle,#242922,#0a0c0a 72%)}.vaultdoor{position:absolute;left:6%;top:25%;width:28vw;height:28vw;max-width:340px;max-height:340px;border:15px solid #454a40;border-radius:50%;box-shadow:inset 0 0 0 4px #171915}.wheel{position:absolute;left:50%;top:50%;width:37%;height:37%;border:7px solid #756b58;border-radius:50%;transform:translate(-50%,-50%)}.archive-grid{position:absolute;left:39%;right:5%;top:25%;bottom:10%;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;overflow:auto}.relic{background:#10120f;border:1px solid #34372f;padding:18px;text-align:left;cursor:pointer;min-height:150px}.relic small{font-size:7px;letter-spacing:.16em;color:#9d8757}.relic strong{display:block;font:21px Georgia,serif;margin:18px 0 8px}.relic em{font-size:11px;color:#918875}.relic.complete{border-color:#6f694f;background:linear-gradient(145deg,#151810,#0f120d)}.seal{display:inline-block;margin-top:12px;border:1px solid #786541;padding:5px 7px;font-size:7px;letter-spacing:.13em}
-/* map */
-#maproom{background:linear-gradient(90deg,#11120f,#2a2117,#0d0e0c)}.map{position:absolute;left:7%;right:7%;top:23%;bottom:10%;background:#b8a57d;box-shadow:inset 0 0 90px #59462f;border:15px solid #2e2117;overflow:hidden}.map:before{content:"";position:absolute;inset:8%;background:#6f815f;clip-path:polygon(5% 26%,22% 15%,35% 20%,43% 9%,53% 20%,67% 15%,90% 29%,81% 39%,66% 39%,62% 53%,48% 52%,40% 73%,25% 65%,19% 46%,8% 44%);opacity:.88}.pin{position:absolute;z-index:4;width:16px;height:16px;border:0;border-radius:50%;background:#7d251f;box-shadow:0 0 0 4px #eadab266;cursor:pointer}.pin:after{content:attr(data-label);position:absolute;left:14px;top:-5px;white-space:nowrap;background:#241b14;color:#eee3ca;padding:4px 6px;font-size:7px;letter-spacing:.1em}.shipwheel{position:absolute;right:3%;bottom:4%;z-index:5;font-size:52px;background:none;border:0;cursor:pointer}
-/* garage */
-#garage{background:linear-gradient(#1a1d1d,#0b0d0c 63%,#070807)}.garage-floor{position:absolute;left:0;right:0;bottom:0;height:40%;background:linear-gradient(150deg,#1a1b1a,#080909)}.garage-bays{position:absolute;left:5%;right:5%;top:28%;bottom:11%;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.bay{position:relative;border:1px solid #2f322e;background:linear-gradient(#111311,#080908);cursor:pointer;overflow:hidden}.bay .machine{position:absolute;left:10%;right:10%;bottom:18%;height:26%;border-radius:50% 50% 14px 14px;background:#5f1b18;box-shadow:0 18px 30px #000}.bay:nth-child(2) .machine{background:#121313}.bay:nth-child(3) .machine{background:#26392a}.bay:nth-child(4) .machine{background:#b55f2c;height:20%}.bay:nth-child(5) .machine{background:#273134;height:13%}.bay:nth-child(6) .machine{background:#78674d;height:16%}.bay strong{position:absolute;left:14px;bottom:12px;font:15px Georgia,serif}.bay small{position:absolute;left:14px;bottom:35px;font-size:7px;letter-spacing:.12em;color:#847d6f}
-/* rides */
-#ride{background:#080a0a}.road{position:absolute;left:12%;right:12%;top:0;bottom:0;background:linear-gradient(90deg,#0b0c0d 0 21%,#2a2928 22% 78%,#0b0c0d 79%)}.road:before{content:"";position:absolute;left:49.5%;top:0;bottom:0;width:1%;background:repeating-linear-gradient(#d9d0b8 0 30px,transparent 31px 66px);animation:roadMove .75s linear infinite}@keyframes roadMove{to{background-position:0 66px}}.windshield{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 65%,transparent 0 36%,#000 70%);pointer-events:none}.dash{position:absolute;left:0;right:0;bottom:0;height:25%;background:#11100e;border-top:1px solid #42392c}.wheelcar{position:absolute;left:50%;bottom:4%;width:200px;height:105px;border:10px solid #2d2924;border-bottom:0;border-radius:100px 100px 0 0;transform:translateX(-50%)}.ride-hud{position:absolute;right:4%;top:18%;font-size:8px;letter-spacing:.15em}.ride-hud strong{display:block;font:30px Georgia,serif}.ride-car{position:absolute;left:50%;bottom:32%;width:80px;height:34px;background:#3b3a37;border-radius:24px 24px 7px 7px;transform:translateX(-50%);transition:left .12s}.ride-note{position:absolute;left:4%;bottom:30%;font:italic 14px Georgia,serif;color:#a49b89}
-#moto{background:linear-gradient(#aa6840 0 37%,#765034 38%,#2d2118 100%)}.moto-track{position:absolute;left:7%;right:7%;top:27%;bottom:10%;background:linear-gradient(160deg,#9b6844,#5d3925 66%,#251b15);border:1px solid #ffffff25;overflow:hidden}.rider{position:absolute;z-index:3;left:10%;bottom:26%;font-size:52px;transition:.11s}.moto-track:after{content:"";position:absolute;left:0;right:0;bottom:15%;height:26%;background:repeating-linear-gradient(90deg,#4a3020 0 90px,#69462d 91px 180px);transform:skewY(-4deg)}.moto-hud{position:absolute;z-index:5;right:18px;top:16px;font-size:8px;letter-spacing:.14em}.moto-hud strong{display:block;font:28px Georgia,serif}.action{position:absolute;z-index:7;left:50%;bottom:7%;transform:translateX(-50%);background:#11130f;border:1px solid #776b55;padding:11px 16px;font-size:8px;letter-spacing:.15em;cursor:pointer}
-/* wings */
-.wing{background:linear-gradient(#151816,#0a0b09)}.winter-window,.summer-window{position:absolute;left:7%;right:7%;top:25%;bottom:10%;border:12px solid #2d251b;overflow:hidden}.winter-window{background:linear-gradient(#8899a0 0 55%,#e1e5e2 56%)}.winter-window:before{content:"";position:absolute;left:-8%;right:-8%;bottom:0;height:66%;background:#dbe1df;clip-path:polygon(0 100%,18% 35%,30% 60%,47% 14%,57% 51%,72% 25%,100% 100%)}.summer-window{background:linear-gradient(#76a9b4 0 55%,#205f6c 56%)}.summer-window:before{content:"";position:absolute;left:0;right:0;bottom:0;height:24%;background:#d8c28c}.wing-items{position:absolute;z-index:5;left:10%;right:10%;bottom:14%;display:flex;justify-content:space-around}.wing-item{background:rgba(9,10,8,.72);border:1px solid #ffffff35;padding:16px 18px;font-size:8px;letter-spacing:.14em}
-/* campfire */
-#campfire{background:radial-gradient(circle at 50% 75%,#352419,#111715 33%,#050708 74%)}.forest{position:absolute;left:0;right:0;bottom:0;height:62%;background:repeating-linear-gradient(75deg,transparent 0 45px,#0c120e 46px 72px);opacity:.9}.campfire-flame{position:absolute;left:50%;bottom:17%;width:80px;height:110px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 90%,#ffd46c,#a64c25 46%,transparent 69%);animation:flicker .45s infinite alternate}.logs{position:absolute;left:50%;bottom:14%;width:160px;height:14px;background:#4b3020;transform:translateX(-50%) rotate(8deg)}.campstars button{position:absolute;width:7px;height:7px;border:0;border-radius:50%;background:#dbe3df;box-shadow:0 0 11px #fff;cursor:pointer}.camp-quote{position:absolute;left:50%;top:33%;transform:translateX(-50%);width:min(560px,80vw);text-align:center;font:italic 20px Georgia,serif;color:#c7bca5}
-/* secret knight/pirate */
-#armory{background:linear-gradient(#191713,#0a0b09)}.armorwall{position:absolute;left:7%;right:7%;top:26%;bottom:10%;background:repeating-linear-gradient(90deg,#171510 0 80px,#241e16 81px 84px);border:1px solid #453b2e}.sword{position:absolute;width:8px;height:46%;background:#b8b6aa;top:24%;left:50%;transform:rotate(22deg);box-shadow:0 0 0 2px #5e5a50}.sword:after{content:"";position:absolute;left:-30px;bottom:7%;width:68px;height:8px;background:#8e7348}.shield{position:absolute;left:26%;top:40%;width:120px;height:145px;background:#3b291d;clip-path:polygon(50% 0,100% 18%,85% 80%,50% 100%,15% 80%,0 18%);border:2px solid #7b6c52}.armory-copy{position:absolute;right:12%;bottom:18%;width:32%;font:italic 15px Georgia,serif;color:#afa48f;line-height:1.7}
-#chartroom{background:linear-gradient(#172026,#0b1012)}.charts{position:absolute;left:7%;right:7%;top:25%;bottom:10%;background:#af9b72;border:13px solid #2d2117;box-shadow:inset 0 0 80px #55442f}.route{position:absolute;left:18%;top:38%;width:60%;height:3px;background:repeating-linear-gradient(90deg,#78261f 0 9px,transparent 10px 18px);transform:rotate(-9deg)}.compass{position:absolute;right:12%;bottom:18%;font-size:100px;color:#2c271e}.pirate-note{position:absolute;left:12%;bottom:18%;width:42%;font:italic 18px Georgia,serif;color:#2e241a}
-/* NYC */
-#nyc{background:linear-gradient(#101725 0 55%,#252726 56%)}.skyline{position:absolute;left:0;right:0;bottom:20%;height:63%;background:repeating-linear-gradient(90deg,#111214 0 44px,#1b1d1f 45px 82px);clip-path:polygon(0 100%,0 37%,9% 37%,9% 18%,20% 18%,20% 42%,34% 42%,34% 4%,48% 4%,48% 31%,60% 31%,60% 15%,72% 15%,72% 40%,84% 40%,84% 24%,100% 24%,100% 100%)}.snow{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.4px);background-size:34px 34px;animation:snow 5s linear infinite;opacity:.52}@keyframes snow{to{background-position:16px 120px}}.penthouse{position:absolute;left:8%;right:8%;bottom:6%;height:35%;background:linear-gradient(90deg,#21170f,#3d2b1b,#1d1711);border-top:16px solid #17120e}.pent-window{position:absolute;left:7%;right:48%;top:9%;bottom:12%;background:#111827;border:8px solid #392c20}.tree{position:absolute;right:14%;bottom:14%;font-size:105px;filter:drop-shadow(0 0 20px #d3a24e77)}.mission-terminal{position:absolute;left:53%;bottom:12%;width:28%;background:#070a08;border:1px solid #526152;padding:15px;font:10px ui-monospace,monospace;color:#a8c5a4;cursor:pointer}.mission-terminal strong{display:block;font-size:12px;margin-bottom:10px}.tux{position:absolute;right:7%;bottom:13%;font-size:60px}
-/* overlays */
-.modal{position:fixed;inset:0;z-index:120;display:none;place-items:center;background:rgba(4,5,4,.76);backdrop-filter:blur(13px)}.modal.open{display:grid}.card{position:relative;width:min(660px,90vw);max-height:78vh;overflow:auto;background:#10120f;border:1px solid #4a463c;padding:32px}.close{position:absolute;right:14px;top:10px;background:none;border:0;font-size:23px;cursor:pointer}.eyebrow{font-size:7px;letter-spacing:.22em;color:#a99162}.card h3{font:38px Georgia,serif;font-weight:400;margin:10px 0 20px}.card p{color:#c3b8a0;line-height:1.7}.tag{display:inline-block;border:1px solid #4b493f;padding:6px 8px;margin:3px;font-size:7px;letter-spacing:.12em}.terminal{font-family:ui-monospace,monospace;background:#070a08;padding:20px;color:#a6c1a1;line-height:1.8}
-.drawer{position:fixed;z-index:110;right:0;top:0;bottom:0;width:min(450px,92vw);background:#0b0d0a;border-left:1px solid #34362f;transform:translateX(103%);transition:.4s;padding:26px;overflow:auto}.drawer.open{transform:none}.drawer-head{display:flex;justify-content:space-between}.drawer-head h3{font:31px Georgia,serif;margin:8px 0}.drawer-head button{background:none;border:0;font-size:23px;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:22px}.slot{min-height:84px;border:1px solid #242720;display:grid;place-items:center;color:#44483f;font-size:7px;letter-spacing:.12em;text-align:center;padding:8px}.slot.found{color:#dbcfb4;background:#161914}.slot .ico{font-size:24px;display:block;margin-bottom:5px}.lorelist{margin-top:20px}.loreitem{border-top:1px solid #252820;padding:12px 0;font:italic 13px Georgia,serif;color:#a9a08d}.toast{position:fixed;z-index:150;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:#e9dfc9;color:#10120f;padding:10px 14px;font-size:8px;letter-spacing:.15em;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
-.season-panel{position:fixed;z-index:130;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,90vw);background:#10120f;border:1px solid #4e493c;padding:28px;display:none}.season-panel.open{display:block}.season-panel h3{font:30px Georgia,serif;font-weight:400;margin:0 0 16px}.season-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.season-grid button{background:#161813;border:1px solid #3e4138;padding:14px;text-align:left;cursor:pointer}.stormtoggle{width:100%;margin-top:9px;background:#17191a;border:1px solid #4b4e4b;padding:12px;text-align:left;cursor:pointer}
-@media(max-width:900px){.scene-title{top:13vh;left:5vw}.scene-title h2{font-size:34px}.manor{left:27%;width:50vw;min-width:0}.wardrobes{grid-template-columns:repeat(2,1fr);overflow:auto}.board{left:43%;width:52%;grid-template-columns:repeat(2,1fr);overflow:auto}.archive-grid{left:34%;grid-template-columns:repeat(2,1fr)}.garage-bays{grid-template-columns:repeat(2,1fr);overflow:auto}.map{left:4%;right:4%}.pin:after{display:none}.piano{display:none}.armor{right:38%;font-size:56px}.top{padding:12px}.hudbtn{padding:7px;font-size:7px}.brand{font-size:16px}}
-</style>
+<meta name="description" content="WELLS — an explorable 3D estate of capabilities, machines, weather, places and future stories."/>
+<title>WELLS</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+<link rel="shortcut icon" href="/favicon.svg"/>
+<link rel="stylesheet" href="/styles.css"/>
 </head>
-<body data-season="autumn" data-storm="false">
-<div id="boot"><div class="boot-inner"><div class="monogram">W</div><h1>WALKERWELLS.COM</h1><p>A place made out of future stories.</p><button id="enter" class="enter">ENTER</button></div></div>
-<div id="app">
-<div class="rain"></div><div class="lightning"></div>
-<header class="top"><button class="brand" data-home>WELLS</button><div class="hud"><button id="soundBtn" class="hudbtn">SOUND — OFF</button><button id="collectionBtn" class="hudbtn">◈ <span id="count">0</span>/16</button></div></header>
-
-<section id="estate" class="scene active">
-<div class="estate-stars"></div><button id="moon" class="moon" aria-label="moon"></button><div class="mountains"></div><div class="lake"></div>
-<div class="manor"><i class="window" style="left:12%;top:28%"></i><i class="window" style="left:29%;top:28%"></i><i class="window" style="left:64%;top:28%"></i><i class="window" style="left:81%;top:28%"></i><i class="window" style="left:29%;top:61%"></i><i class="window" style="left:64%;top:61%"></i><i class="door"></i></div>
-<div class="garage-shape"></div><div class="archive-shape"></div><div class="map-shape"></div><div class="camp-shape"></div>
-<button class="hot" style="left:47%;bottom:31%" data-scene="manor">MANOR</button><button class="hot" style="left:15%;bottom:29%" data-scene="garage">GARAGE</button><button class="hot" style="right:11%;bottom:28%" data-scene="archive">CAPABILITY ARCHIVE</button><button class="hot" style="right:18%;bottom:49%" data-scene="maproom">MAP ROOM</button><button class="hot" style="left:9%;bottom:48%" data-scene="campfire">CAMPFIRE</button>
-<div class="estate-copy"><small>THE ESTATE</small><h1>Pick a direction.</h1><p>Nothing here is arranged sensibly.</p></div><div id="seasonChip" class="season-chip">AUTUMN / RAIN</div>
-<button class="lore" style="left:26%;bottom:10%" data-lore="arrival">A wet envelope</button>
-</section>
-
-<section id="manor" class="scene">
-<button class="back" data-home>← ESTATE</button><div class="scene-title"><small>THE MANOR</small><h2>Rain outside. Fire inside.</h2><p>The rooms are more useful than an About page.</p></div>
-<div class="fireplace" id="fireplace"><div class="fire"></div></div><div class="portrait" id="portrait"></div><div class="rug"></div>
-<div class="manor-door md1"></div><div class="manor-door md2"></div><div class="manor-door md3"></div><div class="manor-door md4"></div>
-<button class="door-label dl1" data-scene="study">STUDY</button><button class="door-label dl2" data-scene="wardrobe">DRESSING ROOM</button><button class="door-label dl3" data-scene="winter">NORTH WING</button><button class="door-label dl4" data-scene="summer">SOUTH WING</button>
-<button id="armor" class="armor">♞</button><div class="piano"><button class="key" data-note="C"></button><button class="key" data-note="E"></button><button class="key" data-note="G"></button><button class="key" data-note="B"></button></div>
-<button class="lift" data-scene="nyc">OLD LIFT — NYC</button><button class="tiny" style="right:20%;bottom:11%" data-item="spider-mask">◒</button><button class="lore" style="right:5%;top:21%" data-lore="house">A note behind the frame</button>
-</section>
-
-<section id="study" class="scene">
-<button class="back" data-scene="manor">← MANOR</button><div class="scene-title"><small>THE STUDY</small><h2>Bad ideas are still ideas.</h2><p>Click a card to cycle its status. The board remembers.</p></div><div class="desk"></div><div class="typewriter">⌨</div><div class="study-note">A planning system built around one dangerous assumption:<br><br><em>you are allowed to become good at more than one thing.</em></div><div id="ideaBoard" class="board"></div><button class="tiny" style="left:12%;bottom:12%" data-item="playing-card">♠</button>
-</section>
-
-<section id="wardrobe" class="scene">
-<button class="back" data-scene="manor">← MANOR</button><div class="scene-title"><small>THE DRESSING ROOM</small><h2>Choose the genre.</h2><p>The site remembers what you left wearing.</p></div><div id="wardrobes" class="wardrobes"></div><div id="mirror" class="mirror">CURRENT: DINNER JACKET</div><button class="tiny" style="left:5%;bottom:6%" data-item="watch">◉</button>
-</section>
-
-<section id="archive" class="scene">
-<button class="back" data-home>← ESTATE</button><div class="scene-title"><small>THE CAPABILITY ARCHIVE</small><h2>Proof, plans, and locked drawers.</h2><p>Boss fights. Adventures. Skill unlocks. Not one lifelong hobby.</p></div><div class="vaultdoor"><div class="wheel"></div></div><div id="archiveGrid" class="archive-grid"></div><button class="tiny" style="left:28%;bottom:9%" data-item="gold-bar">▰</button>
-</section>
-
-<section id="maproom" class="scene">
-<button class="back" data-home>← ESTATE</button><div class="scene-title"><small>THE MAP ROOM</small><h2>No sensible itinerary.</h2><p>Some pins are memories. Some are future stories. The map declines to clarify.</p></div><div class="map">
-<button class="pin" style="left:26%;top:37%" data-place="nyc" data-label="NEW YORK"></button><button class="pin" style="left:15%;top:42%" data-place="california" data-label="CALIFORNIA"></button><button class="pin" style="left:10%;top:23%" data-place="alaska" data-label="ALASKA"></button><button class="pin" style="left:9%;top:57%" data-place="hawaii" data-label="HAWAII"></button><button class="pin" style="left:54%;top:31%" data-place="stmoritz" data-label="ST. MORITZ"></button><button class="pin" style="left:35%;top:54%" data-place="bvi" data-label="BVI"></button><button class="pin" style="left:78%;top:54%" data-place="thailand" data-label="THAILAND"></button><button class="pin" style="left:72%;top:28%" data-place="mongolia" data-label="MONGOLIA"></button><button id="shipwheel" class="shipwheel">☸</button></div><button class="tiny" style="right:5%;bottom:5%" data-item="compass">✥</button>
-</section>
-
-<section id="garage" class="scene">
-<button class="back" data-home>← ESTATE</button><div class="scene-title"><small>THE GARAGE</small><h2>Machines with consequences.</h2><p>Click a bay. Roads are optional.</p></div><div class="garage-floor"></div><div id="garageBays" class="garage-bays"></div><button class="lore" style="right:3%;bottom:3%" data-lore="garage">Grease-stained card</button>
-</section>
-
-<section id="ride" class="scene">
-<button class="back" data-scene="garage">← GARAGE</button><div class="road"></div><div class="ride-car" id="rideCar"></div><div class="windshield"></div><div class="dash"><div class="wheelcar"></div></div><div class="scene-title"><small id="rideEyebrow">NIGHT DRIVE</small><h2 id="rideTitle">Somewhere after rain.</h2></div><div class="ride-hud">SPEED<strong id="speed">72</strong></div><div id="rideNote" class="ride-note">A / D or ← / →</div><button class="tiny" style="right:5%;bottom:5%" data-item="road-key">◆</button>
-</section>
-
-<section id="moto" class="scene">
-<button class="back" data-scene="garage">← GARAGE</button><div class="scene-title"><small>DIRT / DESERT</small><h2>Keep it upright.</h2><p>WASD or arrows. Reach 100 before dignity disappears.</p></div><div class="moto-track"><div id="rider" class="rider">🏍</div><div class="moto-hud">DISTANCE<strong id="motoDistance">0</strong></div><button id="motoStart" class="action">START RUN</button></div>
-</section>
-
-<section id="winter" class="scene wing">
-<button class="back" data-scene="manor">← MANOR</button><div class="scene-title"><small>NORTH WING</small><h2>Winter deserves its own architecture.</h2><p>St. Moritz. Backflips. Touring. Snow on expensive machinery.</p></div><div class="winter-window"></div><div class="wing-items"><div class="wing-item">SKI BACKFLIP — UNLOCKED</div><div class="wing-item">360 — NEXT</div><div class="wing-item">HUT-TO-HUT — LOCKED</div><div class="wing-item">ST. MORITZ — PINNED</div></div><button class="tiny" style="right:5%;bottom:5%" data-item="ski-pass">▣</button>
-</section>
-
-<section id="summer" class="scene wing">
-<button class="back" data-scene="manor">← MANOR</button><div class="scene-title"><small>SOUTH WING</small><h2>Trade winds & bad footwear.</h2><p>Sailing. Scuba. Surf. Islands. Everything is less formal.</p></div><div class="summer-window"></div><div class="wing-items"><div class="wing-item">BVI — SAIL</div><div class="wing-item">SCUBA — DESCEND</div><div class="wing-item">SURF — MAYBE</div><div class="wing-item">HAWAII — PINNED</div></div><button class="tiny" style="right:5%;bottom:5%" data-item="shark-tooth">▽</button>
-</section>
-
-<section id="campfire" class="scene">
-<button class="back" data-home>← ESTATE</button><div class="forest"></div><div class="logs"></div><div class="campfire-flame"></div><div class="scene-title"><small>THE CLEARING</small><h2>No scoreboard.</h2><p>Some parts of a good life should refuse to become metrics.</p></div><div id="campQuote" class="camp-quote">Click the brighter stars.</div><div id="campStars" class="campstars"></div><button class="tiny" style="right:6%;bottom:7%" data-item="star-map">✦</button>
-</section>
-
-<section id="armory" class="scene">
-<button class="back" data-scene="manor">← MANOR</button><div class="scene-title"><small>HIDDEN ROOM / I</small><h2>The armory.</h2><p>Not everything in an old house needs to make sense in this century.</p></div><div class="armorwall"><div class="sword"></div><div class="shield"></div></div><div class="armory-copy">Knights. Swords. Blacksmithing. Craftsmanship. The satisfaction of learning a thing that has existed much longer than you have.</div><button class="tiny" style="right:7%;bottom:8%" data-item="iron-key">⚒</button>
-</section>
-
-<section id="chartroom" class="scene">
-<button class="back" data-scene="maproom">← MAP ROOM</button><div class="scene-title"><small>HIDDEN ROOM / II</small><h2>The chart room.</h2><p>Pirates, passages, boats, islands, routes that look better on paper.</p></div><div class="charts"><div class="route"></div><div class="compass">✥</div><div class="pirate-note">“Pick a coast. Leave before the plan becomes too reasonable.”</div></div><button class="tiny" style="left:12%;bottom:9%" data-item="pirate-coin">◉</button>
-</section>
-
-<section id="nyc" class="scene">
-<button class="back" data-scene="maproom">← MAP ROOM</button><div class="snow"></div><div class="skyline"></div><div class="penthouse"><div class="pent-window"></div><div class="tree">🎄</div><div class="tux">♟</div><button id="missionTerminal" class="mission-terminal"><strong>MISSION TERMINAL</strong>STATUS: AWAITING INPUT<br>LOCATION: UPPER EAST SIDE<br>ATTIRE: DINNER JACKET<br><br>[ OPEN DOSSIER ]</button></div><div class="scene-title"><small>NEW YORK / DECEMBER</small><h2>Upper East Side. After dark.</h2><p>The city is better when it is cold enough to justify the coat.</p></div><button class="tiny" style="right:5%;top:19%" data-item="ornament">●</button>
-</section>
-
-<div id="modal" class="modal"><div class="card"><button id="closeModal" class="close">×</button><div id="eyebrow" class="eyebrow"></div><h3 id="modalTitle"></h3><div id="modalBody"></div></div></div>
-<aside id="drawer" class="drawer"><div class="drawer-head"><div><small>THE COLLECTION</small><h3>Things found.</h3></div><button id="drawerClose">×</button></div><div id="collectionGrid" class="grid"></div><div class="lorelist"><small>LORE FOUND</small><div id="loreList"></div></div></aside>
-<div id="seasonPanel" class="season-panel"><button id="seasonClose" class="close">×</button><small>THE WEATHER ROOM</small><h3>Someone hid the controls in the moon.</h3><div class="season-grid"><button data-season-choice="winter">WINTER<br><small>snow / silver / quiet</small></button><button data-season-choice="spring">SPRING<br><small>mist / green / thaw</small></button><button data-season-choice="summer">SUMMER<br><small>late light / warmer ground</small></button><button data-season-choice="autumn">AUTUMN<br><small>rain / wood / fire</small></button></div><button id="stormToggle" class="stormtoggle">STORM MODE — OFF</button></div>
-<div id="toast" class="toast"></div>
+<body>
+<div id="loader">
+  <div class="loader-inner">
+    <div class="coin">W</div>
+    <h1>WALKERWELLS.COM</h1>
+    <p>Some places are more useful than an About page.</p>
+    <button id="enter">ENTER THE ESTATE</button>
+  </div>
 </div>
-<script>
-const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
-const items=[
-['spider-mask','SPIDER MASK','◒'],['watch','WATCH','◉'],['gold-bar','GOLD BAR','▰'],['playing-card','PLAYING CARD','♠'],['compass','COMPASS','✥'],['road-key','ROAD KEY','◆'],['ski-pass','SKI PASS','▣'],['shark-tooth','SHARK TOOTH','▽'],['star-map','STAR MAP','✦'],['iron-key','FORGE MARK','⚒'],['pirate-coin','PIRATE COIN','◉'],['ornament','ORNAMENT','●'],['race-token','RACE TOKEN','◫'],['pilot-pin','PILOT PIN','◆'],['map-pin','MAP PIN','•'],['vault-seal','VAULT SEAL','◇']
-];
-const loreCopy={
-arrival:'The envelope contains only coordinates and the phrase: “Start with the house.”',
-house:'The frame is older than the painting. Someone carved four tiny seasons into the wood.',
-garage:'“Track only. Roads are for getting there.” The handwriting is annoyingly neat.',
-winter:'A lift ticket with no date. On the back: “Make the backflip boring.”',
-summer:'A salt-stained chart with three islands circled and no explanation.',
-archive:'The drawers are labeled for things completed, things attempted, and things worth becoming able to do.'
-};
-const places={
-california:['CALIFORNIA','Cliffs, bikes, long roads, dry hills, cold Pacific water. Home base without pretending it contains everything.'],
-alaska:['ALASKA','The map gets less detailed the farther north it goes. This is treated as a feature.'],
-hawaii:['HAWAII','Warm water, mountains, surf, diving, long days. An argument for learning ocean competence.'],
-stmoritz:['ST. MORITZ','Winter machinery, clean snow, very good coats, and cars that look absurdly correct in the cold.'],
-bvi:['BVI','A sailboat, moving water, islands close enough to make the next decision at lunch.'],
-thailand:['THAILAND ISLANDS','Longtail boats, warm rain, diving, scooters, impossible water color.'],
-mongolia:['MONGOLIA','Dirt bikes. Open country. A trail that is too long to summarize in a caption.']
-};
-const relics=[
-{kind:'BOSS FIGHT',name:'IRONMAN 70.3 — SANTA CRUZ',note:'5:29 total. Finished.',done:true,seal:'COMPLETED'},
-{kind:'BOSS FIGHT',name:'FULL IRON DISTANCE',note:'A clean finish line somewhere in the future.',done:false},
-{kind:'BOSS FIGHT',name:'EXPEDITION RACE',note:'Navigation + MTB + paddling + teamwork.',done:false},
-{kind:'ADVENTURE',name:'ALCATRAZ CROSSING',note:'Cold water. Clean objective. Excellent story.',done:false},
-{kind:'ADVENTURE',name:'MONGOLIA MOTO',note:'Nine days. Dirt. Open country.',done:false},
-{kind:'ADVENTURE',name:'HUT-TO-HUT WINTER',note:'Touring competence before scenery.',done:false},
-{kind:'SKILL UNLOCK',name:'SKI BACKFLIP',note:'Unlocked. Goal: make it automatic.',done:true,seal:'UNLOCKED'},
-{kind:'SKILL UNLOCK',name:'PRIVATE PILOT',note:'Serious skill. Different branch entirely.',done:false},
-{kind:'SKILL UNLOCK',name:'NAVIGATION',note:'Become harder to strand.',done:false}
-];
-const outfits=[
-['DINNER JACKET','♟','Bond mode'],['RACE SUIT','◫','Track only'],['SKI KIT','⛷','Winter branch'],['WETSUIT','◉','Cold water'],['WESTERN','♞','Cowboy problem'],['SPIDER SUIT','◒','No explanation']
-];
-const ideas=['70.3 Worlds / Kona pursuit','3-day expedition race','Mongolia moto','Pilot license','St. Moritz winter','BVI sailing passage','Via Ferrata','Blacksmith a blade','Adventure race','Backcountry ski tour','Track race license','Liveaboard wreck diving'];
-const machines=[
-['FERRARI / TRACK','race','RED / LOW / LOUD'],['ASTON / NIGHT','aston','BLACK / DINNER JACKET'],['RANGE ROVER / ESTATE','rover','GREEN / RAIN'],['DIRT BIKE / DESERT','dirt','ORANGE / DUST'],['ROAD BIKE / CLIMB','bike','CARBON / WATTS'],['KART / RACE SCHOOL','kart','SMALL / SERIOUS']
-];
-const state={
-found:new Set(JSON.parse(localStorage.getItem('wells.collection')||'[]')),
-lore:new Set(JSON.parse(localStorage.getItem('wells.lore')||'[]')),
-statuses:JSON.parse(localStorage.getItem('wells.ideas')||'{}'),
-outfit:localStorage.getItem('wells.outfit')||'DINNER JACKET',
-season:localStorage.getItem('wells.season')||'autumn',
-storm:localStorage.getItem('wells.storm')==='true',
-moon:0,rideType:'aston',rideX:50,speed:72,moto:{running:false,d:0,y:26},audio:false,audioNode:null
-};
-document.body.dataset.season=state.season;document.body.dataset.storm=String(state.storm);
 
-function save(){localStorage.setItem('wells.collection',JSON.stringify(Array.from(state.found)));localStorage.setItem('wells.lore',JSON.stringify(Array.from(state.lore)));localStorage.setItem('wells.ideas',JSON.stringify(state.statuses));localStorage.setItem('wells.outfit',state.outfit);localStorage.setItem('wells.season',state.season);localStorage.setItem('wells.storm',String(state.storm))}
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(e.t);e.t=setTimeout(()=>e.classList.remove('show'),1800)}
-function go(id){$$('.scene').forEach(x=>x.classList.toggle('active',x.id===id));closeModal();if(id==='garage')renderGarage();if(id==='study')renderIdeas();if(id==='archive')renderArchive();if(id==='wardrobe')renderWardrobe()}
-function openModal(eye,title,body){$('#eyebrow').textContent=eye;$('#modalTitle').textContent=title;$('#modalBody').innerHTML=body;$('#modal').classList.add('open')}
-function closeModal(){$('#modal').classList.remove('open')}
-function collect(id){if(state.found.has(id))return;state.found.add(id);save();renderCollection();const i=items.find(x=>x[0]===id);toast('FOUND — '+(i?i[1]:id.toUpperCase()))}
-function addLore(id){if(!state.lore.has(id)){state.lore.add(id);save();renderCollection();toast('LORE ADDED')}openModal('LORE / '+String(state.lore.size).padStart(2,'0'),'Found fragment','<p>'+loreCopy[id]+'</p>')}
-function renderCollection(){$('#count').textContent=state.found.size;$('#collectionGrid').innerHTML=items.map(x=>state.found.has(x[0])?'<div class="slot found"><div><span class="ico">'+x[2]+'</span>'+x[1]+'</div></div>':'<div class="slot">—</div>').join('');$('#loreList').innerHTML=Array.from(state.lore).map(id=>'<div class="loreitem">'+loreCopy[id]+'</div>').join('')||'<div class="loreitem">Nothing yet.</div>'}
-function renderIdeas(){const statuses=['IDEA','APPROVED','ACTIVE','DONE'];$('#ideaBoard').innerHTML=ideas.map((n,i)=>{const st=state.statuses[n]||'IDEA';return '<button class="idea" style="--r:'+(i%2?1.4:-1.3)+'deg" data-idea="'+n.replace(/"/g,'&quot;')+'" data-status="'+st+'"><strong>'+n+'</strong><span class="stamp">'+st+'</span></button>'}).join('');$$('[data-idea]').forEach(b=>b.onclick=()=>{const n=b.dataset.idea,cur=state.statuses[n]||'IDEA',idx=statuses.indexOf(cur),next=statuses[(idx+1)%statuses.length];state.statuses[n]=next;save();renderIdeas();toast(n+' — '+next)})}
-function renderWardrobe(){$('#wardrobes').innerHTML=outfits.map(x=>'<button class="outfit '+(state.outfit===x[0]?'on':'')+'" data-outfit="'+x[0]+'"><div class="sil">'+x[1]+'</div><strong>'+x[0]+'</strong><small>'+x[2]+'</small></button>').join('');$('#mirror').textContent='CURRENT: '+state.outfit;$$('[data-outfit]').forEach(b=>b.onclick=()=>{state.outfit=b.dataset.outfit;save();renderWardrobe();toast('SUITED — '+state.outfit);if(state.outfit==='SPIDER SUIT')collect('spider-mask')})}
-function renderArchive(){$('#archiveGrid').innerHTML=relics.map((r,i)=>'<button class="relic '+(r.done?'complete':'')+'" data-relic="'+i+'"><small>'+r.kind+'</small><strong>'+r.name+'</strong><em>'+r.note+'</em>'+(r.done?'<span class="seal">'+r.seal+'</span>':'')+'</button>').join('');$$('[data-relic]').forEach(b=>b.onclick=()=>{const r=relics[+b.dataset.relic];openModal(r.kind,r.name,'<p>'+r.note+'</p>'+(r.done?'<span class="tag">'+r.seal+'</span>':'<span class="tag">LOCKED DRAWER</span>'));if(r.name.indexOf('SANTA CRUZ')>=0)collect('vault-seal')})}
-function renderGarage(){$('#garageBays').innerHTML=machines.map(m=>'<button class="bay" data-machine="'+m[1]+'"><div class="machine"></div><small>'+m[2]+'</small><strong>'+m[0]+'</strong></button>').join('');$$('[data-machine]').forEach(b=>b.onclick=()=>startMachine(b.dataset.machine))}
-function startMachine(type){if(type==='dirt'){go('moto');return}if(type==='bike'){openModal('GARAGE / CARBON','The engine is the problem.','<p>Road. Mountain. Long climbs. Bad ideas measured in watts.</p>');return}if(type==='kart'){openModal('GARAGE / KART','Race school.','<p>Karting → track craft → coaching → race license → wheel-to-wheel.</p>');collect('race-token');return}state.rideType=type;state.rideX=50;state.speed=type==='race'?108:type==='rover'?54:72;$('#rideEyebrow').textContent=type==='race'?'TRACK / NIGHT':type==='rover'?'ESTATE ROAD / STORM':'NIGHT DRIVE';$('#rideTitle').textContent=type==='race'?'Redline after dark.':type==='rover'?'Rain belongs on the windshield.':'Somewhere after rain.';$('#rideNote').textContent=type==='rover'?'The road is worse. The car is happier.':'A / D or ← / →';$('#speed').textContent=state.speed;go('ride')}
-function renderSeason(){document.body.dataset.season=state.season;document.body.dataset.storm=String(state.storm);$('#seasonChip').textContent=state.season.toUpperCase()+(state.storm?' / STORM':' / RAIN');$('#stormToggle').textContent='STORM MODE — '+(state.storm?'ON':'OFF');save()}
+<div id="world"></div>
+<div id="vignette"></div><div id="grain"></div><div id="fade"></div>
 
-$('#enter').onclick=()=>{$('#boot').classList.add('hide');setTimeout(()=>{$('#boot').style.display='none';$('#app').style.display='block'},820)}
-$$('[data-scene]').forEach(b=>b.onclick=()=>go(b.dataset.scene));$$('[data-home]').forEach(b=>b.onclick=()=>go('estate'));
-$('#closeModal').onclick=closeModal;$('#modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
-$('#collectionBtn').onclick=()=>$('#drawer').classList.add('open');$('#drawerClose').onclick=()=>$('#drawer').classList.remove('open');
-$$('[data-item]').forEach(b=>b.onclick=()=>collect(b.dataset.item));$$('[data-lore]').forEach(b=>b.onclick=()=>addLore(b.dataset.lore));
+<div id="ui">
+  <div class="topbar">
+    <button id="brand" class="brand">WELLS</button>
+    <div class="top-actions">
+      <button id="soundBtn">SOUND — OFF</button>
+      <button id="ideasBtn">BAD IDEAS</button>
+      <button id="wardrobeBtn">SUIT UP</button>
+      <button id="weatherBtn">WEATHER</button>
+      <button id="collectionBtn">◈ <span id="collectionCount">0</span>/16</button>
+    </div>
+  </div>
 
-$('#moon').onclick=()=>{state.moon++;if(state.moon<4){toast('THE MOON DOES NOT APPEAR TO BE A BUTTON.');return}state.moon=0;$('#seasonPanel').classList.add('open')};
-$('#seasonClose').onclick=()=>$('#seasonPanel').classList.remove('open');$$('[data-season-choice]').forEach(b=>b.onclick=()=>{state.season=b.dataset.seasonChoice;renderSeason();toast('SEASON — '+state.season.toUpperCase())});$('#stormToggle').onclick=()=>{state.storm=!state.storm;renderSeason();toast(state.storm?'STORM FRONT MOVING IN':'STORM CLEARED')};
+  <div class="credits">DRAG YOUR EYES AROUND. CLICK THE WORLD.</div>
 
-let fireKnocks=0,fireTimer=null;$('#fireplace').onclick=()=>{fireKnocks++;clearTimeout(fireTimer);fireTimer=setTimeout(()=>fireKnocks=0,1500);if(fireKnocks>=5){fireKnocks=0;go('armory');toast('STONE MOVING...')}else if(fireKnocks>1)toast((5-fireKnocks)+' KNOCKS REMAIN')};
-$('#armor').onclick=()=>go('armory');$('#portrait').onclick=()=>openModal('PORTRAIT / UNKNOWN','No plaque.','<p>The frame has four tiny season marks carved into the back.</p><p>There is probably a reason.</p>');
-$('#shipwheel').onclick=()=>go('chartroom');
+  <div class="hero">
+    <div id="heroEye" class="eyebrow">WELLS / 01</div>
+    <h1 id="heroTitle">The estate.</h1>
+    <p id="heroCopy">A place made out of future stories. Click the architecture, not the labels.</p>
+  </div>
 
-$$('.pin').forEach(p=>p.onclick=()=>{const place=p.dataset.place;if(place==='nyc'){collect('map-pin');go('nyc');return}const d=places[place];openModal('MAP PIN',d[0],'<p>'+d[1]+'</p>');collect('map-pin')});
-$('#missionTerminal').onclick=()=>openModal('MISSION TERMINAL','OPERATION: WINTER FORMAL','<div class="terminal">LOCATION: NEW YORK<br>TIME: 20:40<br>ATTIRE: '+state.outfit+'<br>VEHICLE: BLACK GRAND TOURER<br>WEATHER: SNOW<br><br>OBJECTIVE:<br>LEAVE THE APARTMENT LOOKING LIKE YOU KNOW WHERE YOU ARE GOING.<br><br>SECONDARY OBJECTIVE:<br>DO SOMETHING WORTH RETELLING.</div>');
+  <div class="scene-nav">
+    <button data-scene="estate">ESTATE</button>
+    <button data-scene="manor">MANOR</button>
+    <button data-scene="garage">GARAGE</button>
+    <button data-scene="archive">ARCHIVE</button>
+    <button data-scene="map">MAP ROOM</button>
+    <button data-scene="camp">CAMPFIRE</button>
+    <button data-scene="nyc">NYC</button>
+  </div>
+  <div id="hint"></div><div id="reticle"></div>
 
-const campLines=['Family before mythology.','Capability > hobby.','Stories > stats.','A good plan can still contain chaos.','Learn enough things to become difficult to categorize.'];
-campLines.forEach((q,i)=>{const b=document.createElement('button');b.style.left=(14+i*17)+'%';b.style.top=(20+(i%2)*13)+'%';b.onclick=()=>{$('#campQuote').textContent=q;if(i===4)collect('star-map')};$('#campStars').appendChild(b)});
+  <section id="collectionPanel" class="panel">
+    <button class="close" data-close>×</button><small>THE COLLECTION</small><h2>Things found.</h2>
+    <div id="collectionGrid"></div>
+  </section>
 
-addEventListener('keydown',e=>{const k=e.key.toLowerCase();if($('#ride').classList.contains('active')){if(k==='a'||e.key==='ArrowLeft')state.rideX=Math.max(32,state.rideX-4);if(k==='d'||e.key==='ArrowRight')state.rideX=Math.min(68,state.rideX+4);$('#rideCar').style.left=state.rideX+'%';if((k==='w'||e.key==='ArrowUp') && state.speed < (state.rideType==='race'?140:95)) state.speed+=2;$('#speed').textContent=state.speed}
-if($('#moto').classList.contains('active')&&state.moto.running){if(k==='w'||e.key==='ArrowUp')state.moto.y=Math.min(55,state.moto.y+4);if(k==='s'||e.key==='ArrowDown')state.moto.y=Math.max(18,state.moto.y-4);if(k==='d'||e.key==='ArrowRight')state.moto.d+=5;if(k==='a'||e.key==='ArrowLeft')state.moto.d=Math.max(0,state.moto.d-2);$('#rider').style.left=(10+Math.min(72,state.moto.d*.7))+'%';$('#rider').style.bottom=state.moto.y+'%';$('#motoDistance').textContent=Math.floor(state.moto.d);if(state.moto.d>=100){state.moto.running=false;$('#motoStart').textContent='RUN AGAIN';toast('TRAIL COMPLETE — MONGOLIA IS FARTHER.');collect('race-token')}}});
-$('#motoStart').onclick=()=>{state.moto={running:true,d:0,y:26};$('#rider').style.left='10%';$('#rider').style.bottom='26%';$('#motoDistance').textContent='0';$('#motoStart').textContent='RUNNING';toast('GO.')};
+  <section id="ideasPanel" class="panel">
+    <button class="close" data-close>×</button><small>THE STUDY</small><h2>Bad Ideas Board</h2>
+    <p>Click a card to move it from idea → approved → active → done. The board remembers.</p>
+    <div id="badGrid" class="bad-grid"></div>
+  </section>
 
-$$('[data-note]').forEach(k=>k.onclick=()=>{try{const ac=window._ac||(window._ac=new(window.AudioContext||window.webkitAudioContext)()),o=ac.createOscillator(),g=ac.createGain(),freq={C:261.63,E:329.63,G:392,B:493.88}[k.dataset.note];o.frequency.value=freq;g.gain.setValueAtTime(.06,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.55);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.58)}catch(err){}});
+  <section id="wardrobePanel" class="panel">
+    <button class="close" data-close>×</button><small>THE DRESSING ROOM</small><h2>Choose the genre.</h2>
+    <div id="wardrobeGrid" class="wardrobe-grid"></div>
+  </section>
 
-function soundOn(){if(state.audio)return;try{const ac=window._ac||(window._ac=new(window.AudioContext||window.webkitAudioContext)()),buf=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.07;const src=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();f.type='lowpass';f.frequency.value=800;g.gain.value=.15;src.buffer=buf;src.loop=true;src.connect(f);f.connect(g);g.connect(ac.destination);src.start();state.audio=true;state.audioNode=src;$('#soundBtn').textContent='SOUND — ON'}catch(err){}}
-function soundOff(){if(state.audioNode){try{state.audioNode.stop()}catch(err){}}state.audioNode=null;state.audio=false;$('#soundBtn').textContent='SOUND — OFF'}
-$('#soundBtn').onclick=()=>state.audio?soundOff():soundOn();
+  <section id="weatherPanel" class="panel">
+    <button class="close" data-close>×</button><small>THE WEATHER ROOM</small><h2>Change the world.</h2>
+    <p>The season is usually supposed to be discovered through the moon. You have the controls now.</p>
+    <div class="weather-grid">
+      <button data-season="winter">WINTER</button><button data-season="spring">SPRING</button>
+      <button data-season="summer">SUMMER</button><button data-season="autumn">AUTUMN</button>
+    </div>
+    <button id="stormBtn" class="wide-btn">STORM MODE — OFF</button>
+  </section>
 
-renderCollection();renderIdeas();renderArchive();renderWardrobe();renderGarage();renderSeason();
-</script>
+  <section id="missionPanel" class="panel">
+    <button class="close" data-close>×</button><small>MISSION TERMINAL</small><h2>Operation: Winter Formal</h2>
+    <div class="dossier"></div>
+  </section>
+
+  <section id="infoPanel" class="panel">
+    <button class="close" data-close>×</button><small id="infoEye"></small><h2 id="infoTitle"></h2>
+    <div id="infoBody"></div>
+  </section>
+</div>
+
+<div id="toast"></div>
+
+<script type="module" src="/app.js"></script>
 </body>
 </html>
