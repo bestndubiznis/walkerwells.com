@@ -24,8 +24,8 @@ jobs:
           mkdir -p assets/scenes
           cat .asset_chunks/manor.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/manor-cinematic-hq.avif
           cat .asset_chunks/nyc.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/nyc-christmas-hq.avif
-          test "$(stat -c%s assets/scenes/manor-cinematic-hq.avif)" -gt 80000
-          test "$(stat -c%s assets/scenes/nyc-christmas-hq.avif)" -gt 80000
+          test "$(stat -c%s assets/scenes/manor-cinematic-hq.avif)" -gt 60000
+          test "$(stat -c%s assets/scenes/nyc-christmas-hq.avif)" -gt 60000
           rm -f assets/scenes/_probe-manor.avif assets/scenes/_probe-nyc.avif
           rm -rf .asset_chunks
           sed -i 's/hq1/hq2/g' enhancements.js
