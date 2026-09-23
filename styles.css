@@ -58,7 +58,7 @@ body[data-season="winter"] .weather-fx{background-image:radial-gradient(circle,r
 .room-card div{font:15px "Playfair Display",serif}
 .room-card small{display:block;margin-top:4px;font-size:7px;letter-spacing:.12em;color:#b9ad97}
 
-.hotspot-layer,.collectible-layer{position:absolute;inset:0;z-index:22}
+.hotspot-layer{position:absolute;inset:0;z-index:25;pointer-events:none}\n.collectible-layer{position:absolute;inset:0;z-index:24;pointer-events:none}
 .hotspot{
   position:absolute;border:0;background:transparent;cursor:pointer;
   transform:translate(-50%,-50%);border-radius:14px;opacity:1;
