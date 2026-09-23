@@ -8,7 +8,8 @@
   IMG.nyc="/assets/scenes/nyc-christmas-hq.webp?v=hq2";
   IMG.archive="/assets/scenes/archive-hq.webp?v=archive2";
   IMG.map="/assets/scenes/map-room-hq.webp?v=map2";
-  [IMG.manor,IMG.nyc,IMG.archive,IMG.map].forEach(src=>{const im=new Image();im.src=src});
+  IMG.camp="/assets/scenes/camp-hq.webp?v=camp2";
+  [IMG.manor,IMG.nyc,IMG.archive,IMG.map,IMG.camp].forEach(src=>{const im=new Image();im.src=src});
 
   scenes.manor={
     title:"The manor.",
@@ -26,15 +27,23 @@
       {x:61,y:72,w:31,h:20,label:"CENTER TABLE",sub:"Books, notes, one unfinished plan",action:"manor-table"}
     ]
   };
-  scenes.camp.bgPos="center 82%";
-  scenes.camp.bgPosMobile="center 58%";
-  scenes.camp.hotspots=[
-    {x:51,y:66,w:26,h:28,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
-    {x:72,y:18,w:50,h:26,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"},
-    {x:20,y:60,w:26,h:36,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
-    {x:34,y:78,w:15,h:14,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
-    {x:82,y:67,w:16,h:18,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
-  ];
+  scenes.camp={
+    title:"The campfire.",
+    eye:"WELLS / CAMPFIRE",
+    copy:"Mountain air, firelight, Brevard memories, and a sky worth staying awake for.",
+    hint:"Click the actual tent, fire, compass, carved tree, or the night sky.",
+    bg:IMG.camp,
+    bgPos:"center center",
+    bgPosMobile:"26% center",
+    hotspots:[
+      {x:4,y:25,w:25,h:39,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
+      {x:36,y:47,w:28,h:40,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
+      {x:4,y:63,w:18,h:24,label:"OLD COMPASS",sub:"Left on the log",action:"camp-compass"},
+      {x:88,y:22,w:11,h:36,label:"TREE CARVING",sub:"Three trees / mountain mark",action:"tree-carving"},
+      {x:32,y:0,w:55,h:36,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"}
+    ],
+    collectibles:[]
+  };
   scenes.nyc={
     title:"New York. December.",
     eye:"WELLS / NYC",

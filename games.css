@@ -72,3 +72,20 @@ body[data-scene="map"].discover .scene-bg,
 body[data-scene="map"] .scene.interacting .scene-bg{
   filter:brightness(1.07) saturate(1.02) contrast(.99) !important;
 }
+
+/* Generated campfire backplate already has a cinematic night grade. Keep the tent, compass and tree carving legible. */
+body[data-scene="camp"][data-storm="false"] .scene-bg{
+  filter:brightness(1.10) saturate(1.04) contrast(.98) !important;
+}
+body[data-scene="camp"] .scene-bg::after{
+  background:
+    linear-gradient(90deg,rgba(3,5,6,.08) 0,transparent 25% 88%,rgba(3,5,6,.05) 100%),
+    linear-gradient(0deg,rgba(3,5,6,.08),transparent 27%);
+}
+body[data-scene="camp"] .cinema-vignette{
+  background:radial-gradient(circle at 50% 48%,transparent 0 74%,rgba(0,0,0,.06) 90%,rgba(0,0,0,.16) 100%);
+}
+body[data-scene="camp"].discover .scene-bg,
+body[data-scene="camp"] .scene.interacting .scene-bg{
+  filter:brightness(1.07) saturate(1.03) contrast(.99) !important;
+}

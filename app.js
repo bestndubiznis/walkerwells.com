@@ -10,7 +10,7 @@ const IMG={
   map:"/assets/scenes/map-room-hq.webp?v=map2",
   nyc:"https://images.unsplash.com/photo-1616486788371-62d930495c44?auto=format&fit=crop&w=2400&q=88",
   armory:"https://images.unsplash.com/photo-1755194357377-a5b59ab01e1f?auto=format&fit=crop&w=2400&q=88",
-  camp:"https://images.unsplash.com/photo-1538135901208-b7bc0a074a56?auto=format&fit=crop&w=2400&q=88"
+  camp:"/assets/scenes/camp-hq.webp?v=camp2"
 };
 
 const scenes={
@@ -123,17 +123,19 @@ const scenes={
     collectibles:[]
   },
   camp:{
-    title:"The clearing.",eye:"WELLS / CAMPFIRE",copy:"No scoreboard.",
-    hint:"The fire, the tent, and the sky all have something to say.",
+    title:"The campfire.",eye:"WELLS / CAMPFIRE",copy:"Mountain air, firelight, Brevard memories, and a sky worth staying awake for.",
+    hint:"Click the actual tent, fire, compass, carved tree, or the night sky.",
     bg:IMG.camp,
+    bgPos:"center center",
+    bgPosMobile:"26% center",
     hotspots:[
-      {x:51,y:59,w:26,h:28,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
-      {x:72,y:18,w:50,h:26,label:"THE SKY",sub:"Five unofficial constellations",action:"stars"},
-      {x:20,y:52,w:26,h:40,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
-      {x:34,y:73,w:15,h:15,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
-      {x:82,y:63,w:16,h:19,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
+      {x:4,y:25,w:25,h:39,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
+      {x:36,y:47,w:28,h:40,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
+      {x:4,y:63,w:18,h:24,label:"OLD COMPASS",sub:"Left on the log",action:"camp-compass"},
+      {x:88,y:22,w:11,h:36,label:"TREE CARVING",sub:"Three trees / mountain mark",action:"tree-carving"},
+      {x:32,y:0,w:55,h:36,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"}
     ],
-    collectibles:[{x:83,y:18,id:"star-map",icon:"✦"}]
+    collectibles:[]
   },
   nyc:{
     title:"New York. December.",eye:"WELLS / NYC",copy:"A real New York interior with an actual Christmas tree. No palm trees. No G-Wagen.",
