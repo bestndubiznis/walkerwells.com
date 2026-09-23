@@ -15,112 +15,133 @@ const IMG={
 const scenes={
   estate:{
     title:"The estate.",eye:"WELLS / ESTATE",copy:"A place made out of future stories.",
-    hint:"The house is not a menu. It just happens to contain one.",
+    hint:"Move across the architecture. Hold D if you want the world to give up its secrets.",
     bg:IMG.estate,
     hotspots:[
-      {x:51,y:50,label:"MANOR",sub:"Home base",go:"manor"},
-      {x:79,y:58,label:"GARAGE",sub:"Machines & motion",go:"garage"},
-      {x:31,y:54,label:"ARCHIVE",sub:"Relics & lessons",go:"archive"},
-      {x:65,y:31,label:"MAP ROOM",sub:"Next destinations",go:"map"},
-      {x:14,y:73,label:"CAMPFIRE",sub:"Perspective",go:"camp"}
+      {x:50,y:80,w:16,h:24,label:"FRONT DOOR",sub:"Enter the manor",go:"manor"},
+      {x:43,y:76,w:10,h:22,label:"WEST WING",sub:"Relics / capability archive",go:"archive"},
+      {x:58,y:76,w:10,h:22,label:"EAST WING",sub:"Maps / routes / next destinations",go:"map"},
+      {x:14,y:72,w:24,h:36,label:"THE GROVE",sub:"A path disappears into the trees",go:"camp"},
+      {x:88,y:78,w:20,h:34,label:"EAST DRIVE",sub:"The garage is around the bend",go:"garage"},
+      {x:51,y:69,w:7,h:10,label:"A LIT WINDOW",sub:"Someone left something upstairs",action:"estate-window"},
+      {x:9,y:87,w:13,h:14,label:"OLD GATE PLAQUE",sub:"Worn brass / almost unreadable",action:"estate-gate"}
     ],
-    collectibles:[{x:88,y:73,id:"road-key",icon:"◆"}]
+    collectibles:[{x:90,y:76,id:"road-key",icon:"◆"}]
   },
   manor:{
     title:"The manor.",eye:"WELLS / MANOR",copy:"Old stone, warm wood, and rooms with different rules.",
-    hint:"Some doors are obvious. The useful ones usually are not.",
+    hint:"Doors work. So do fireplaces, paintings, instruments, and bad instincts.",
     bg:IMG.manor,
     hotspots:[
-      {x:23,y:54,label:"STUDY",sub:"Plans / bad ideas",go:"study"},
-      {x:78,y:55,label:"DRESSING ROOM",sub:"Choose the genre",go:"wardrobe"},
-      {x:52,y:48,label:"CAPABILITY ARCHIVE",sub:"Proof / locked drawers",go:"archive"},
-      {x:66,y:32,label:"OLD LIFT",sub:"New York / December",go:"nyc"},
-      {x:10,y:51,label:"ARMORY",sub:"Hidden room",action:"armory"}
+      {x:23,y:55,w:18,h:34,label:"STUDY DOOR",sub:"Plans / bad ideas",go:"study"},
+      {x:78,y:55,w:18,h:34,label:"DRESSING ROOM",sub:"Choose the genre",go:"wardrobe"},
+      {x:51,y:50,w:14,h:28,label:"ARCHIVE DOOR",sub:"Proof / locked drawers",go:"archive"},
+      {x:88,y:45,w:13,h:26,label:"OLD LIFT",sub:"New York / December",go:"nyc"},
+      {x:49,y:70,w:19,h:24,label:"FIREPLACE",sub:"The stone sounds hollow",action:"fireplace"},
+      {x:13,y:36,w:16,h:24,label:"PORTRAIT",sub:"No plaque",action:"portrait"},
+      {x:34,y:73,w:23,h:19,label:"PIANO",sub:"Four notes open something",action:"piano"},
+      {x:7,y:58,w:11,h:31,label:"SUIT OF ARMOR",sub:"Older than everything else in here",action:"armory"}
     ],
-    collectibles:[{x:84,y:78,id:"spider-mask",icon:"◒"}]
+    collectibles:[{x:84,y:78,id:"spider-mask",icon:"◒"},{x:63,y:79,id:"watch",icon:"◉"}]
   },
   study:{
     title:"The study.",eye:"WELLS / STUDY",copy:"Plans, maps, questions, and things that probably sounded better after midnight.",
-    hint:"The board on the right remembers what changes.",
+    hint:"Nothing on the desk is decorative.",
     bg:IMG.study,
     hotspots:[
-      {x:73,y:42,label:"BAD IDEAS BOARD",sub:"Idea → approved → active → done",action:"ideas"},
-      {x:44,y:62,label:"FIELD NOTES",sub:"Things worth learning",action:"fieldnotes"},
-      {x:26,y:56,label:"RETURN TO HALL",sub:"Manor",go:"manor"}
+      {x:73,y:45,w:34,h:42,label:"BAD IDEAS BOARD",sub:"Idea → approved → active → done",action:"ideas"},
+      {x:45,y:62,w:20,h:22,label:"FIELD NOTES",sub:"Things worth learning",action:"fieldnotes"},
+      {x:25,y:36,w:22,h:24,label:"PINNED MAP",sub:"Red thread / unnecessary ambition",action:"study-map"},
+      {x:34,y:76,w:18,h:16,label:"LOCKED DRAWER",sub:"It is, obviously, not locked well",action:"study-drawer"},
+      {x:58,y:72,w:17,h:18,label:"TYPEWRITER",sub:"One unfinished sentence",action:"typewriter"},
+      {x:13,y:55,w:13,h:32,label:"HALL DOOR",sub:"Back to manor",go:"manor"}
     ],
     collectibles:[{x:61,y:72,id:"playing-card",icon:"♠"}]
   },
   wardrobe:{
     title:"The dressing room.",eye:"WELLS / WARDROBE",copy:"Choose the genre before choosing the destination.",
-    hint:"The current outfit follows you into the mission terminal.",
+    hint:"Open cabinets. Check shelves. One outfit is much less sensible than the others.",
     bg:IMG.wardrobe,
     hotspots:[
-      {x:62,y:45,label:"SUIT UP",sub:"Dinner / race / snow / water / western / spider",action:"suit"},
-      {x:18,y:54,label:"MIRROR",sub:"Current loadout",action:"mirror"},
-      {x:31,y:78,label:"BACK TO HALL",sub:"Manor",go:"manor"}
+      {x:62,y:50,w:45,h:58,label:"WARDROBE",sub:"Dinner / race / snow / water / western / spider",action:"suit"},
+      {x:15,y:50,w:22,h:58,label:"MIRROR",sub:"Current loadout",action:"mirror"},
+      {x:52,y:72,w:15,h:16,label:"WATCH CASE",sub:"Mechanical / small / expensive-looking",action:"wardrobe-watch"},
+      {x:83,y:30,w:16,h:23,label:"TOP SHELF",sub:"Something red is tucked behind a hat box",action:"wardrobe-mask"},
+      {x:30,y:80,w:20,h:14,label:"HALL DOOR",sub:"Back to manor",go:"manor"}
     ],
-    collectibles:[{x:55,y:64,id:"watch",icon:"◉"}]
+    collectibles:[{x:55,y:65,id:"watch",icon:"◉"}]
   },
   garage:{
     title:"The garage.",eye:"WELLS / GARAGE",copy:"Machines with consequences.",
-    hint:"The vehicles are finally allowed to look like vehicles.",
+    hint:"Cars start. Shelves hide things. The wall map is not decoration.",
     bg:IMG.garage,
     hotspots:[
-      {x:31,y:57,label:"RED / TRACK",sub:"Performance branch",action:"drive-race"},
-      {x:55,y:53,label:"BLACK / GRAND TOURER",sub:"Night-drive branch",action:"drive-aston"},
-      {x:76,y:53,label:"ESTATE / RANGE",sub:"Rain looks correct on it",action:"drive-rover"},
-      {x:10,y:66,label:"DIRT BIKE",sub:"Desert → Mongolia",action:"moto"},
-      {x:91,y:70,label:"CARBON",sub:"Long climbs / watts",action:"bike"}
+      {x:30,y:58,w:25,h:33,label:"RED / TRACK",sub:"Performance branch",action:"drive-race"},
+      {x:55,y:56,w:24,h:32,label:"BLACK / GRAND TOURER",sub:"Night-drive branch",action:"drive-aston"},
+      {x:77,y:56,w:22,h:32,label:"ESTATE / RANGE",sub:"Rain looks correct on it",action:"drive-rover"},
+      {x:10,y:72,w:16,h:26,label:"DIRT BIKE",sub:"Desert → Mongolia",action:"moto"},
+      {x:91,y:70,w:15,h:28,label:"CARBON BIKE",sub:"Long climbs / watts",action:"bike"},
+      {x:19,y:28,w:14,h:16,label:"HELMET SHELF",sub:"A race-school token is tucked inside one",action:"helmet"},
+      {x:88,y:28,w:16,h:17,label:"TRACK MAP",sub:"A line through corners / no explanation",action:"track-map"}
     ],
-    collectibles:[{x:88,y:25,id:"race-token",icon:"◫"}]
+    collectibles:[{x:87,y:24,id:"race-token",icon:"◫"}]
   },
   archive:{
     title:"The capability archive.",eye:"WELLS / ARCHIVE",copy:"Proof, plans, and locked drawers.",
-    hint:"Boss fights. Adventures. Skill unlocks.",
+    hint:"The objects are the biography. The labels are secondary.",
     bg:IMG.archive,
     hotspots:[
-      {x:27,y:50,label:"BOSS FIGHTS",sub:"Clean finish lines",action:"boss"},
-      {x:51,y:45,label:"ADVENTURES",sub:"Worth it for the story",action:"adventure"},
-      {x:73,y:52,label:"SKILL UNLOCKS",sub:"Capabilities that compound",action:"skill"},
-      {x:88,y:41,label:"VAULT",sub:"Open relic case",action:"relic"}
+      {x:27,y:50,w:20,h:27,label:"BOSS FIGHTS",sub:"Clean finish lines",action:"boss"},
+      {x:51,y:45,w:20,h:27,label:"ADVENTURES",sub:"Worth it for the story",action:"adventure"},
+      {x:73,y:52,w:20,h:27,label:"SKILL UNLOCKS",sub:"Capabilities that compound",action:"skill"},
+      {x:88,y:42,w:15,h:26,label:"VAULT",sub:"Open relic case",action:"relic"},
+      {x:42,y:71,w:14,h:17,label:"RACE RELIC",sub:"Santa Cruz / 5:29",action:"santa-relic"},
+      {x:66,y:70,w:14,h:17,label:"SKI PASS",sub:"Backflip — unlocked",action:"ski-relic"},
+      {x:18,y:76,w:15,h:16,label:"UNMARKED DRAWER",sub:"No category",action:"locked-drawer"}
     ],
-    collectibles:[{x:63,y:74,id:"gold-bar",icon:"▰"},{x:84,y:69,id:"vault-seal",icon:"◇"}]
+    collectibles:[{x:63,y:74,id:"gold-bar",icon:"▰"},{x:84,y:69,id:"vault-seal",icon:"◇"},{x:67,y:72,id:"ski-pass",icon:"▣"}]
   },
   map:{
     title:"The map room.",eye:"WELLS / MAP ROOM",copy:"Some pins are memories. Some are future stories.",
     hint:"The map declines to clarify which is which.",
     bg:IMG.map,
     hotspots:[
-      {x:27,y:52,label:"CALIFORNIA",sub:"Home base",action:"place-california"},
-      {x:45,y:46,label:"NEW YORK",sub:"December",go:"nyc"},
-      {x:58,y:40,label:"ST. MORITZ",sub:"Winter branch",action:"place-stmoritz"},
-      {x:64,y:58,label:"MONGOLIA",sub:"Nine days / dirt",action:"place-mongolia"},
-      {x:74,y:66,label:"BVI",sub:"Sail / dive",action:"place-bvi"},
-      {x:86,y:51,label:"THAILAND",sub:"Islands / water",action:"place-thailand"},
-      {x:13,y:63,label:"PIRATE CHART ROOM",sub:"Hidden mechanism",action:"pirate"}
+      {x:27,y:52,w:12,h:12,label:"CALIFORNIA",sub:"Home base",action:"place-california"},
+      {x:45,y:46,w:12,h:12,label:"NEW YORK",sub:"December",go:"nyc"},
+      {x:58,y:40,w:12,h:12,label:"ST. MORITZ",sub:"Winter branch",action:"place-stmoritz"},
+      {x:64,y:58,w:12,h:12,label:"MONGOLIA",sub:"Nine days / dirt",action:"place-mongolia"},
+      {x:74,y:66,w:12,h:12,label:"BVI",sub:"Sail / dive",action:"place-bvi"},
+      {x:86,y:51,w:12,h:12,label:"THAILAND",sub:"Islands / water",action:"place-thailand"},
+      {x:13,y:63,w:17,h:28,label:"SHIP'S WHEEL",sub:"It moves when it should not",action:"pirate"},
+      {x:71,y:30,w:12,h:14,label:"BRASS COMPASS",sub:"Needle points somewhere inconvenient",action:"compass-case"},
+      {x:36,y:68,w:20,h:15,label:"PENCIL ROUTE",sub:"Someone has drawn a line across the ocean",action:"map-route"}
     ],
     collectibles:[{x:70,y:29,id:"compass",icon:"✥"},{x:78,y:77,id:"map-pin",icon:"•"}]
   },
   camp:{
     title:"The clearing.",eye:"WELLS / CAMPFIRE",copy:"No scoreboard.",
-    hint:"Some parts of a good life should refuse to become metrics.",
+    hint:"The fire, the tent, and the sky all have something to say.",
     bg:IMG.camp,
     hotspots:[
-      {x:51,y:58,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
-      {x:78,y:26,label:"THE SKY",sub:"Five unofficial constellations",action:"stars"},
-      {x:20,y:52,label:"THE TENT",sub:"No agenda",action:"tent"}
+      {x:51,y:59,w:26,h:28,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
+      {x:72,y:18,w:50,h:26,label:"THE SKY",sub:"Five unofficial constellations",action:"stars"},
+      {x:20,y:52,w:26,h:40,label:"THE TENT",sub:"No agenda",action:"tent"},
+      {x:34,y:73,w:15,h:15,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
+      {x:82,y:63,w:16,h:19,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
     ],
     collectibles:[{x:83,y:18,id:"star-map",icon:"✦"}]
   },
   nyc:{
     title:"New York. December.",eye:"WELLS / NYC",copy:"Upper East Side. After dark.",
-    hint:"A side quest with better tailoring.",
+    hint:"The apartment is a side quest. Treat it accordingly.",
     bg:IMG.nyc,
     hotspots:[
-      {x:26,y:53,label:"MISSION TERMINAL",sub:"Open dossier",action:"mission"},
-      {x:57,y:56,label:"WINDOWS",sub:"Central Park / snow",action:"windows"},
-      {x:77,y:64,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
-      {x:84,y:34,label:"OLD LIFT",sub:"Return to manor",go:"manor"}
+      {x:26,y:53,w:26,h:40,label:"MISSION TERMINAL",sub:"Open dossier",action:"mission"},
+      {x:57,y:48,w:35,h:55,label:"WINDOWS",sub:"Central Park / snow",action:"windows"},
+      {x:77,y:65,w:17,h:35,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
+      {x:88,y:34,w:15,h:26,label:"OLD LIFT",sub:"Return to manor",go:"manor"},
+      {x:44,y:43,w:18,h:42,label:"CHRISTMAS TREE",sub:"One ornament does not match",action:"tree"},
+      {x:61,y:72,w:12,h:16,label:"SNOW GLOBE",sub:"Shake it",action:"snowglobe"}
     ],
     collectibles:[{x:44,y:35,id:"ornament",icon:"●"}]
   }
@@ -213,13 +234,13 @@ function sceneTo(name,instant=false){
   $("#transition").classList.add("on");setTimeout(go,420);
 }
 function renderHotspots(s){
-  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>'<button class="hotspot" data-hot="'+i+'" style="left:'+h.x+'%;top:'+h.y+'%" aria-label="'+h.label+'"></button>').join("");
+  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>'<button class="hotspot" data-hot="'+i+'" style="left:'+h.x+'%;top:'+h.y+'%;width:'+(h.w||10)+'%;height:'+(h.h||12)+'%" aria-label="'+h.label+'"></button>').join("");
   $("#collectibleLayer").innerHTML=(s.collectibles||[]).map(c=>'<button class="collectible" data-collect="'+c.id+'" style="left:'+c.x+'%;top:'+c.y+'%">'+c.icon+'</button>').join("");
   $$("[data-hot]").forEach(b=>{
     const h=s.hotspots[+b.dataset.hot];
-    b.onmouseenter=e=>showRoomCard(e,h);
+    b.onmouseenter=e=>{$("#scene").classList.add("interacting");showRoomCard(e,h)};
     b.onmousemove=e=>moveRoomCard(e);
-    b.onmouseleave=hideRoomCard;
+    b.onmouseleave=()=>{$("#scene").classList.remove("interacting");hideRoomCard()};
     b.onclick=()=>h.go?sceneTo(h.go):doAction(h.action);
   });
   $$("[data-collect]").forEach(b=>b.onclick=()=>collect(b.dataset.collect));
@@ -228,6 +249,7 @@ function showRoomCard(e,h){$("#roomCardTitle").textContent=h.label;$("#roomCardS
 function moveRoomCard(e){$("#roomCard").style.left=Math.min(innerWidth-230,e.clientX+16)+"px";$("#roomCard").style.top=Math.min(innerHeight-90,e.clientY+16)+"px"}
 function hideRoomCard(){$("#roomCard").classList.remove("show")}
 
+let fireplaceKnocks=0, fireplaceTimer=null, pianoSequence=[];
 function doAction(a){
   if(!a)return;
   if(a==="ideas"){openPanel("ideas");return}
@@ -235,6 +257,36 @@ function doAction(a){
   if(a==="mirror"){info("DRESSING ROOM","Current loadout","<p>"+state.suit+". That is apparently the answer.</p>");return}
   if(a==="fieldnotes"){info("FIELD NOTES","A portfolio of capabilities","<p>Navigation. Pilot. Sailing. Ski touring. Racing. Diving. Moto. Strength. Craft.</p><p>The exact list is allowed to change.</p>");return}
   if(a==="armory"){collect("iron-key");info("HIDDEN ROOM / I","The armory","<p>Armor, blades, blacksmithing, craft. A room for learning things older than the house.</p><span class='tag'>FORGE</span><span class='tag'>SWORD</span><span class='tag'>CRAFT</span>");return}
+  if(a==="estate-window"){info("ESTATE / FOUND","A lit window","<p>A folded note is trapped behind the old latch:</p><p><em>Capability &gt; hobby. Stories &gt; stats.</em></p>");return}
+  if(a==="estate-gate"){info("ESTATE / FOUND","The gate plaque","<p>The brass is worn almost smooth. The only readable words are:</p><p><strong>DISCIPLINE · ADVENTURE · GOOD COMPANY</strong></p>");return}
+  if(a==="portrait"){info("MANOR / FOUND","No plaque.","<p>The frame is older than the painting. Four tiny season marks are carved into the back.</p>");return}
+  if(a==="fireplace"){
+    fireplaceKnocks++;clearTimeout(fireplaceTimer);fireplaceTimer=setTimeout(()=>fireplaceKnocks=0,1600);
+    if(fireplaceKnocks>=5){fireplaceKnocks=0;collect("iron-key");info("HIDDEN ROOM","Stone moving...","<p>Five knocks. The left side of the fireplace shifts just enough to reveal the armory passage.</p><p><strong>ARMORY — UNLOCKED</strong></p>")}
+    else toast((5-fireplaceKnocks)+" KNOCK"+(5-fireplaceKnocks===1?"":"S")+" REMAIN");
+    return
+  }
+  if(a==="piano"){
+    info("MANOR / PIANO","Four notes.","<p>Play the sequence hidden in the house.</p><div class='piano-mini'><button data-note='C'>C</button><button data-note='E'>E</button><button data-note='G'>G</button><button data-note='B'>B</button></div>");
+    setTimeout(()=>$("[data-note]").forEach(b=>b.onclick=()=>{pianoSequence.push(b.dataset.note);if(pianoSequence.slice(-4).join("")==="CEGB"){collect("watch");toast("CHORD ACCEPTED — DRAWER RELEASED");pianoSequence=[]}else if(pianoSequence.length>8)pianoSequence=[]}),0);
+    return
+  }
+  if(a==="study-map"){info("STUDY / MAP","Red thread.","<p>California → Alaska → St. Moritz → BVI → Mongolia. No sane itinerary connects them. Good.</p>");return}
+  if(a==="study-drawer"){collect("playing-card");info("STUDY / DRAWER","Not very locked.","<p>A single playing card. No note.</p>");return}
+  if(a==="typewriter"){info("STUDY / TYPEWRITER","One unfinished sentence","<p><em>Learn enough things to become difficult to...</em></p>");return}
+  if(a==="wardrobe-watch"){collect("watch");toast("FOUND — WATCH");return}
+  if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","This does not belong with the tuxedos.","<p>Correct.</p>");return}
+  if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet: an old race-school token and a note that says TRACK ONLY.</p>");return}
+  if(a==="track-map"){info("GARAGE / WALL","Track map","<p>Kart → coaching → HPDE → time trial → race license → wheel-to-wheel.</p>");return}
+  if(a==="santa-relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>");return}
+  if(a==="ski-relic"){collect("ski-pass");info("RELIC / UNLOCKED","SKI BACKFLIP","<p>Unlocked. Next objective: make it boring.</p>");return}
+  if(a==="locked-drawer"){info("ARCHIVE / ???","Unmarked drawer","<p>It does not open. Yet.</p>");return}
+  if(a==="compass-case"){collect("compass");toast("FOUND — COMPASS");return}
+  if(a==="map-route"){info("MAP ROOM / ROUTE","A pencil line across the ocean","<p>The route begins in California and ends somewhere that does not have a direct flight home.</p>");return}
+  if(a==="camp-compass"){collect("compass");info("CLEARING / FOUND","Old compass","<p>Still points north. Annoyingly practical.</p>");return}
+  if(a==="tree-carving"){info("CLEARING / TREE","Three letters. One date.","<p>No explanation. Some lore should stay lore.</p>");return}
+  if(a==="tree"){collect("ornament");info("NYC / TREE","The wrong ornament","<p>A tiny brass W. It definitely came from the estate.</p>");return}
+  if(a==="snowglobe"){toast("SNOW GLOBE — SHAKEN");$("#weatherFx").animate([{opacity:.35},{opacity:.9},{opacity:.35}],{duration:900});return}
   if(a==="pirate"){collect("pirate-coin");info("HIDDEN ROOM / II","The chart room","<p>Pirates, passages, nautical charts, navigation tools, and routes that look better on paper.</p>");return}
   if(a==="boss"){info("ARCHIVE / 01","Boss Fights","<p>Major objectives with clean finish lines.</p><span class='tag'>IRON DISTANCE</span><span class='tag'>EXPEDITION RACE</span><span class='tag'>SPARTAN ULTRA</span>");return}
   if(a==="adventure"){info("ARCHIVE / 02","Adventures","<p>Worth doing because the story is better afterwards.</p><span class='tag'>ALCATRAZ</span><span class='tag'>MONGOLIA</span><span class='tag'>SAILING PASSAGE</span>");return}
@@ -302,6 +354,7 @@ $("#resetBtn").onclick=()=>{["wells.collection","wells.ideas","wells.outfit","we
 $("#driveExit").onclick=()=>$("#driveOverlay").classList.remove("open");
 addEventListener("mousemove",parallax);
 addEventListener("keydown",e=>{
+  if(e.key.toLowerCase()==="d" && !$("#driveOverlay").classList.contains("open"))document.body.classList.add("discover");
   if(!$("#driveOverlay").classList.contains("open"))return;
   const k=e.key.toLowerCase();
   if(k==="a"||e.key==="ArrowLeft")state.driveX=Math.max(34,state.driveX-3);
@@ -315,3 +368,4 @@ renderCollection();renderIdeas();renderSuits();applyWeather();
 document.body.classList.toggle("reduce-motion",state.reduce);
 $("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");
 sceneTo("estate",true);
+addEventListener("keyup",e=>{if(e.key.toLowerCase()==="d")document.body.classList.remove("discover")});
