@@ -1,99 +1,144 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#090b09"/>
-<meta name="description" content="WELLS — an explorable 3D estate of capabilities, machines, weather, places and future stories."/>
-<title>WELLS</title>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
-<link rel="shortcut icon" href="/favicon.svg"/>
-<link rel="stylesheet" href="/styles.css"/>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#11150f"/>
+  <meta name="description" content="WELLS — an explorable cinematic estate of capabilities, machines, weather, places and future stories."/>
+  <title>WELLS</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <link rel="shortcut icon" href="/favicon.svg"/>
+  <link rel="preconnect" href="https://images.unsplash.com"/>
+  <link rel="stylesheet" href="/styles.css"/>
 </head>
-<body>
-<div id="loader">
-  <div class="loader-inner">
-    <div class="coin">W</div>
-    <h1>WALKERWELLS.COM</h1>
-    <p>Some places are more useful than an About page.</p>
-    <button id="enter">ENTER THE ESTATE</button>
-  </div>
-</div>
-
-<div id="world"></div>
-<div id="vignette"></div><div id="grain"></div><div id="fade"></div>
-
-<div id="ui">
-  <div class="topbar">
-    <button id="brand" class="brand">WELLS</button>
-    <div class="top-actions">
-      <button id="soundBtn">SOUND — OFF</button>
-      <button id="ideasBtn">BAD IDEAS</button>
-      <button id="wardrobeBtn">SUIT UP</button>
-      <button id="weatherBtn">WEATHER</button>
-      <button id="collectionBtn">◈ <span id="collectionCount">0</span>/16</button>
+<body data-season="autumn" data-storm="false">
+  <div id="boot" class="boot">
+    <div class="boot-shade"></div>
+    <div class="boot-card">
+      <div class="coin-mark">W</div>
+      <div class="boot-kicker">WALKERWELLS.COM</div>
+      <h1>The estate is open.</h1>
+      <p>No résumé. No tour. Pick a direction.</p>
+      <button id="enterBtn" class="primary">ENTER</button>
     </div>
   </div>
 
-  <div class="credits">DRAG YOUR EYES AROUND. CLICK THE WORLD.</div>
-
-  <div class="hero">
-    <div id="heroEye" class="eyebrow">WELLS / 01</div>
-    <h1 id="heroTitle">The estate.</h1>
-    <p id="heroCopy">A place made out of future stories. Click the architecture, not the labels.</p>
-  </div>
-
-  <div class="scene-nav">
-    <button data-scene="estate">ESTATE</button>
-    <button data-scene="manor">MANOR</button>
-    <button data-scene="garage">GARAGE</button>
-    <button data-scene="archive">ARCHIVE</button>
-    <button data-scene="map">MAP ROOM</button>
-    <button data-scene="camp">CAMPFIRE</button>
-    <button data-scene="nyc">NYC</button>
-  </div>
-  <div id="hint"></div><div id="reticle"></div>
-
-  <section id="collectionPanel" class="panel">
-    <button class="close" data-close>×</button><small>THE COLLECTION</small><h2>Things found.</h2>
-    <div id="collectionGrid"></div>
-  </section>
-
-  <section id="ideasPanel" class="panel">
-    <button class="close" data-close>×</button><small>THE STUDY</small><h2>Bad Ideas Board</h2>
-    <p>Click a card to move it from idea → approved → active → done. The board remembers.</p>
-    <div id="badGrid" class="bad-grid"></div>
-  </section>
-
-  <section id="wardrobePanel" class="panel">
-    <button class="close" data-close>×</button><small>THE DRESSING ROOM</small><h2>Choose the genre.</h2>
-    <div id="wardrobeGrid" class="wardrobe-grid"></div>
-  </section>
-
-  <section id="weatherPanel" class="panel">
-    <button class="close" data-close>×</button><small>THE WEATHER ROOM</small><h2>Change the world.</h2>
-    <p>The season is usually supposed to be discovered through the moon. You have the controls now.</p>
-    <div class="weather-grid">
-      <button data-season="winter">WINTER</button><button data-season="spring">SPRING</button>
-      <button data-season="summer">SUMMER</button><button data-season="autumn">AUTUMN</button>
+  <main id="world" class="world">
+    <div id="scene" class="scene">
+      <div id="sceneBg" class="scene-bg"></div>
+      <div class="scene-depth depth-a"></div>
+      <div class="scene-depth depth-b"></div>
+      <div id="weatherFx" class="weather-fx"></div>
+      <div class="cinema-vignette"></div>
+      <div class="film-grain"></div>
+      <div id="hotspotLayer" class="hotspot-layer"></div>
+      <div id="collectibleLayer" class="collectible-layer"></div>
     </div>
-    <button id="stormBtn" class="wide-btn">STORM MODE — OFF</button>
-  </section>
 
-  <section id="missionPanel" class="panel">
-    <button class="close" data-close>×</button><small>MISSION TERMINAL</small><h2>Operation: Winter Formal</h2>
-    <div class="dossier"></div>
-  </section>
+    <header class="topbar">
+      <button id="brandBtn" class="brand" aria-label="Return to estate">
+        <span class="brand-w">W</span><span>WELLS</span>
+      </button>
+      <div class="top-actions">
+        <button id="soundBtn" class="glass-btn">SOUND — OFF</button>
+        <button id="ideasBtn" class="glass-btn">BAD IDEAS</button>
+        <button id="suitBtn" class="glass-btn">SUIT UP</button>
+        <button id="weatherBtn" class="glass-btn">WEATHER</button>
+        <button id="collectionBtn" class="glass-btn">◈ <span id="collectionCount">0</span>/16</button>
+      </div>
+    </header>
 
-  <section id="infoPanel" class="panel">
-    <button class="close" data-close>×</button><small id="infoEye"></small><h2 id="infoTitle"></h2>
-    <div id="infoBody"></div>
-  </section>
-</div>
+    <aside class="rail">
+      <div class="rail-line"></div>
+      <button data-nav="estate"><span>01</span>ESTATE</button>
+      <button data-nav="manor"><span>02</span>MANOR</button>
+      <button data-nav="garage"><span>03</span>GARAGE</button>
+      <button data-nav="archive"><span>04</span>ARCHIVE</button>
+      <button data-nav="map"><span>05</span>MAP ROOM</button>
+      <button data-nav="camp"><span>06</span>CAMPFIRE</button>
+      <button data-nav="nyc"><span>07</span>NYC</button>
+      <div class="rail-rule"></div>
+      <button id="settingsBtn"><span>•</span>SETTINGS</button>
+    </aside>
 
-<div id="toast"></div>
+    <section class="scene-caption">
+      <div id="sceneEyebrow" class="eyebrow">WELLS / ESTATE</div>
+      <h2 id="sceneTitle">The estate.</h2>
+      <p id="sceneCopy">A place made out of future stories.</p>
+      <div id="sceneHint" class="scene-hint">Move around. Click what looks interesting.</div>
+    </section>
 
-<script type="module" src="/app.js"></script>
+    <div id="roomCard" class="room-card" aria-hidden="true">
+      <div class="room-card-line"></div>
+      <div id="roomCardTitle"></div>
+      <small id="roomCardSub"></small>
+    </div>
+
+    <div id="transition" class="transition"></div>
+
+    <section id="infoPanel" class="panel">
+      <button class="panel-close" data-close>×</button>
+      <div id="infoEyebrow" class="panel-kicker"></div>
+      <h3 id="infoTitle"></h3>
+      <div id="infoBody"></div>
+    </section>
+
+    <section id="ideasPanel" class="panel wide-panel">
+      <button class="panel-close" data-close>×</button>
+      <div class="panel-kicker">THE STUDY</div>
+      <h3>Bad Ideas Board</h3>
+      <p>Click a card to move it from idea → approved → active → done. The board remembers.</p>
+      <div id="ideasGrid" class="ideas-grid"></div>
+    </section>
+
+    <section id="suitPanel" class="panel">
+      <button class="panel-close" data-close>×</button>
+      <div class="panel-kicker">DRESSING ROOM</div>
+      <h3>Choose the genre.</h3>
+      <p id="currentSuit"></p>
+      <div id="suitGrid" class="suit-grid"></div>
+    </section>
+
+    <section id="weatherPanel" class="panel">
+      <button class="panel-close" data-close>×</button>
+      <div class="panel-kicker">THE WEATHER ROOM</div>
+      <h3>Change the estate.</h3>
+      <div class="weather-grid">
+        <button data-season="spring">SPRING</button>
+        <button data-season="summer">SUMMER</button>
+        <button data-season="autumn">AUTUMN</button>
+        <button data-season="winter">WINTER</button>
+      </div>
+      <button id="stormBtn" class="panel-action">STORM MODE — OFF</button>
+    </section>
+
+    <section id="collectionPanel" class="panel">
+      <button class="panel-close" data-close>×</button>
+      <div class="panel-kicker">THE COLLECTION</div>
+      <h3>Things found.</h3>
+      <div id="collectionGrid" class="collection-grid"></div>
+    </section>
+
+    <section id="settingsPanel" class="panel">
+      <button class="panel-close" data-close>×</button>
+      <div class="panel-kicker">SETTINGS / CREDITS</div>
+      <h3>World controls.</h3>
+      <button id="reduceMotionBtn" class="panel-action">MOTION — FULL</button>
+      <button id="resetBtn" class="panel-action">RESET LOCAL PROGRESS</button>
+      <p class="credits-copy">Environment imagery uses free Unsplash photography and architectural visualization. Interaction, art direction, systems and world design are custom to WELLS.</p>
+    </section>
+
+    <section id="driveOverlay" class="drive-overlay">
+      <div class="drive-bg"></div>
+      <div class="drive-speed"><small id="driveCarLabel">GRAND TOURER</small><strong id="driveSpeed">72</strong><span>MPH</span></div>
+      <div class="drive-copy"><span>NIGHT DRIVE</span><h3 id="driveTitle">Somewhere after rain.</h3><p>A / D or ← / →</p></div>
+      <div id="driveLaneCar" class="drive-lane-car"></div>
+      <button id="driveExit" class="drive-exit">EXIT DRIVE</button>
+    </section>
+
+    <div id="toast" class="toast"></div>
+  </main>
+
+  <script src="/app.js" defer></script>
 </body>
 </html>
