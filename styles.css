@@ -152,3 +152,25 @@ body.reduce-motion *{animation:none!important;transition-duration:.01ms!importan
   color:#ddcca5;font-size:7px;letter-spacing:.12em;opacity:0;transition:.2s;
 }
 .object-found.show{opacity:1}
+
+.reveal-btn{
+  margin-top:13px;pointer-events:auto;border:1px solid rgba(229,204,141,.24);
+  background:rgba(12,14,11,.34);color:#bfb399;padding:8px 10px;
+  font-size:7px;letter-spacing:.16em;cursor:pointer;backdrop-filter:blur(10px)
+}
+.reveal-btn:hover,.reveal-btn:active{border-color:rgba(229,204,141,.65);color:#f1e5c9}
+body.discover .scene-hint{color:#e4cca0}
+body.discover .scene-bg{filter:brightness(.88) saturate(.88) contrast(1.04)}
+.piano-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.piano-mini button{height:76px;border:1px solid #565348;background:#eee7d4;color:#171814;cursor:pointer;font:18px "Playfair Display",serif}
+.piano-mini button:nth-child(even){background:#171916;color:#eee7d4}
+.forge-game{margin-top:18px}
+.forge-track{position:relative;height:22px;border:1px solid #494b42;background:#0d100d;overflow:hidden}
+.forge-track span{position:absolute;left:44%;width:12%;top:0;bottom:0;background:rgba(207,170,86,.26);border-left:1px solid #cdaa57;border-right:1px solid #cdaa57}
+.forge-track i{position:absolute;left:0;top:2px;bottom:2px;width:4px;background:#f1d785;box-shadow:0 0 12px #f1d785}
+#forgeStrike{width:100%;margin-top:10px;border:1px solid #5a5241;background:#171a15;padding:12px;letter-spacing:.15em;font-size:8px;cursor:pointer}
+#forgeStrike:hover{background:#ece3cf;color:#12140f}
+@media(max-width:880px){
+  .reveal-btn{font-size:8px;padding:10px 12px}
+  body.discover .hotspot::before{border-color:rgba(232,207,145,.55);background:rgba(232,207,145,.06)}
+}
