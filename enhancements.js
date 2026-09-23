@@ -119,7 +119,7 @@
     tray.innerHTML='<div class="mobile-interaction-kicker">EXPLORE</div><div class="mobile-interaction-scroll">'+
       items.map((h,i)=>'<button class="mobile-interaction" data-mobile-hot="'+i+'"><strong>'+h.label+'</strong>'+(h.sub?'<span>'+h.sub+'</span>':'')+'</button>').join('')+
       '</div>';
-    $q('[data-mobile-hot]').forEach(b=>{
+    $$q('[data-mobile-hot]').forEach(b=>{
       const h=items[+b.dataset.mobileHot];
       b.onclick=()=>h.go?sceneTo(h.go):doAction(h.action);
     });
