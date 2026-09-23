@@ -89,3 +89,15 @@ body[data-scene="camp"].discover .scene-bg,
 body[data-scene="camp"] .scene.interacting .scene-bg{
   filter:brightness(1.07) saturate(1.03) contrast(.99) !important;
 }
+
+@media(max-width:880px){
+  .game-note{font-size:11px;line-height:1.5}
+  .piano-keys{height:118px;gap:3px}.piano-key{font-size:11px}
+  .piano-progress{margin:10px 0}
+  .vault-dials{gap:6px}.dial{padding:10px 4px}.dial strong{font-size:30px}
+  .constellation-board{height:min(46vh,310px)}
+  .route-game{grid-template-columns:1fr 1fr}
+  .watch-face{width:132px;height:132px}
+  .globe-big{width:150px;height:150px}
+  .timing-game{margin-top:12px}
+}
