@@ -6,7 +6,7 @@ const IMG={
   garage:"/assets/scenes/garage-hq.webp?v=garage2",
   study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
   wardrobe:"https://images.unsplash.com/photo-1765766600589-ddad380d6534?auto=format&fit=crop&w=2400&q=88",
-  archive:"https://images.unsplash.com/photo-1759774311106-630dbcc45b70?auto=format&fit=crop&w=2400&q=88",
+  archive:"/assets/scenes/archive-hq.webp?v=archive2",
   map:"https://images.unsplash.com/photo-1503503330041-4cd943d2b61f?auto=format&fit=crop&w=2400&q=88",
   nyc:"https://images.unsplash.com/photo-1616486788371-62d930495c44?auto=format&fit=crop&w=2400&q=88",
   armory:"https://images.unsplash.com/photo-1755194357377-a5b59ab01e1f?auto=format&fit=crop&w=2400&q=88",
@@ -85,19 +85,18 @@ const scenes={
     collectibles:[]
   },
   archive:{
-    title:"The capability archive.",eye:"WELLS / ARCHIVE",copy:"Proof, plans, and locked drawers.",
-    hint:"The objects are the biography. The labels are secondary.",
+    title:"The archive.",eye:"WELLS / ARCHIVE",copy:"Not a résumé. The things that actually earned wall space.",
+    hint:"Click the specific relics: Yale, Santa Cruz 70.3, the ski backflip, Ponte Vedra Beach, or the archive index.",
     bg:IMG.archive,
     hotspots:[
-      {x:27,y:50,w:20,h:27,label:"BOSS FIGHTS",sub:"Clean finish lines",action:"boss"},
-      {x:51,y:45,w:20,h:27,label:"ADVENTURES",sub:"Worth it for the story",action:"adventure"},
-      {x:73,y:52,w:20,h:27,label:"SKILL UNLOCKS",sub:"Capabilities that compound",action:"skill"},
-      {x:88,y:42,w:15,h:26,label:"VAULT",sub:"Open relic case",action:"relic"},
-      {x:42,y:71,w:14,h:17,label:"RACE RELIC",sub:"Santa Cruz / 5:29",action:"santa-relic"},
-      {x:66,y:70,w:14,h:17,label:"SKI PASS",sub:"Backflip — unlocked",action:"ski-relic"},
-      {x:18,y:76,w:15,h:16,label:"UNMARKED DRAWER",sub:"No category",action:"locked-drawer"}
+      {x:41,y:23,w:15,h:22,label:"YALE DIPLOMA",sub:"Education / one frame",action:"archive-yale"},
+      {x:57,y:24,w:16,h:23,label:"IRONMAN 70.3",sub:"Santa Cruz / 5:29",action:"santa-relic"},
+      {x:16,y:28,w:18,h:35,label:"SKI BACKFLIP",sub:"Unlocked / make it boring",action:"ski-relic"},
+      {x:78,y:23,w:20,h:24,label:"PONTE VEDRA BEACH",sub:"A place that belongs on the wall",action:"archive-pontevedra"},
+      {x:61,y:42,w:11,h:18,label:"FINISH LINE",sub:"The day behind the medal",action:"archive-finish"},
+      {x:52,y:74,w:36,h:20,label:"ARCHIVE INDEX",sub:"Boss fights / adventures / skill unlocks",action:"archive-index"}
     ],
-    collectibles:[{x:63,y:74,id:"gold-bar",icon:"▰"},{x:84,y:69,id:"vault-seal",icon:"◇"},{x:67,y:72,id:"ski-pass",icon:"▣"}]
+    collectibles:[]
   },
   map:{
     title:"The map room.",eye:"WELLS / MAP ROOM",copy:"Some pins are memories. Some are future stories.",
@@ -295,6 +294,10 @@ function doAction(a){
   if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","This does not belong with the tuxedos.","<p>Correct.</p>");return}
   if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet: an old race-school token and a note that says TRACK ONLY.</p>");return}
   if(a==="track-map"){info("GARAGE / WALL","Track map","<p>Kart → coaching → HPDE → time trial → race license → wheel-to-wheel.</p>");return}
+  if(a==="archive-yale"){info("ARCHIVE / EDUCATION","Yale University","<p>Statistics & Data Science.</p><p>Some chapters fit in a frame. Most of the useful parts do not.</p>");return}
+  if(a==="archive-pontevedra"){info("ARCHIVE / PLACE","Ponte Vedra Beach","<p>A place important enough to earn permanent wall space.</p>");return}
+  if(a==="archive-finish"){info("ARCHIVE / FINISH LINE","Santa Cruz","<p><strong>5:29 total.</strong></p><p>The photograph behind the medal.</p>");return}
+  if(a==="archive-index"){info("ARCHIVE / INDEX","The system behind the wall","<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>");return}
   if(a==="garage-porsche"){info("GARAGE / PORSCHE","911","<p>The back-bay car. Smaller, sharper, and deliberately less theatrical.</p><p>Its own drive branch can come later. For now, it stays parked.</p>");return}
   if(a==="santa-relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>");return}
   if(a==="ski-relic"){collect("ski-pass");info("RELIC / UNLOCKED","SKI BACKFLIP","<p>Unlocked. Next objective: make it boring.</p>");return}

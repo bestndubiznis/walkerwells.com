@@ -6,7 +6,8 @@
 
   IMG.manor="/assets/scenes/manor-cinematic-hq.webp?v=hq2";
   IMG.nyc="/assets/scenes/nyc-christmas-hq.webp?v=hq2";
-  [IMG.manor,IMG.nyc].forEach(src=>{const im=new Image();im.src=src});
+  IMG.archive="/assets/scenes/archive-hq.webp?v=archive2";
+  [IMG.manor,IMG.nyc,IMG.archive].forEach(src=>{const im=new Image();im.src=src});
 
   scenes.manor={
     title:"The manor.",
@@ -50,15 +51,23 @@
     ],
     props:[{x:57,y:70,type:"snowglobe",action:"snowglobe",label:"SNOW GLOBE"}]
   };
-  scenes.archive.hotspots=[
-    {x:27,y:50,w:20,h:27,label:"BOSS FIGHTS",sub:"Clean finish lines",action:"boss"},
-    {x:51,y:45,w:20,h:27,label:"ADVENTURES",sub:"Worth it for the story",action:"adventure"},
-    {x:73,y:52,w:20,h:27,label:"SKILL UNLOCKS",sub:"Capabilities that compound",action:"skill"},
-    {x:88,y:42,w:15,h:26,label:"VAULT",sub:"Three-number combination",action:"vault-game"},
-    {x:42,y:71,w:14,h:17,label:"RACE RELIC",sub:"Santa Cruz / 5:29",action:"santa-relic"},
-    {x:66,y:70,w:14,h:17,label:"SKI PASS",sub:"Backflip — unlocked",action:"ski-relic"},
-    {x:18,y:76,w:15,h:16,label:"UNMARKED DRAWER",sub:"No category",action:"locked-drawer"}
-  ];
+  scenes.archive={
+    title:"The archive.",
+    eye:"WELLS / ARCHIVE",
+    copy:"Not a résumé. The things that actually earned wall space.",
+    hint:"Click the specific relics: Yale, Santa Cruz 70.3, the ski backflip, Ponte Vedra Beach, or the archive index.",
+    bg:IMG.archive,
+    bgPos:"center center",
+    hotspots:[
+      {x:41,y:23,w:15,h:22,label:"YALE DIPLOMA",sub:"Education / one frame",action:"archive-yale"},
+      {x:57,y:24,w:16,h:23,label:"IRONMAN 70.3",sub:"Santa Cruz / 5:29",action:"santa-relic"},
+      {x:16,y:28,w:18,h:35,label:"SKI BACKFLIP",sub:"Unlocked / make it boring",action:"ski-relic"},
+      {x:78,y:23,w:20,h:24,label:"PONTE VEDRA BEACH",sub:"A place that belongs on the wall",action:"archive-pontevedra"},
+      {x:61,y:42,w:11,h:18,label:"FINISH LINE",sub:"The day behind the medal",action:"archive-finish"},
+      {x:52,y:74,w:36,h:20,label:"ARCHIVE INDEX",sub:"Boss fights / adventures / skill unlocks",action:"archive-index"}
+    ],
+    collectibles:[]
+  };
   scenes.map.hotspots=scenes.map.hotspots.map(h=>h.action==="map-route"?{...h,sub:"Plot it correctly"}:h);
 
   function bgPos(s){return innerWidth<=880?(s.bgPosMobile||s.bgPos||"center center"):(s.bgPos||"center center")}
@@ -97,6 +106,10 @@
     if(a==='manor-table'){info('MANOR / TABLE','A life well lived','<p>One boss fight. One adventure. One skill unlock. Repeat until the stories are better than the plans.</p>');return}
     if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Inside / outside','<p>Fire inside. Snow outside. Brick across the street. Somewhere to be later.</p>');return}
     if(a==='nyc-bar'){info('NYC / BAR CART','Before going out','<p>Glassware, old bottles, and a dinner jacket waiting nearby.</p><p>The actual mission is still on the desk.</p>');return}
+    if(a==='archive-yale'){info('ARCHIVE / EDUCATION','Yale University','<p>Statistics & Data Science.</p><p>Some chapters fit in a frame. Most of the useful parts do not.</p>');return}
+    if(a==='archive-pontevedra'){info('ARCHIVE / PLACE','Ponte Vedra Beach','<p>A place important enough to earn permanent wall space.</p>');return}
+    if(a==='archive-finish'){info('ARCHIVE / FINISH LINE','Santa Cruz','<p><strong>5:29 total.</strong></p><p>The photograph behind the medal.</p>');return}
+    if(a==='archive-index'){info('ARCHIVE / INDEX','The system behind the wall','<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>');return}
     if(a==='tree'){info('NYC / TREE','One ornament is different','<p>A tiny brass W is hanging deeper in the branches.</p><button id="takeOrnament" class="mini-action">TAKE IT</button>');later(()=>{$q('#takeOrnament').onclick=()=>{collect('ornament');toast('THE ESTATE HAS FOLLOWED YOU TO NEW YORK')}},0);return}
     if(a==='santa-relic'){info('RELIC / COMPLETED','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>');return}
     return baseDoAction(a)

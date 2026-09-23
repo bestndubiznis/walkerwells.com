@@ -35,3 +35,23 @@ body[data-scene="nyc"] .scene.interacting .scene-bg{
   body[data-scene="manor"][data-storm="false"] .scene-bg,
   body[data-scene="nyc"][data-storm="false"] .scene-bg{filter:brightness(1.12) saturate(1.03) contrast(.98) !important}
 }
+
+/* The archive backplate already carries its own cinematic lighting; preserve the trophy-room detail. */
+body[data-scene="archive"][data-storm="false"] .scene-bg{
+  filter:brightness(1.13) saturate(1.03) contrast(.97) !important;
+}
+body[data-scene="archive"] .scene-bg::after{
+  background:
+    linear-gradient(90deg,rgba(4,5,4,.15) 0,rgba(4,5,4,.03) 28%,transparent 48% 88%,rgba(4,5,4,.07) 100%),
+    linear-gradient(0deg,rgba(4,5,4,.11),transparent 30%);
+}
+body[data-scene="archive"] .cinema-vignette{
+  background:radial-gradient(circle at 52% 43%,transparent 0 72%,rgba(0,0,0,.08) 88%,rgba(0,0,0,.20) 100%);
+}
+body[data-scene="archive"].discover .scene-bg,
+body[data-scene="archive"] .scene.interacting .scene-bg{
+  filter:brightness(1.08) saturate(1.01) contrast(.98) !important;
+}
+@media(max-width:880px){
+  body[data-scene="archive"][data-storm="false"] .scene-bg{filter:brightness(1.10) saturate(1.02) contrast(.98) !important}
+}
