@@ -7,7 +7,8 @@
   IMG.manor="/assets/scenes/manor-cinematic-hq.webp?v=hq2";
   IMG.nyc="/assets/scenes/nyc-christmas-hq.webp?v=hq2";
   IMG.archive="/assets/scenes/archive-hq.webp?v=archive2";
-  [IMG.manor,IMG.nyc,IMG.archive].forEach(src=>{const im=new Image();im.src=src});
+  IMG.map="/assets/scenes/map-room-hq.webp?v=map2";
+  [IMG.manor,IMG.nyc,IMG.archive,IMG.map].forEach(src=>{const im=new Image();im.src=src});
 
   scenes.manor={
     title:"The manor.",
@@ -68,7 +69,33 @@
     ],
     collectibles:[]
   };
-  scenes.map.hotspots=scenes.map.hotspots.map(h=>h.action==="map-route"?{...h,sub:"Plot it correctly"}:h);
+  scenes.map={
+    title:"The map room.",
+    eye:"WELLS / MAP ROOM",
+    copy:"Where I came from, where I disappeared to, and what is next.",
+    hint:"Click the framed trips, map pins, and travel books. The room is the itinerary.",
+    bg:IMG.map,
+    bgPos:"center center",
+    hotspots:[
+      {x:13,y:8,w:17,h:12,label:"SAN FRANCISCO",sub:"Home base",action:"place-sf"},
+      {x:13,y:20,w:17,h:12,label:"BANFF",sub:"Canadian Rockies",action:"place-banff"},
+      {x:13,y:33,w:17,h:12,label:"SANTA MONICA",sub:"California",action:"place-santamonica"},
+      {x:13,y:46,w:17,h:12,label:"PERU",sub:"South America",action:"place-peru"},
+      {x:13,y:58,w:17,h:12,label:"COSTA RICA",sub:"Six weeks",action:"place-costarica"},
+      {x:84,y:9,w:17,h:12,label:"LONDON",sub:"Born here",action:"place-london"},
+      {x:79,y:24,w:11,h:13,label:"EUROPE",sub:"Four months solo / gap year",action:"place-europe"},
+      {x:85,y:36,w:17,h:13,label:"JAPAN",sub:"Coming soon / 2027",action:"place-japan"},
+      {x:84,y:51,w:17,h:12,label:"VAIL, COLORADO",sub:"Mountain chapter",action:"place-vail"},
+      {x:84,y:63,w:17,h:12,label:"SOUTHEAST ASIA",sub:"Trip with friends",action:"place-seasia"},
+      {x:84,y:75,w:17,h:12,label:"SOUTH AFRICA",sub:"Childhood safari",action:"place-southafrica"},
+      {x:39,y:27,w:8,h:8,label:"PONTE VEDRA",sub:"Northeast Florida",action:"place-pontevedra"},
+      {x:40,y:22,w:8,h:8,label:"CONNECTICUT",sub:"Northeast chapter",action:"place-ct"},
+      {x:39,y:33,w:8,h:8,label:"BAHAMAS",sub:"Many New Years",action:"place-bahamas"},
+      {x:40,y:38,w:8,h:8,label:"JAMAICA",sub:"Learned to scuba dive",action:"place-jamaica"},
+      {x:29,y:68,w:22,h:13,label:"TRAVEL BOOKS",sub:"Plot the next route",action:"map-route"}
+    ],
+    collectibles:[]
+  };
 
   function bgPos(s){return innerWidth<=880?(s.bgPosMobile||s.bgPos||"center center"):(s.bgPos||"center center")}
   function renderProps(s){const layer=$q('#propLayer');if(!layer)return;layer.innerHTML=(s.props||[]).map((p,i)=>`<button class="scene-prop ${p.type}" data-prop="${i}" style="left:${p.x}%;top:${p.y}%" aria-label="${p.label}"></button>`).join('');$$q('[data-prop]').forEach(b=>{const p=s.props[+b.dataset.prop];b.onmouseenter=e=>showRoomCard(e,{label:p.label,sub:"Click to interact"});b.onmouseleave=hideRoomCard;b.onclick=()=>doAction(p.action)})}

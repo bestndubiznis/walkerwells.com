@@ -55,3 +55,20 @@ body[data-scene="archive"] .scene.interacting .scene-bg{
 @media(max-width:880px){
   body[data-scene="archive"][data-storm="false"] .scene-bg{filter:brightness(1.10) saturate(1.02) contrast(.98) !important}
 }
+
+/* Map-room art already contains warm practical lighting; keep the map, labels and travel photos readable. */
+body[data-scene="map"][data-storm="false"] .scene-bg{
+  filter:brightness(1.10) saturate(1.03) contrast(.98) !important;
+}
+body[data-scene="map"] .scene-bg::after{
+  background:
+    linear-gradient(90deg,rgba(4,5,4,.10) 0,rgba(4,5,4,.02) 24%,transparent 44% 87%,rgba(4,5,4,.06) 100%),
+    linear-gradient(0deg,rgba(4,5,4,.10),transparent 28%);
+}
+body[data-scene="map"] .cinema-vignette{
+  background:radial-gradient(circle at 52% 43%,transparent 0 73%,rgba(0,0,0,.07) 89%,rgba(0,0,0,.18) 100%);
+}
+body[data-scene="map"].discover .scene-bg,
+body[data-scene="map"] .scene.interacting .scene-bg{
+  filter:brightness(1.07) saturate(1.02) contrast(.99) !important;
+}

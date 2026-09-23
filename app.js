@@ -7,7 +7,7 @@ const IMG={
   study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
   wardrobe:"https://images.unsplash.com/photo-1765766600589-ddad380d6534?auto=format&fit=crop&w=2400&q=88",
   archive:"/assets/scenes/archive-hq.webp?v=archive2",
-  map:"https://images.unsplash.com/photo-1503503330041-4cd943d2b61f?auto=format&fit=crop&w=2400&q=88",
+  map:"/assets/scenes/map-room-hq.webp?v=map2",
   nyc:"https://images.unsplash.com/photo-1616486788371-62d930495c44?auto=format&fit=crop&w=2400&q=88",
   armory:"https://images.unsplash.com/photo-1755194357377-a5b59ab01e1f?auto=format&fit=crop&w=2400&q=88",
   camp:"https://images.unsplash.com/photo-1538135901208-b7bc0a074a56?auto=format&fit=crop&w=2400&q=88"
@@ -99,21 +99,28 @@ const scenes={
     collectibles:[]
   },
   map:{
-    title:"The map room.",eye:"WELLS / MAP ROOM",copy:"Some pins are memories. Some are future stories.",
-    hint:"The map declines to clarify which is which.",
+    title:"The map room.",eye:"WELLS / MAP ROOM",copy:"Where I came from, where I disappeared to, and what is next.",
+    hint:"Click the framed trips, map pins, and travel books. The room is the itinerary.",
     bg:IMG.map,
     hotspots:[
-      {x:27,y:52,w:12,h:12,label:"CALIFORNIA",sub:"Home base",action:"place-california"},
-      {x:45,y:46,w:12,h:12,label:"NEW YORK",sub:"December",go:"nyc"},
-      {x:58,y:40,w:12,h:12,label:"ST. MORITZ",sub:"Winter branch",action:"place-stmoritz"},
-      {x:64,y:58,w:12,h:12,label:"MONGOLIA",sub:"Nine days / dirt",action:"place-mongolia"},
-      {x:74,y:66,w:12,h:12,label:"BVI",sub:"Sail / dive",action:"place-bvi"},
-      {x:86,y:51,w:12,h:12,label:"THAILAND",sub:"Islands / water",action:"place-thailand"},
-      {x:13,y:63,w:17,h:28,label:"SHIP'S WHEEL",sub:"It moves when it should not",action:"pirate"},
-      {x:71,y:30,w:12,h:14,label:"BRASS COMPASS",sub:"Needle points somewhere inconvenient",action:"compass-case"},
-      {x:36,y:68,w:20,h:15,label:"PENCIL ROUTE",sub:"Someone has drawn a line across the ocean",action:"map-route"}
+      {x:13,y:8,w:17,h:12,label:"SAN FRANCISCO",sub:"Home base",action:"place-sf"},
+      {x:13,y:20,w:17,h:12,label:"BANFF",sub:"Canadian Rockies",action:"place-banff"},
+      {x:13,y:33,w:17,h:12,label:"SANTA MONICA",sub:"California",action:"place-santamonica"},
+      {x:13,y:46,w:17,h:12,label:"PERU",sub:"South America",action:"place-peru"},
+      {x:13,y:58,w:17,h:12,label:"COSTA RICA",sub:"Six weeks",action:"place-costarica"},
+      {x:84,y:9,w:17,h:12,label:"LONDON",sub:"Born here",action:"place-london"},
+      {x:79,y:24,w:11,h:13,label:"EUROPE",sub:"Four months solo / gap year",action:"place-europe"},
+      {x:85,y:36,w:17,h:13,label:"JAPAN",sub:"Coming soon / 2027",action:"place-japan"},
+      {x:84,y:51,w:17,h:12,label:"VAIL, COLORADO",sub:"Mountain chapter",action:"place-vail"},
+      {x:84,y:63,w:17,h:12,label:"SOUTHEAST ASIA",sub:"Trip with friends",action:"place-seasia"},
+      {x:84,y:75,w:17,h:12,label:"SOUTH AFRICA",sub:"Childhood safari",action:"place-southafrica"},
+      {x:39,y:27,w:8,h:8,label:"PONTE VEDRA",sub:"Northeast Florida",action:"place-pontevedra"},
+      {x:40,y:22,w:8,h:8,label:"CONNECTICUT",sub:"Northeast chapter",action:"place-ct"},
+      {x:39,y:33,w:8,h:8,label:"BAHAMAS",sub:"Many New Years",action:"place-bahamas"},
+      {x:40,y:38,w:8,h:8,label:"JAMAICA",sub:"Learned to scuba dive",action:"place-jamaica"},
+      {x:29,y:68,w:22,h:13,label:"TRAVEL BOOKS",sub:"Plot the next route",action:"map-route"}
     ],
-    collectibles:[{x:70,y:29,id:"compass",icon:"✥"},{x:78,y:77,id:"map-pin",icon:"•"}]
+    collectibles:[]
   },
   camp:{
     title:"The clearing.",eye:"WELLS / CAMPFIRE",copy:"No scoreboard.",
@@ -314,8 +321,37 @@ function doAction(a){
   if(a==="skill"){info("ARCHIVE / 03","Skill Unlocks","<p>Capabilities that compound.</p><span class='tag'>BACKFLIP</span><span class='tag'>PILOT</span><span class='tag'>NAVIGATION</span><span class='tag'>WINGFOIL</span>");return}
   if(a==="relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>No speech. Put the proof in the case and keep moving.</p>");return}
   if(a.startsWith("place-")){
-    const k=a.slice(6),copy={california:"Cliffs, bikes, long roads, dry hills, cold Pacific water.",stmoritz:"Snow, clean lines, winter machinery, good coats.",mongolia:"Dirt bikes. Open country. Nine days.",bvi:"Sailing, diving, moving water, islands close enough for lunch.",thailand:"Warm rain, diving, islands, scooters."};
-    collect("map-pin");info("MAP PIN",k.toUpperCase(),"<p>"+(copy[k]||"Pinned.")+"</p>");return
+    const k=a.slice(6);
+    const titles={
+      sf:"SAN FRANCISCO",banff:"BANFF",santamonica:"SANTA MONICA",peru:"PERU",costarica:"COSTA RICA",
+      london:"LONDON",europe:"EUROPE",japan:"JAPAN",vail:"VAIL, COLORADO",seasia:"SOUTHEAST ASIA",
+      southafrica:"SOUTH AFRICA",pontevedra:"PONTE VEDRA / NORTHEAST FLORIDA",ct:"CONNECTICUT",
+      bahamas:"BAHAMAS",jamaica:"JAMAICA",california:"CALIFORNIA",stmoritz:"ST. MORITZ",
+      mongolia:"MONGOLIA",bvi:"BVI",thailand:"THAILAND"
+    };
+    const copy={
+      sf:"Home base now — Pacific water, hills, bikes, and the place the estate is being imagined from.",
+      banff:"One of the mountain pins. Banff belongs in the room.",
+      santamonica:"A California pin on the western edge of the map.",
+      peru:"A South America pin that earned a permanent place on the wall.",
+      costarica:"Six weeks in Costa Rica.",
+      london:"Born in London. The map starts here before it goes anywhere else.",
+      europe:"During my gap year, I backpacked around Europe solo for four months.",
+      japan:"Coming soon: Japan in 2027.",
+      vail:"Vail, Colorado — another mountain pin in the collection.",
+      seasia:"Southeast Asia — a trip with friends.",
+      southafrica:"South Africa — a childhood safari trip.",
+      pontevedra:"Ponte Vedra Beach / Northeast Florida — one of the places that feels foundational enough to show up in both the archive and the map room.",
+      ct:"Connecticut — another Northeast chapter.",
+      bahamas:"The Bahamas — many New Years spent here.",
+      jamaica:"Jamaica — where I learned to scuba dive.",
+      california:"Cliffs, bikes, long roads, dry hills, cold Pacific water.",
+      stmoritz:"Snow, clean lines, winter machinery, good coats.",
+      mongolia:"Dirt bikes. Open country. Nine days.",
+      bvi:"Sailing, diving, moving water, islands close enough for lunch.",
+      thailand:"Warm rain, diving, islands, scooters."
+    };
+    collect("map-pin");info("MAP PIN",titles[k]||k.toUpperCase(),"<p>"+(copy[k]||"Pinned.")+"</p>");return
   }
   if(a==="mission"){info("MISSION TERMINAL","OPERATION: WINTER FORMAL","<div class='dossier'>LOCATION: NEW YORK<br>TIME: 20:40<br>ATTIRE: "+state.suit+"<br>VEHICLE: BLACK GRAND TOURER<br>WEATHER: SNOW<br><br>OBJECTIVE:<br>LEAVE THE APARTMENT LOOKING LIKE YOU KNOW WHERE YOU ARE GOING.<br><br>SECONDARY OBJECTIVE:<br>DO SOMETHING WORTH RETELLING.</div>");return}
   if(a==="windows"){info("NYC / DECEMBER","Best version of the city.","<p>Snow outside. Fire inside. Somewhere to be later.</p>");return}
