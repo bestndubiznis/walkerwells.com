@@ -59,9 +59,33 @@ body[data-season="winter"] .weather-fx{background-image:radial-gradient(circle,r
 .room-card small{display:block;margin-top:4px;font-size:7px;letter-spacing:.12em;color:#b9ad97}
 
 .hotspot-layer,.collectible-layer{position:absolute;inset:0;z-index:22}
-.hotspot{position:absolute;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,244,215,.8);background:rgba(255,244,215,.11);box-shadow:0 0 0 8px rgba(255,244,215,.05),0 0 20px rgba(233,203,140,.22);cursor:pointer;transform:translate(-50%,-50%);transition:.2s}
-.hotspot::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:#fff2cf;transform:translate(-50%,-50%);box-shadow:0 0 9px #fff2cf}
-.hotspot:hover{transform:translate(-50%,-50%) scale(1.18);background:rgba(255,244,215,.2)}
+.hotspot{
+  position:absolute;border:0;background:transparent;cursor:pointer;
+  transform:translate(-50%,-50%);border-radius:14px;opacity:1;
+  transition:background .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.hotspot::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid transparent;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.hotspot::after{
+  content:"";position:absolute;left:50%;bottom:8px;width:0;height:1px;
+  transform:translateX(-50%);background:linear-gradient(90deg,transparent,#e8cf91,transparent);
+  transition:width .18s ease;
+}
+.hotspot:hover{transform:translate(-50%,-50%) scale(1.015)}
+.hotspot:hover::before{
+  border-color:rgba(232,207,145,.36);
+  background:radial-gradient(circle at 50% 50%,rgba(232,207,145,.075),transparent 72%);
+  box-shadow:inset 0 0 35px rgba(232,207,145,.035);
+}
+.hotspot:hover::after{width:34px}
+body.discover .hotspot::before{
+  border-color:rgba(232,207,145,.28);
+  background:rgba(232,207,145,.025);
+  box-shadow:inset 0 0 24px rgba(232,207,145,.025);
+}
+body.discover .hotspot::after{width:22px}
 .collectible{position:absolute;z-index:24;width:22px;height:22px;border:0;background:none;color:#e7c77c;font-size:20px;cursor:pointer;filter:drop-shadow(0 2px 8px #000);animation:float 2.8s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-6px)}}
 
@@ -116,3 +140,15 @@ body.reduce-motion *{animation:none!important;transition-duration:.01ms!importan
   .scene-caption p{font-size:13px}.room-card{display:none}.topbar{left:12px;right:12px}
   .panel{right:12px;top:70px;width:calc(100vw - 24px)}.ideas-grid{grid-template-columns:1fr}
 }
+/* Interaction pass: the world itself is clickable; no floating waypoint circles. */
+.scene.interacting .scene-bg{filter:brightness(.94) saturate(.9) contrast(1.035)}
+.room-card{max-width:220px}
+.room-card small{line-height:1.35}
+.hotspot-layer{cursor:default}
+.hotspot:focus-visible::before{border-color:rgba(232,207,145,.65)}
+.object-found{
+  position:absolute;z-index:26;pointer-events:none;padding:5px 7px;
+  background:rgba(12,14,11,.62);border:1px solid rgba(232,207,145,.24);
+  color:#ddcca5;font-size:7px;letter-spacing:.12em;opacity:0;transition:.2s;
+}
+.object-found.show{opacity:1}
