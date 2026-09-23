@@ -129,11 +129,11 @@ const scenes={
     bgPos:"center center",
     bgPosMobile:"26% center",
     hotspots:[
-      {x:4,y:25,w:25,h:39,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
-      {x:36,y:47,w:28,h:40,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
-      {x:4,y:63,w:18,h:24,label:"OLD COMPASS",sub:"Left on the log",action:"camp-compass"},
-      {x:88,y:22,w:11,h:36,label:"TREE CARVING",sub:"Three trees / mountain mark",action:"tree-carving"},
-      {x:32,y:0,w:55,h:36,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"}
+      {x:6,y:28,w:25,h:39,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
+      {x:38,y:50,w:28,h:40,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
+      {x:6,y:66,w:18,h:24,label:"OLD COMPASS",sub:"Left on the log",action:"camp-compass"},
+      {x:90,y:25,w:9,h:36,label:"TREE CARVING",sub:"Three trees / mountain mark",action:"tree-carving"},
+      {x:34,y:3,w:55,h:36,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"}
     ],
     collectibles:[]
   },
