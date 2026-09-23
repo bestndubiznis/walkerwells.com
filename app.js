@@ -129,7 +129,7 @@ const scenes={
     hotspots:[
       {x:51,y:59,w:26,h:28,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
       {x:72,y:18,w:50,h:26,label:"THE SKY",sub:"Five unofficial constellations",action:"stars"},
-      {x:20,y:52,w:26,h:40,label:"THE TENT",sub:"No agenda",action:"tent"},
+      {x:20,y:52,w:26,h:40,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
       {x:34,y:73,w:15,h:15,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
       {x:82,y:63,w:16,h:19,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
     ],
@@ -357,7 +357,7 @@ function doAction(a){
   if(a==="windows"){info("NYC / DECEMBER","Best version of the city.","<p>Snow outside. Fire inside. Somewhere to be later.</p>");return}
   if(a==="campfire"){info("THE CLEARING","No scoreboard.","<p>Some things do not need to become metrics.</p>");return}
   if(a==="stars"){collect("star-map");info("THE SKY","Unofficial constellations","<p>Motorcycle. Sailboat. Shark. Skier. Sword.</p>");return}
-  if(a==="tent"){info("THE CLEARING","No agenda.","<p>Stay until the fire gets low.</p>");return}
+  if(a==="tent"){info("BREVARD / NORTH CAROLINA","Camp country.","<p><strong>Brevard, North Carolina.</strong> One of those places that feels permanently tied to summer and being outside.</p><p>Camp Carolina. Dolly\'s ice cream. Sliding Rock. The Blue Ridge Parkway. The Appalachian Trail.</p><p>Mountains, campfires, cold water, long roads through the Blue Ridge, and the kind of memories that make a tent belong in the estate.</p>");return}
   if(a==="moto"){collect("race-token");info("GARAGE / DIRT","Mongolia starts here.","<p>Trail riding → camping → desert → multi-day expedition.</p>");return}
   if(a==="bike"){info("GARAGE / CARBON","The engine is the problem.","<p>Road. Mountain. Long climbs. Bad ideas measured in watts.</p>");return}
   if(a.startsWith("drive-")){startDrive(a.slice(6));return}

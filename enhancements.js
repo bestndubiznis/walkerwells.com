@@ -31,7 +31,7 @@
   scenes.camp.hotspots=[
     {x:51,y:66,w:26,h:28,label:"THE FIRE",sub:"Stay a minute",action:"campfire"},
     {x:72,y:18,w:50,h:26,label:"THE SKY",sub:"Trace the hidden constellation",action:"stars-game"},
-    {x:20,y:60,w:26,h:36,label:"THE TENT",sub:"No agenda",action:"tent"},
+    {x:20,y:60,w:26,h:36,label:"THE TENT",sub:"Brevard / Camp Carolina",action:"tent"},
     {x:34,y:78,w:15,h:14,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
     {x:82,y:67,w:16,h:18,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
   ];
