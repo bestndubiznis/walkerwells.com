@@ -364,7 +364,7 @@ $("#weatherBtn").onclick=()=>openPanel("weather");
 $("#collectionBtn").onclick=()=>openPanel("collection");
 $("#settingsBtn").onclick=()=>openPanel("settings");
 $$("[data-close]").forEach(b=>b.onclick=closePanels);
-$("#weatherPanel [data-season]").forEach(b=>b.onclick=e=>{e.stopPropagation();state.season=b.dataset.season;applyWeather();toast("SEASON — "+state.season.toUpperCase())});
+Array.from(document.querySelectorAll("#weatherPanel [data-season]")).forEach(b=>b.onclick=e=>{e.stopPropagation();state.season=b.dataset.season;applyWeather();toast("SEASON — "+state.season.toUpperCase())});
 $("#stormBtn").onclick=()=>{state.storm=!state.storm;applyWeather();toast(state.storm?"STORM FRONT MOVING IN":"STORM CLEARED")};
 $("#reduceMotionBtn").onclick=()=>{state.reduce=!state.reduce;document.body.classList.toggle("reduce-motion",state.reduce);$("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");save()};
 $("#resetBtn").onclick=()=>{["wells.collection","wells.ideas","wells.outfit","wells.season","wells.storm","wells.reduceMotion"].forEach(k=>localStorage.removeItem(k));location.reload()};
