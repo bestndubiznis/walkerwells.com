@@ -4,17 +4,26 @@
   const timers=[];
   const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
 
-  IMG.manor="https://www.nps.gov/vama/learn/historyculture/images/20120816a-0020.jpg";
-  IMG.nyc="https://images.pexels.com/photos/5850401/pexels-photo-5850401.jpeg?auto=compress&cs=tinysrgb&w=2400";
+  IMG.manor="/assets/scenes/manor-cinematic.webp";
+  IMG.nyc="/assets/scenes/nyc-christmas.webp";
+  [IMG.manor,IMG.nyc].forEach(src=>{const im=new Image();im.src=src});
 
-  scenes.manor={title:"The manor.",eye:"WELLS / MANOR",copy:"Gilded-age wood, a real fireplace, a grand piano, and rooms that reward curiosity.",hint:"The fireplace and piano are real objects now. The crest, table and side doors have their own secrets.",bg:IMG.manor,bgPos:"center center",hotspots:[
-    {x:14,y:53,w:24,h:40,label:"FIREPLACE",sub:"Five knocks. Not one.",action:"fireplace"},
-    {x:82,y:55,w:30,h:42,label:"GRAND PIANO",sub:"Hear it. Repeat it.",action:"piano"},
-    {x:49,y:18,w:30,h:28,label:"TAPESTRY / CREST",sub:"Look closer",action:"portrait"},
-    {x:52,y:64,w:34,h:26,label:"CENTRAL TABLE",sub:"Books, notes, one unfinished plan",action:"manor-table"},
-    {x:4,y:54,w:10,h:46,label:"WEST DOOR",sub:"Plans / bad ideas",go:"study"},
-    {x:95,y:54,w:10,h:46,label:"EAST DOOR",sub:"New York / December",go:"nyc"}
-  ]};
+  scenes.manor={
+    title:"The manor.",
+    eye:"WELLS / MANOR",
+    copy:"Firelight, old wood, armor, books, and a grand piano. This is the room we meant.",
+    hint:"The visible objects are the interactions: fireplace, piano, armor, painting, study doorway and center table.",
+    bg:IMG.manor,
+    bgPos:"center center",
+    hotspots:[
+      {x:49,y:45,w:20,h:31,label:"FIREPLACE",sub:"Five knocks. Not one.",action:"fireplace"},
+      {x:84,y:48,w:27,h:33,label:"GRAND PIANO",sub:"Hear it. Repeat it.",action:"piano"},
+      {x:30,y:38,w:12,h:30,label:"SUIT OF ARMOR",sub:"Older skills / hidden passage clue",action:"armor-display"},
+      {x:49,y:16,w:27,h:23,label:"THE PAINTING",sub:"Look behind the frame",action:"portrait"},
+      {x:9,y:32,w:17,h:34,label:"STUDY DOORWAY",sub:"Books, maps and bad ideas",go:"study"},
+      {x:61,y:72,w:31,h:20,label:"CENTER TABLE",sub:"Books, notes, one unfinished plan",action:"manor-table"}
+    ]
+  };
   scenes.camp.bgPos="center 82%";
   scenes.camp.bgPosMobile="center 58%";
   scenes.camp.hotspots=[
@@ -24,13 +33,23 @@
     {x:34,y:78,w:15,h:14,label:"OLD COMPASS",sub:"Left beside a log",action:"camp-compass"},
     {x:82,y:67,w:16,h:18,label:"TREE CARVING",sub:"Three letters / one date",action:"tree-carving"}
   ];
-  scenes.nyc={title:"New York. December.",eye:"WELLS / NYC",copy:"Christmas inside. Winter city outside. Much closer to the right Manhattan fantasy.",hint:"The tree, city windows, mission desk, tuxedo and snow globe are active.",bg:IMG.nyc,bgPos:"center center",hotspots:[
-    {x:34,y:49,w:30,h:58,label:"CHRISTMAS TREE",sub:"One ornament is wrong",action:"tree"},
-    {x:64,y:58,w:35,h:28,label:"MISSION DESK",sub:"Open dossier",action:"mission"},
-    {x:72,y:30,w:45,h:42,label:"WINDOW / CITY",sub:"Winter beyond the glass",action:"windows"},
-    {x:88,y:76,w:18,h:22,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
-    {x:8,y:54,w:16,h:40,label:"SIDE ROOM",sub:"Back to the manor",go:"manor"}
-  ],props:[{x:66,y:73,type:"snowglobe",action:"snowglobe",label:"SNOW GLOBE"}]};
+  scenes.nyc={
+    title:"New York. December.",
+    eye:"WELLS / NYC",
+    copy:"Christmas inside. Snow and brick buildings across the street. This is the Manhattan room we meant.",
+    hint:"Click the objects you can actually see: tree, desk, windows, tuxedo, fireplace and bar cart.",
+    bg:IMG.nyc,
+    bgPos:"center center",
+    hotspots:[
+      {x:35,y:37,w:25,h:48,label:"CHRISTMAS TREE",sub:"One ornament is different",action:"tree"},
+      {x:61,y:49,w:30,h:26,label:"MISSION DESK",sub:"Dossiers & next moves",action:"mission"},
+      {x:70,y:25,w:45,h:38,label:"THE VIEW",sub:"Snowy brick buildings across the street",action:"windows"},
+      {x:92,y:44,w:13,h:30,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
+      {x:7,y:46,w:14,h:34,label:"FIREPLACE",sub:"Warm room / cold city",action:"nyc-fireplace"},
+      {x:91,y:61,w:12,h:23,label:"BAR CART",sub:"Inspect the setup",action:"nyc-bar"}
+    ],
+    props:[{x:57,y:70,type:"snowglobe",action:"snowglobe",label:"SNOW GLOBE"}]
+  };
   scenes.archive.hotspots=[
     {x:27,y:50,w:20,h:27,label:"BOSS FIGHTS",sub:"Clean finish lines",action:"boss"},
     {x:51,y:45,w:20,h:27,label:"ADVENTURES",sub:"Worth it for the story",action:"adventure"},
@@ -73,8 +92,11 @@
     if(a==='stars-game'){openStars();return}
     if(a==='wardrobe-watch'){openWatch();return}
     if(a==='snowglobe'){openSnowGlobe();return}
-    if(a==='portrait'){info('MANOR / CREST','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>Probably unrelated to the piano.</p>');return}
+    if(a==='portrait'){info('MANOR / PAINTING','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>Probably unrelated to the grand piano twenty feet away.</p>');return}
+    if(a==='armor-display'){info('MANOR / ARMOR','Older skills','<p>Blacksmithing. Archery. Blades. Craft.</p><p>The armor is not the entrance. The fireplace is.</p>');return}
     if(a==='manor-table'){info('MANOR / TABLE','A life well lived','<p>One boss fight. One adventure. One skill unlock. Repeat until the stories are better than the plans.</p>');return}
+    if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Inside / outside','<p>Fire inside. Snow outside. Brick across the street. Somewhere to be later.</p>');return}
+    if(a==='nyc-bar'){info('NYC / BAR CART','Before going out','<p>Glassware, old bottles, and a dinner jacket waiting nearby.</p><p>The actual mission is still on the desk.</p>');return}
     if(a==='tree'){info('NYC / TREE','One ornament is different','<p>A tiny brass W is hanging deeper in the branches.</p><button id="takeOrnament" class="mini-action">TAKE IT</button>');later(()=>{$q('#takeOrnament').onclick=()=>{collect('ornament');toast('THE ESTATE HAS FOLLOWED YOU TO NEW YORK')}},0);return}
     if(a==='santa-relic'){info('RELIC / COMPLETED','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>');return}
     return baseDoAction(a)
