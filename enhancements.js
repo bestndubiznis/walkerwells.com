@@ -4,8 +4,8 @@
   const timers=[];
   const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
 
-  IMG.manor="/assets/scenes/manor-cinematic-hq.avif?v=hq1";
-  IMG.nyc="/assets/scenes/nyc-christmas-hq.avif?v=hq1";
+  IMG.manor="/assets/scenes/manor-cinematic-hq.webp?v=hq2";
+  IMG.nyc="/assets/scenes/nyc-christmas-hq.webp?v=hq2";
   [IMG.manor,IMG.nyc].forEach(src=>{const im=new Image();im.src=src});
 
   scenes.manor={
