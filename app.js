@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const IMG={
   estate:"https://images.unsplash.com/photo-1761767274100-b7bad43be8cf?auto=format&fit=crop&w=2400&q=88",
   manor:"https://images.unsplash.com/photo-1757524784105-cf1d1938abc7?auto=format&fit=crop&w=2400&q=88",
-  garage:"https://images.unsplash.com/photo-1770691281034-9c179a7f3685?auto=format&fit=crop&w=2400&q=88",
+  garage:"/assets/scenes/garage-hq.webp?v=garage2",
   study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
   wardrobe:"https://images.unsplash.com/photo-1765766600589-ddad380d6534?auto=format&fit=crop&w=2400&q=88",
   archive:"https://images.unsplash.com/photo-1759774311106-630dbcc45b70?auto=format&fit=crop&w=2400&q=88",
@@ -71,16 +71,16 @@ const scenes={
     collectibles:[{x:55,y:65,id:"watch",icon:"◉"}]
   },
   garage:{
-    title:"The garage.",eye:"WELLS / GARAGE",copy:"A real Ferrari. Real metal. Real reflections. The rest of the fleet lives through the bays.",
-    hint:"Click the Ferrari itself. The wall, shelf, and side bays hide the rest.",
+    title:"The garage.",eye:"WELLS / GARAGE",copy:"Four machines, one wall of gear, and several extremely defensible reasons to leave the house.",
+    hint:"Click the actual cars, dirt bike, helmet rack, or tool wall.",
     bg:IMG.garage,
     hotspots:[
-      {x:49,y:59,w:46,h:38,label:"FERRARI / TRACK",sub:"Start it, then drive",action:"drive-race"},
-      {x:15,y:55,w:22,h:40,label:"LEFT BAY",sub:"Aston / night-drive branch",action:"drive-aston"},
-      {x:84,y:54,w:22,h:40,label:"RIGHT BAY",sub:"Range Rover / estate branch",action:"drive-rover"},
-      {x:13,y:24,w:18,h:16,label:"HELMET SHELF",sub:"Race-school token inside",action:"helmet"},
-      {x:87,y:24,w:18,h:16,label:"TRACK MAP",sub:"Corners / notes / no street racing",action:"track-map"},
-      {x:50,y:84,w:26,h:12,label:"GARAGE FLOOR MARK",sub:"A faint orange line heads toward the dirt bikes",action:"moto"}
+      {x:28,y:58,w:48,h:40,label:"FERRARI",sub:"Track mode / start it, then drive",action:"drive-race"},
+      {x:78,y:56,w:35,h:36,label:"ASTON MARTIN",sub:"Green grand tourer / night-drive branch",action:"drive-aston"},
+      {x:63,y:40,w:21,h:18,label:"PORSCHE 911",sub:"Back bay / precision over drama",action:"garage-porsche"},
+      {x:45,y:40,w:13,h:25,label:"DIRT BIKE",sub:"Red bike / open-country branch",action:"moto"},
+      {x:8,y:30,w:16,h:39,label:"HELMET RACK",sub:"Race-school token inside",action:"helmet"},
+      {x:32,y:34,w:18,h:19,label:"TOOL WALL",sub:"Track notes / progression",action:"track-map"}
     ],
     collectibles:[]
   },
@@ -295,6 +295,7 @@ function doAction(a){
   if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","This does not belong with the tuxedos.","<p>Correct.</p>");return}
   if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet: an old race-school token and a note that says TRACK ONLY.</p>");return}
   if(a==="track-map"){info("GARAGE / WALL","Track map","<p>Kart → coaching → HPDE → time trial → race license → wheel-to-wheel.</p>");return}
+  if(a==="garage-porsche"){info("GARAGE / PORSCHE","911","<p>The back-bay car. Smaller, sharper, and deliberately less theatrical.</p><p>Its own drive branch can come later. For now, it stays parked.</p>");return}
   if(a==="santa-relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>");return}
   if(a==="ski-relic"){collect("ski-pass");info("RELIC / UNLOCKED","SKI BACKFLIP","<p>Unlocked. Next objective: make it boring.</p>");return}
   if(a==="locked-drawer"){info("ARCHIVE / ???","Unmarked drawer","<p>It does not open. Yet.</p>");return}
