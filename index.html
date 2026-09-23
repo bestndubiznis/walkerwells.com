@@ -9,7 +9,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="shortcut icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://images.unsplash.com"/>
-  <link rel="stylesheet" href="/styles.css"/>
+  <link rel="stylesheet" href="/styles.css?v=20260923a"/>
 </head>
 <body data-season="autumn" data-storm="false">
   <div id="boot" class="boot">
@@ -32,13 +32,11 @@
       <div class="cinema-vignette"></div>
       <div class="film-grain"></div>
       <div id="hotspotLayer" class="hotspot-layer"></div>
-      <div id="collectibleLayer" class="collectible-layer"></div>
+      <div id="propLayer" class="prop-layer"></div>
     </div>
 
     <header class="topbar">
-      <button id="brandBtn" class="brand" aria-label="Return to estate">
-        <span class="brand-w">W</span><span>WELLS</span>
-      </button>
+      <button id="brandBtn" class="brand" aria-label="Return to estate"><span class="brand-w">W</span><span>WELLS</span></button>
       <div class="top-actions">
         <button id="soundBtn" class="glass-btn">SOUND — OFF</button>
         <button id="ideasBtn" class="glass-btn">BAD IDEAS</button>
@@ -71,15 +69,10 @@
       <button id="revealBtn" class="reveal-btn" type="button">HOLD D — REVEAL INTERACTIONS</button>
     </section>
 
-    <div id="roomCard" class="room-card" aria-hidden="true">
-      <div class="room-card-line"></div>
-      <div id="roomCardTitle"></div>
-      <small id="roomCardSub"></small>
-    </div>
-
+    <div id="roomCard" class="room-card" aria-hidden="true"><div class="room-card-line"></div><div id="roomCardTitle"></div><small id="roomCardSub"></small></div>
     <div id="transition" class="transition"></div>
 
-    <section id="infoPanel" class="panel">
+    <section id="infoPanel" class="panel game-panel">
       <button class="panel-close" data-close>×</button>
       <div id="infoEyebrow" class="panel-kicker"></div>
       <h3 id="infoTitle"></h3>
@@ -87,61 +80,44 @@
     </section>
 
     <section id="ideasPanel" class="panel wide-panel">
-      <button class="panel-close" data-close>×</button>
-      <div class="panel-kicker">THE STUDY</div>
-      <h3>Bad Ideas Board</h3>
-      <p>Click a card to move it from idea → approved → active → done. The board remembers.</p>
-      <div id="ideasGrid" class="ideas-grid"></div>
+      <button class="panel-close" data-close>×</button><div class="panel-kicker">THE STUDY</div><h3>Bad Ideas Board</h3>
+      <p>Click a card to move it from idea → approved → active → done. The board remembers.</p><div id="ideasGrid" class="ideas-grid"></div>
     </section>
 
     <section id="suitPanel" class="panel">
-      <button class="panel-close" data-close>×</button>
-      <div class="panel-kicker">DRESSING ROOM</div>
-      <h3>Choose the genre.</h3>
-      <p id="currentSuit"></p>
-      <div id="suitGrid" class="suit-grid"></div>
+      <button class="panel-close" data-close>×</button><div class="panel-kicker">DRESSING ROOM</div><h3>Choose the genre.</h3>
+      <p id="currentSuit"></p><div id="suitGrid" class="suit-grid"></div>
     </section>
 
     <section id="weatherPanel" class="panel">
-      <button class="panel-close" data-close>×</button>
-      <div class="panel-kicker">THE WEATHER ROOM</div>
-      <h3>Change the estate.</h3>
-      <div class="weather-grid">
-        <button data-season="spring">SPRING</button>
-        <button data-season="summer">SUMMER</button>
-        <button data-season="autumn">AUTUMN</button>
-        <button data-season="winter">WINTER</button>
-      </div>
+      <button class="panel-close" data-close>×</button><div class="panel-kicker">THE WEATHER ROOM</div><h3>Change the estate.</h3>
+      <div class="weather-grid"><button data-season="spring">SPRING</button><button data-season="summer">SUMMER</button><button data-season="autumn">AUTUMN</button><button data-season="winter">WINTER</button></div>
       <button id="stormBtn" class="panel-action">STORM MODE — OFF</button>
     </section>
 
     <section id="collectionPanel" class="panel">
-      <button class="panel-close" data-close>×</button>
-      <div class="panel-kicker">THE COLLECTION</div>
-      <h3>Things found.</h3>
-      <div id="collectionGrid" class="collection-grid"></div>
+      <button class="panel-close" data-close>×</button><div class="panel-kicker">THE COLLECTION</div><h3>Things found.</h3><div id="collectionGrid" class="collection-grid"></div>
     </section>
 
     <section id="settingsPanel" class="panel">
-      <button class="panel-close" data-close>×</button>
-      <div class="panel-kicker">SETTINGS / CREDITS</div>
-      <h3>World controls.</h3>
-      <button id="reduceMotionBtn" class="panel-action">MOTION — FULL</button>
-      <button id="resetBtn" class="panel-action">RESET LOCAL PROGRESS</button>
-      <p class="credits-copy">Environment imagery uses free Unsplash photography and architectural visualization. Interaction, art direction, systems and world design are custom to WELLS.</p>
+      <button class="panel-close" data-close>×</button><div class="panel-kicker">SETTINGS / CREDITS</div><h3>World controls.</h3>
+      <button id="reduceMotionBtn" class="panel-action">MOTION — FULL</button><button id="resetBtn" class="panel-action">RESET LOCAL PROGRESS</button>
+      <p class="credits-copy">Environment imagery mixes WELLS art direction with licensed web photography, including National Park Service imagery and Pexels. Interaction and world systems are custom to WELLS.</p>
     </section>
 
-    <section id="driveOverlay" class="drive-overlay">
-      <div class="drive-bg"></div>
+    <section id="driveOverlay" class="drive-overlay" aria-hidden="true">
+      <div id="driveBg" class="drive-bg"></div>
+      <div class="road"><div class="road-glow"></div><div class="lane lane-a"></div><div class="lane lane-b"></div><div id="roadObstacles" class="road-obstacles"></div></div>
+      <div class="drive-hud left"><small>MISSION</small><strong id="driveMission">CLEAN RUN</strong><span>DISTANCE <b id="driveDistance">0.00</b> MI</span><span>AVOIDED <b id="driveScore">0</b></span><span>COMPOSURE <b id="driveLives">3</b></span></div>
       <div class="drive-speed"><small id="driveCarLabel">GRAND TOURER</small><strong id="driveSpeed">72</strong><span>MPH</span></div>
-      <div class="drive-copy"><span>NIGHT DRIVE</span><h3 id="driveTitle">Somewhere after rain.</h3><p>A / D or ← / →</p></div>
-      <div id="driveLaneCar" class="drive-lane-car"></div>
+      <div class="drive-copy"><span id="driveModeLabel">NIGHT DRIVE</span><h3 id="driveTitle">Somewhere after rain.</h3><p>A / D or ← / → · W / S for speed</p></div>
+      <div id="driveLaneCar" class="drive-lane-car"><i></i></div>
+      <div class="drive-touch"><button id="driveLeft" aria-label="Steer left">←</button><button id="driveRight" aria-label="Steer right">→</button></div>
       <button id="driveExit" class="drive-exit">EXIT DRIVE</button>
     </section>
 
     <div id="toast" class="toast"></div>
   </main>
-
-  <script src="/app.js" defer></script>
+  <script src="/app.js?v=20260923a" defer></script>
 </body>
 </html>
