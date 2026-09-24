@@ -158,8 +158,9 @@
         name:'SAILBOAT',
         subtitle:'Mast, sail, hull.',
         points:[
-          {x:50,y:15},{x:50,y:67},{x:72,y:67},{x:50,y:28},{x:50,y:67},
-          {x:28,y:67},{x:43,y:82},{x:66,y:82},{x:78,y:67}
+          {x:50,y:13},{x:50,y:28},{x:50,y:48},{x:50,y:66},
+          {x:70,y:66},{x:61,y:48},{x:52,y:31},{x:48,y:67},
+          {x:28,y:67},{x:39,y:81},{x:64,y:81},{x:78,y:67}
         ]
       },
       {
@@ -168,7 +169,7 @@
         points:[
           {x:16,y:52},{x:34,y:40},{x:56,y:41},{x:66,y:25},{x:69,y:43},
           {x:86,y:35},{x:80,y:52},{x:87,y:68},{x:67,y:59},{x:55,y:72},
-          {x:37,y:65},{x:16,y:52}
+          {x:37,y:65},{x:18,y:55}
         ]
       },
       {
@@ -184,9 +185,9 @@
         name:'MOTORCYCLE',
         subtitle:'Two wheels and a bad idea.',
         points:[
-          {x:24,y:70},{x:17,y:78},{x:24,y:86},{x:33,y:78},{x:24,y:70},
-          {x:44,y:69},{x:54,y:55},{x:66,y:60},{x:74,y:70},{x:83,y:78},
-          {x:76,y:86},{x:67,y:78},{x:74,y:70},{x:56,y:71},{x:44,y:69}
+          {x:24,y:69},{x:17,y:78},{x:24,y:86},{x:33,y:78},{x:26,y:71},
+          {x:44,y:68},{x:54,y:55},{x:66,y:60},{x:73,y:69},{x:83,y:78},
+          {x:76,y:86},{x:67,y:78},{x:75,y:71},{x:56,y:72},{x:45,y:70}
         ]
       }
     ];
@@ -195,7 +196,7 @@
     info(
       'THE SKY',
       'Constellation Run',
-      '<p class="game-note">Trace each constellation in order. The next star is always the brightest.</p>'+
+      '<p class="game-note">Trace each constellation in order. Start with the largest star; each next star is slightly smaller.</p>'+
       '<div class="constellation-meta"><strong id="constellationName"></strong><span id="constellationCount"></span></div>'+
       '<div class="constellation-progress" id="constellationProgress"></div>'+
       '<div class="star-field" id="starField"><svg class="star-lines" id="starLines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg></div>'+
