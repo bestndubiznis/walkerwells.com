@@ -169,3 +169,27 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
   .arcade-touch{justify-content:space-between}
   .arcade-touch button{width:72px;height:64px}
 }
+
+/* Constellation Run — multiple recognizable shapes, one sky chart. */
+.constellation-meta{display:flex;justify-content:space-between;align-items:end;margin-top:13px}
+.constellation-meta strong{font:22px "Playfair Display",serif;font-weight:500;letter-spacing:.04em}
+.constellation-meta span{font-size:8px;letter-spacing:.18em;color:#9f947d}
+.constellation-progress{display:flex;gap:5px;margin-top:8px}
+.constellation-progress i{height:2px;flex:1;background:#303844;transition:.25s}
+.constellation-progress i.current{background:#8d805f}
+.constellation-progress i.done{background:#d8bc73;box-shadow:0 0 8px rgba(216,188,115,.32)}
+.constellation-sub{margin-top:8px;font:italic 12px "Playfair Display",serif;color:#a9a08d}
+.star-field{height:310px;background:
+  radial-gradient(circle at 62% 18%,rgba(42,55,82,.34),transparent 28%),
+  radial-gradient(circle at 50% 100%,#17202b,#06090f 67%);
+}
+.ambient-star{position:absolute;width:2px;height:2px;border-radius:50%;background:#dfe7ee;box-shadow:0 0 5px rgba(223,231,238,.45);pointer-events:none}
+.star-node{transition:transform .16s ease,background .16s ease,box-shadow .16s ease}
+.star-node:hover{transform:translate(-50%,-50%) scale(1.22)}
+.star-node.used{background:#e8ca79;box-shadow:0 0 17px rgba(232,202,121,.95)}
+.star-lines line{stroke:#ddc178;stroke-width:1.15;filter:drop-shadow(0 0 2px rgba(221,193,120,.55))}
+@media(max-width:880px){
+  .star-field{height:min(44vh,330px)}
+  .constellation-meta strong{font-size:19px}
+  .star-node{min-width:16px;min-height:16px}
+}

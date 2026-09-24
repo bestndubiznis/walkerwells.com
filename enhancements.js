@@ -144,7 +144,136 @@
 
   function openRoute(){info('MAP ROOM / ROUTE','Plot the improbable year',`<p class="game-note">Clue: Pacific → cold north → Alps → islands → steppe.</p><div class="route-game">${['CALIFORNIA','ALASKA','ST. MORITZ','BVI','MONGOLIA','THAILAND'].map(n=>`<button data-route="${n}">${n}</button>`).join('')}</div><div id="routePath" class="route-path">START →</div>`);const target=['CALIFORNIA','ALASKA','ST. MORITZ','BVI','MONGOLIA'];let route=[];$$q('[data-route]').forEach(b=>b.onclick=()=>{const n=b.dataset.route;if(n!==target[route.length]){toast('ROUTE BREAKS — START AGAIN');route=[];$$q('[data-route]').forEach(x=>x.classList.remove('done'));$q('#routePath').textContent='START →';return}route.push(n);b.classList.add('done');$q('#routePath').textContent='START → '+route.join(' → ');if(route.length===target.length){collect('map-pin');later(()=>info('MAP ROOM / ROUTE','Route accepted.','<p>It makes almost no logistical sense.</p><p><strong>Perfect.</strong></p>'),350)}})}
 
-  function openStars(){info('THE SKY','Trace the Sword','<p class="game-note">Start with the brightest star. Then keep choosing the next brightest.</p><div class="star-field" id="starField"><svg class="star-lines" id="starLines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg></div>');const stars=[{x:18,y:22,s:22},{x:74,y:18,s:8},{x:48,y:38,s:19},{x:82,y:65,s:10},{x:35,y:70,s:16},{x:58,y:84,s:13}],order=[0,2,4,5,3,1],field=$q('#starField');stars.forEach((s,i)=>{const b=document.createElement('button');b.className='star-node';b.dataset.star=i;b.style.left=s.x+'%';b.style.top=s.y+'%';b.style.width=s.s+'px';b.style.height=s.s+'px';b.setAttribute('aria-label','Star '+(i+1));field.appendChild(b)});let path=[];const lines=()=>{const svg=$q('#starLines');svg.innerHTML='';for(let i=1;i<path.length;i++){const a=stars[path[i-1]],b=stars[path[i]],ln=document.createElementNS('http://www.w3.org/2000/svg','line');ln.setAttribute('x1',a.x);ln.setAttribute('y1',a.y);ln.setAttribute('x2',b.x);ln.setAttribute('y2',b.y);svg.appendChild(ln)}};$$q('[data-star]').forEach(b=>b.onclick=()=>{const n=+b.dataset.star;if(n!==order[path.length]){toast('CONSTELLATION LOST — START AGAIN');path=[];$$q('[data-star]').forEach(x=>x.classList.remove('used'));lines();return}path.push(n);b.classList.add('used');lines();if(path.length===order.length){collect('star-map');later(()=>info('THE SKY','Sword found.','<p>Unofficial constellation #1.</p><p>The others are a motorcycle, sailboat, shark and skier.</p>'),400)}})}
+  function openStars(){
+    const shapes=[
+      {
+        name:'SWORD',
+        subtitle:'A proper blade this time.',
+        points:[
+          {x:50,y:8},{x:54,y:54},{x:72,y:62},{x:58,y:66},{x:57,y:77},
+          {x:50,y:91},{x:43,y:77},{x:42,y:66},{x:28,y:62},{x:46,y:54}
+        ]
+      },
+      {
+        name:'SAILBOAT',
+        subtitle:'Mast, sail, hull.',
+        points:[
+          {x:50,y:15},{x:50,y:67},{x:72,y:67},{x:50,y:28},{x:50,y:67},
+          {x:28,y:67},{x:43,y:82},{x:66,y:82},{x:78,y:67}
+        ]
+      },
+      {
+        name:'SHARK',
+        subtitle:'Nose, fin, tail.',
+        points:[
+          {x:16,y:52},{x:34,y:40},{x:56,y:41},{x:66,y:25},{x:69,y:43},
+          {x:86,y:35},{x:80,y:52},{x:87,y:68},{x:67,y:59},{x:55,y:72},
+          {x:37,y:65},{x:16,y:52}
+        ]
+      },
+      {
+        name:'SKIER',
+        subtitle:'Downhill, obviously.',
+        points:[
+          {x:49,y:18},{x:49,y:31},{x:37,y:42},{x:57,y:43},{x:68,y:55},
+          {x:53,y:54},{x:44,y:70},{x:29,y:83},{x:47,y:75},{x:63,y:84},
+          {x:52,y:67},{x:59,y:52}
+        ]
+      },
+      {
+        name:'MOTORCYCLE',
+        subtitle:'Two wheels and a bad idea.',
+        points:[
+          {x:24,y:70},{x:17,y:78},{x:24,y:86},{x:33,y:78},{x:24,y:70},
+          {x:44,y:69},{x:54,y:55},{x:66,y:60},{x:74,y:70},{x:83,y:78},
+          {x:76,y:86},{x:67,y:78},{x:74,y:70},{x:56,y:71},{x:44,y:69}
+        ]
+      }
+    ];
+    let round=0,path=[],locked=false;
+
+    info(
+      'THE SKY',
+      'Constellation Run',
+      '<p class="game-note">Trace each constellation in order. The next star is always the brightest.</p>'+
+      '<div class="constellation-meta"><strong id="constellationName"></strong><span id="constellationCount"></span></div>'+
+      '<div class="constellation-progress" id="constellationProgress"></div>'+
+      '<div class="star-field" id="starField"><svg class="star-lines" id="starLines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg></div>'+
+      '<div class="constellation-sub" id="constellationSub"></div>'
+    );
+
+    const draw=()=>{
+      const shape=shapes[round],field=$q('#starField'),svg=$q('#starLines');
+      path=[];locked=false;
+      $q('#constellationName').textContent=shape.name;
+      $q('#constellationCount').textContent=(round+1)+' / '+shapes.length;
+      $q('#constellationSub').textContent=shape.subtitle;
+      $q('#constellationProgress').innerHTML=shapes.map((_,i)=>'<i class="'+(i<round?'done':i===round?'current':'')+'"></i>').join('');
+      field.querySelectorAll('.star-node,.ambient-star').forEach(x=>x.remove());
+      svg.innerHTML='';
+
+      // Dim background stars make this feel like a sky rather than a diagram.
+      for(let i=0;i<24;i++){
+        const a=document.createElement('i');
+        a.className='ambient-star';
+        a.style.left=(6+((i*37)%89))+'%';
+        a.style.top=(7+((i*53)%84))+'%';
+        a.style.opacity=(.18+(i%4)*.08).toFixed(2);
+        field.appendChild(a);
+      }
+
+      shape.points.forEach((s,i)=>{
+        const b=document.createElement('button');
+        b.className='star-node';
+        b.dataset.star=i;
+        b.style.left=s.x+'%';b.style.top=s.y+'%';
+        const size=Math.max(8,19-i*.7);
+        b.style.width=size+'px';b.style.height=size+'px';
+        b.style.zIndex=3;
+        b.setAttribute('aria-label',shape.name+' star '+(i+1));
+        field.appendChild(b);
+      });
+
+      const redrawLines=()=>{
+        svg.innerHTML='';
+        for(let i=1;i<path.length;i++){
+          const a=shape.points[path[i-1]],b=shape.points[path[i]];
+          const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+          ln.setAttribute('x1',a.x);ln.setAttribute('y1',a.y);
+          ln.setAttribute('x2',b.x);ln.setAttribute('y2',b.y);
+          svg.appendChild(ln);
+        }
+      };
+
+      $$q('[data-star]').forEach(b=>b.onclick=()=>{
+        if(locked)return;
+        const n=+b.dataset.star,expected=path.length;
+        if(n!==expected){
+          toast('CONSTELLATION LOST — START AGAIN');
+          path=[];$$q('[data-star]').forEach(x=>x.classList.remove('used'));redrawLines();
+          return;
+        }
+        path.push(n);b.classList.add('used');redrawLines();
+        if(path.length===shape.points.length){
+          locked=true;
+          $q('#constellationProgress').children[round].classList.add('done');
+          toast(shape.name+' FOUND');
+          if(round<shapes.length-1){
+            round++;
+            later(draw,700);
+          }else{
+            collect('star-map');
+            later(()=>info(
+              'THE SKY',
+              'Sky chart complete.',
+              '<p><strong>Sword · Sailboat · Shark · Skier · Motorcycle.</strong></p><p>Five unofficial constellations. All considerably more useful than the real ones.</p>'
+            ),700);
+          }
+        }
+      });
+    };
+    draw();
+  }
 
   function openWatch(){info('DRESSING ROOM / WATCH','Wind the movement','<p class="game-note">Ten turns. The second hand will tell you when it is alive.</p><div class="watch-game"><div class="watch-face"><i id="watchHand" class="watch-hand"></i></div><button id="windCrown" class="wind-crown">↻</button><div class="wind-meter"><i id="windFill"></i></div><div id="windLabel" class="game-note">0 / 10 TURNS</div></div>');let turns=0;$q('#windCrown').onclick=()=>{turns=Math.min(10,turns+1);$q('#watchHand').style.transform='rotate('+(turns*108)+'deg)';$q('#windFill').style.width=(turns*10)+'%';$q('#windLabel').textContent=turns+' / 10 TURNS';playTone('E',.1);if(turns===10){collect('watch');later(()=>info('DRESSING ROOM / WATCH','Running.','<p>Mechanical, wound, and now yours.</p>'),350)}}}
 
