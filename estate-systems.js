@@ -270,16 +270,17 @@
     }
   }
   function makePinDraggable(btn,p){
-    let dragging=false,start=null;
-    btn.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragging=true;start={x:e.clientX,y:e.clientY};btn.setPointerCapture?.(e.pointerId)});
+    let dragging=false,moved=false,start=null;
+    btn.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragging=true;moved=false;start={x:e.clientX,y:e.clientY};btn.setPointerCapture?.(e.pointerId)});
     btn.addEventListener('pointermove',e=>{
       if(!dragging)return;
       const map=q('#physicalWorldMap'),r=map.getBoundingClientRect();
-      if(Math.hypot(e.clientX-start.x,e.clientY-start.y)<5)return;
+      if(!moved&&Math.hypot(e.clientX-start.x,e.clientY-start.y)<5)return;
+      moved=true;
       const x=clamp((e.clientX-r.left)/r.width*100,1,99),y=clamp((e.clientY-r.top)/r.height*100,2,98),geo=ll(x,y);
       p.lat=geo.lat;p.lon=geo.lon;btn.style.left=x+'%';btn.style.top=y+'%';
     });
-    btn.addEventListener('pointerup',()=>{if(!dragging)return;dragging=false;save();if(selectedPin?.id===p.id)selectPin(p);log('map','Moved '+p.name+' on the map')});
+    btn.addEventListener('pointerup',()=>{if(!dragging)return;dragging=false;if(!moved)return;save();if(selectedPin?.id===p.id)selectPin(p);log('map','Moved '+p.name+' on the map')});
     btn.addEventListener('keydown',e=>{
       if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();
       const pos=xy(p),step=e.shiftKey?1:.25;
@@ -291,7 +292,7 @@
     openOverlay(mapOverlay);renderPins();q('#mapAddForm').hidden=true;q('#manualPinGuide').classList.remove('show');manualDraft=null;
     log('map','Opened the physical map table');
   }
-  q('#addMapLocation').onclick=()=>{q('#mapAddForm').hidden=false;q('#mapPlaceInput').focus()};
+  q('#addMapLocation').onclick=()=>{q('#mapAddForm').hidden=false;q('#mapFormStatus').textContent='';manualDraft=null;q('#manualPinGuide').classList.remove('show');q('#mapPlaceInput').focus()};
   q('#mapManualBtn').onclick=()=>beginManual();
   function beginManual(){
     const name=q('#mapPlaceInput').value.trim(),desc=q('#mapDescInput').value.trim();
@@ -322,6 +323,7 @@
     }
   };
   function addCustomPin(name,desc,lat,lon,source){
+    manualDraft=null;q('#manualPinGuide').classList.remove('show');
     const p={id:'custom-'+Date.now().toString(36),name:name.slice(0,90),desc:desc.slice(0,240),lat:clamp(+lat,-90,90),lon:clamp(+lon,-180,180),custom:true,source};
     sys.customPins.push(p);save();renderPins();selectPin(p);
     q('#mapAddForm').reset();q('#mapAddForm').hidden=true;log('map','Pinned '+p.name,p.desc);toast('MAP PIN — '+p.name.toUpperCase());
@@ -457,6 +459,15 @@
     try{sessionStorage.clear()}catch(e){}
     location.reload();
   };
+
+  q('#ideasGrid')?.addEventListener('click',e=>{
+    const card=e.target.closest('[data-idea]');if(!card)return;
+    setTimeout(()=>log('idea',card.dataset.idea+' — '+(state.ideas[card.dataset.idea]||'IDEA')),0);
+  });
+  q('#suitGrid')?.addEventListener('click',e=>{
+    const card=e.target.closest('[data-suit]');if(!card)return;
+    setTimeout(()=>log('wardrobe','Equipped '+state.suit),0);
+  });
 
   addEventListener('keydown',e=>{
     if(e.key!=='Escape')return;
