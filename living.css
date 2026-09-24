@@ -92,8 +92,6 @@ body[data-daypart="night"] .living-glow,body[data-daypart="dusk"] .living-glow{o
 .armor-sword{position:absolute;left:2px;top:-64px;width:2px;height:83px;background:linear-gradient(#f6ead0,#9ca29d 72%,#5e5140);box-shadow:0 0 5px rgba(240,229,207,.35)}
 .armor-sword::after{content:"";position:absolute;left:-8px;bottom:11px;width:18px;height:2px;background:#a78d62}
 .armor-actor.raise .armor-arm{transform:rotate(-64deg)}
-.armor-actor.remembered .armor-arm{transform:rotate(28deg)}
-.armor-actor.raise.remembered .armor-arm{transform:rotate(-64deg)}
 
 .physical-drawer{position:absolute;width:12%;height:5%;transform:translate(-50%,-50%) perspective(100px) rotateX(8deg);background:linear-gradient(180deg,rgba(84,54,32,.05),rgba(35,20,12,.18));border-bottom:1px solid rgba(192,145,89,.12);opacity:.18;transition:transform .75s cubic-bezier(.2,.8,.2,1),opacity .6s}
 .physical-drawer.open{transform:translate(-50%,-18%) perspective(100px) rotateX(8deg);opacity:.48}
