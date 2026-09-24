@@ -14,8 +14,8 @@
   scenes.manor={
     title:"The manor.",
     eye:"WELLS / MANOR",
-    copy:"Firelight, old wood, armor, books, and a grand piano. This is the room we meant.",
-    hint:"The visible objects are the interactions: fireplace, piano, armor, painting, study doorway and center table.",
+    copy:"The center of the house: firelight, old wood, books, armor, and a grand piano.",
+    hint:"The fireplace, piano, armor, painting, study doorway, and center table all lead somewhere.",
     bg:IMG.manor,
     bgPos:"center center",
     hotspots:[
@@ -31,7 +31,7 @@
     title:"The campfire.",
     eye:"WELLS / CAMPFIRE",
     copy:"Mountain air, firelight, Brevard memories, and a sky worth staying awake for.",
-    hint:"Click the actual tent, fire, compass, carved tree, or the night sky.",
+    hint:"Brevard memories live in the tent, fire, compass, carved tree, and night sky.",
     bg:IMG.camp,
     bgPos:"center center",
     bgPosMobile:"26% center",
@@ -47,25 +47,25 @@
   scenes.nyc={
     title:"New York. December.",
     eye:"WELLS / NYC",
-    copy:"Christmas inside. Snow and brick buildings across the street. This is the Manhattan room we meant.",
-    hint:"Click the objects you can actually see: tree, desk, windows, tuxedo, fireplace and bar cart.",
+    copy:"A Manhattan apartment in December: Christmas tree lit, snow outside, and somewhere to be later.",
+    hint:"Explore the tree, mission desk, windows, dinner jacket, fireplace, bar cart, and snow globe.",
     bg:IMG.nyc,
     bgPos:"center center",
     hotspots:[
       {x:35,y:37,w:25,h:48,label:"CHRISTMAS TREE",sub:"One ornament is different",action:"tree"},
-      {x:61,y:49,w:30,h:26,label:"MISSION DESK",sub:"Dossiers & next moves",action:"mission"},
+      {x:61,y:49,w:30,h:26,label:"MISSION DESK",sub:"Tonight’s plan and current outfit",action:"mission"},
       {x:70,y:25,w:45,h:38,label:"THE VIEW",sub:"Snowy brick buildings across the street",action:"windows"},
       {x:92,y:44,w:13,h:30,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
       {x:7,y:46,w:14,h:34,label:"FIREPLACE",sub:"Warm room / cold city",action:"nyc-fireplace"},
-      {x:91,y:61,w:12,h:23,label:"BAR CART",sub:"Inspect the setup",action:"nyc-bar"}
+      {x:91,y:61,w:12,h:23,label:"BAR CART",sub:"A quiet pre-city ritual",action:"nyc-bar"}
     ],
     props:[{x:57,y:70,type:"snowglobe",action:"snowglobe",label:"SNOW GLOBE"}]
   };
   scenes.archive={
     title:"The archive.",
     eye:"WELLS / ARCHIVE",
-    copy:"Not a résumé. The things that actually earned wall space.",
-    hint:"Click the specific relics: Yale, Santa Cruz 70.3, the ski backflip, Ponte Vedra Beach, or the archive index.",
+    copy:"A room for finished things: education, races, places, and skills that made it out of the planning stage.",
+    hint:"Each framed object opens the story behind it, from Yale and Santa Cruz to the ski backflip and Ponte Vedra.",
     bg:IMG.archive,
     bgPos:"center center",
     hotspots:[
@@ -81,8 +81,8 @@
   scenes.map={
     title:"The map room.",
     eye:"WELLS / MAP ROOM",
-    copy:"Where I came from, where I disappeared to, and what is next.",
-    hint:"Click the framed trips, map pins, and travel books. The room is the itinerary.",
+    copy:"A map of where the story started, where it wandered, and where it is heading next.",
+    hint:"The photographs and pins open the trips behind them; the travel books hold the next route.",
     bg:IMG.map,
     bgPos:"center center",
     hotspots:[
@@ -114,7 +114,7 @@
     const tray=$q('#mobileInteractions');if(!tray)return;
     const items=[
       ...(s.hotspots||[]).map(h=>({label:h.label,sub:h.sub||'',go:h.go,action:h.action})),
-      ...(s.props||[]).map(p=>({label:p.label,sub:'Object interaction',action:p.action}))
+      ...(s.props||[]).map(p=>({label:p.label,sub:'Explore this object',action:p.action}))
     ];
     tray.innerHTML='<div class="mobile-interaction-kicker">EXPLORE</div><div class="mobile-interaction-scroll">'+
       items.map((h,i)=>'<button class="mobile-interaction" data-mobile-hot="'+i+'"><strong>'+h.label+'</strong>'+(h.sub?'<span>'+h.sub+'</span>':'')+'</button>').join('')+
@@ -140,7 +140,7 @@
 
   function openForge(){info('ARMORY / FORGE','Strike. Then quench.',`<p class="game-note">Two clean timing windows. Miss and the steel goes back in the fire.</p><div class="timing-game"><div id="timingLabel" class="timing-meta"><span>PHASE 1 / STRIKE</span><span>GOLD ZONE</span></div><div id="timingTrack" class="timing-track"><span class="zone"></span><i id="timingMarker" class="marker"></i></div><button id="timingHit" class="mini-action">STRIKE</button></div>`);let phase=1,pos=0,dir=1,t;const start=()=>{clearInterval(t);pos=0;dir=1;t=setInterval(()=>{const m=$q('#timingMarker');if(!m){clearInterval(t);return}pos+=dir*(phase===1?2.9:3.5);if(pos>=96||pos<=0)dir*=-1;m.style.left=pos+'%'},24)};start();$q('#timingHit').onclick=()=>{const good=phase===1?(pos>43&&pos<57):(pos>61&&pos<71);if(!good){toast(phase===1?'MISS — BACK IN THE FIRE':'TOO EARLY — STEAM EVERYWHERE');phase=1;$q('#timingTrack').classList.remove('quench');$q('#timingLabel').innerHTML='<span>PHASE 1 / STRIKE</span><span>GOLD ZONE</span>';$q('#timingHit').textContent='STRIKE';start();return}if(phase===1){toast('CLEAN STRIKE');phase=2;$q('#timingTrack').classList.add('quench');$q('#timingLabel').innerHTML='<span>PHASE 2 / QUENCH</span><span>BLUE ZONE</span>';$q('#timingHit').textContent='QUENCH';start()}else{clearInterval(t);collect('iron-key');info('ARMORY / FORGE','FORGE MARK — UNLOCKED','<p>Clean strike. Clean quench.</p><p>The mark goes into the collection.</p>')}}}
 
-  function openVault(){info('ARCHIVE / VAULT','Three-number combination',`<p class="vault-clue">The combination is already in the archive. One completed boss fight has the answer.</p><div class="vault-dials">${[0,1,2].map(i=>`<div class="dial"><button data-dial="${i}" data-dir="1">▲</button><strong id="dial${i}">0</strong><button data-dial="${i}" data-dir="-1">▼</button></div>`).join('')}</div><button id="vaultOpen" class="mini-action">OPEN VAULT</button>`);const vals=[0,0,0];$$q('[data-dial]').forEach(b=>b.onclick=()=>{const i=+b.dataset.dial;vals[i]=(vals[i]+(+b.dataset.dir)+10)%10;$q('#dial'+i).textContent=vals[i]});$q('#vaultOpen').onclick=()=>{if(vals.join('')==='529'){collect('vault-seal');info('VAULT / OPEN','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>No speech. Put the proof in the case and keep moving.</p>')}else toast('THE LOCK DOES NOT MOVE')}}
+  function openVault(){info('ARCHIVE / VAULT','Three-number combination',`<p class="vault-clue">The combination is already in the archive. One completed boss fight has the answer.</p><div class="vault-dials">${[0,1,2].map(i=>`<div class="dial"><button data-dial="${i}" data-dir="1">▲</button><strong id="dial${i}">0</strong><button data-dial="${i}" data-dir="-1">▼</button></div>`).join('')}</div><button id="vaultOpen" class="mini-action">OPEN VAULT</button>`);const vals=[0,0,0];$$q('[data-dial]').forEach(b=>b.onclick=()=>{const i=+b.dataset.dial;vals[i]=(vals[i]+(+b.dataset.dir)+10)%10;$q('#dial'+i).textContent=vals[i]});$q('#vaultOpen').onclick=()=>{if(vals.join('')==='529'){collect('vault-seal');info('VAULT / OPEN','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>First 70.3 completed. The next question is what gets harder from here.</p>')}else toast('THE LOCK DOES NOT MOVE')}}
 
   function openRoute(){info('MAP ROOM / ROUTE','Plot the improbable year',`<p class="game-note">Clue: Pacific → cold north → Alps → islands → steppe.</p><div class="route-game">${['CALIFORNIA','ALASKA','ST. MORITZ','BVI','MONGOLIA','THAILAND'].map(n=>`<button data-route="${n}">${n}</button>`).join('')}</div><div id="routePath" class="route-path">START →</div>`);const target=['CALIFORNIA','ALASKA','ST. MORITZ','BVI','MONGOLIA'];let route=[];$$q('[data-route]').forEach(b=>b.onclick=()=>{const n=b.dataset.route;if(n!==target[route.length]){toast('ROUTE BREAKS — START AGAIN');route=[];$$q('[data-route]').forEach(x=>x.classList.remove('done'));$q('#routePath').textContent='START →';return}route.push(n);b.classList.add('done');$q('#routePath').textContent='START → '+route.join(' → ');if(route.length===target.length){collect('map-pin');later(()=>info('MAP ROOM / ROUTE','Route accepted.','<p>It makes almost no logistical sense.</p><p><strong>Perfect.</strong></p>'),350)}})}
 
@@ -148,7 +148,7 @@
     const shapes=[
       {
         name:'SWORD',
-        subtitle:'A proper blade this time.',
+        subtitle:'Blade, guard, grip, and pommel.',
         points:[
           {x:50,y:8},{x:54,y:54},{x:72,y:62},{x:58,y:66},{x:57,y:77},
           {x:50,y:91},{x:43,y:77},{x:42,y:66},{x:28,y:62},{x:46,y:54}
@@ -174,7 +174,7 @@
       },
       {
         name:'SKIER',
-        subtitle:'Downhill, obviously.',
+        subtitle:'A skier dropping into the fall line.',
         points:[
           {x:49,y:18},{x:49,y:31},{x:37,y:42},{x:57,y:43},{x:68,y:55},
           {x:53,y:54},{x:44,y:70},{x:29,y:83},{x:47,y:75},{x:63,y:84},
@@ -183,7 +183,7 @@
       },
       {
         name:'MOTORCYCLE',
-        subtitle:'Two wheels and a bad idea.',
+        subtitle:'Two wheels, frame, and handlebars.',
         points:[
           {x:24,y:69},{x:17,y:78},{x:24,y:86},{x:33,y:78},{x:26,y:71},
           {x:44,y:68},{x:54,y:55},{x:66,y:60},{x:73,y:69},{x:83,y:78},
@@ -267,7 +267,7 @@
             later(()=>info(
               'THE SKY',
               'Sky chart complete.',
-              '<p><strong>Sword · Sailboat · Shark · Skier · Motorcycle.</strong></p><p>Five unofficial constellations. All considerably more useful than the real ones.</p>'
+              '<p><strong>Sword · Sailboat · Shark · Skier · Motorcycle.</strong></p><p>Five constellations traced from the same sky, each tied to something elsewhere in the estate.</p>'
             ),700);
           }
         }
@@ -278,7 +278,7 @@
 
   function openWatch(){info('DRESSING ROOM / WATCH','Wind the movement','<p class="game-note">Ten turns. The second hand will tell you when it is alive.</p><div class="watch-game"><div class="watch-face"><i id="watchHand" class="watch-hand"></i></div><button id="windCrown" class="wind-crown">↻</button><div class="wind-meter"><i id="windFill"></i></div><div id="windLabel" class="game-note">0 / 10 TURNS</div></div>');let turns=0;$q('#windCrown').onclick=()=>{turns=Math.min(10,turns+1);$q('#watchHand').style.transform='rotate('+(turns*108)+'deg)';$q('#windFill').style.width=(turns*10)+'%';$q('#windLabel').textContent=turns+' / 10 TURNS';playTone('E',.1);if(turns===10){collect('watch');later(()=>info('DRESSING ROOM / WATCH','Running.','<p>Mechanical, wound, and now yours.</p>'),350)}}}
 
-  function openSnowGlobe(){info('NYC / SNOW GLOBE','Shake it','<p class="game-note">Drag the globe hard from side to side, or use the button.</p><div class="snowglobe-game"><div id="globeBig" class="globe-big"></div><div class="shake-meter"><i id="shakeFill"></i></div><button id="shakeButton" class="mini-action">SHAKE</button></div>');let energy=0,lastX=null,down=false,globe=$q('#globeBig');const snow=()=>{for(let i=0;i<12;i++){const f=document.createElement('i');f.className='snowflake';f.textContent='•';f.style.left=(10+Math.random()*80)+'%';f.style.top=(Math.random()*25)+'%';globe.appendChild(f);later(()=>f.remove(),800)}};const add=n=>{energy=Math.min(100,energy+n);$q('#shakeFill').style.width=energy+'%';snow();if(energy>=100&&!globe.classList.contains('revealed')){globe.classList.add('revealed');toast('SOMETHING IS INSIDE THE BASE');later(()=>{const b=document.createElement('button');b.className='mini-action';b.textContent='OPEN THE BASE';b.onclick=()=>{collect('ornament');info('NYC / FOUND','A tiny brass W','<p>The estate has apparently followed you to New York.</p>')};$q('#infoBody').appendChild(b)},300)}};globe.onpointerdown=e=>{down=true;lastX=e.clientX;globe.setPointerCapture(e.pointerId)};globe.onpointermove=e=>{if(!down)return;const d=Math.abs(e.clientX-lastX);if(d>18){add(Math.min(18,d/2));lastX=e.clientX}};globe.onpointerup=()=>{down=false;lastX=null};$q('#shakeButton').onclick=()=>add(20)}
+  function openSnowGlobe(){info('NYC / SNOW GLOBE','Shake it','<p class="game-note">Drag the globe hard from side to side, or use the button.</p><div class="snowglobe-game"><div id="globeBig" class="globe-big"></div><div class="shake-meter"><i id="shakeFill"></i></div><button id="shakeButton" class="mini-action">SHAKE</button></div>');let energy=0,lastX=null,down=false,globe=$q('#globeBig');const snow=()=>{for(let i=0;i<12;i++){const f=document.createElement('i');f.className='snowflake';f.textContent='•';f.style.left=(10+Math.random()*80)+'%';f.style.top=(Math.random()*25)+'%';globe.appendChild(f);later(()=>f.remove(),800)}};const add=n=>{energy=Math.min(100,energy+n);$q('#shakeFill').style.width=energy+'%';snow();if(energy>=100&&!globe.classList.contains('revealed')){globe.classList.add('revealed');toast('SOMETHING IS INSIDE THE BASE');later(()=>{const b=document.createElement('button');b.className='mini-action';b.textContent='OPEN THE BASE';b.onclick=()=>{collect('ornament');info('NYC / FOUND','A tiny brass W','<p>A small brass W, brought from the estate and hidden in the tree.</p>')};$q('#infoBody').appendChild(b)},300)}};globe.onpointerdown=e=>{down=true;lastX=e.clientX;globe.setPointerCapture(e.pointerId)};globe.onpointermove=e=>{if(!down)return;const d=Math.abs(e.clientX-lastX);if(d>18){add(Math.min(18,d/2));lastX=e.clientX}};globe.onpointerup=()=>{down=false;lastX=null};$q('#shakeButton').onclick=()=>add(20)}
 
   const baseDoAction=doAction;
   doAction=function(a){
@@ -295,16 +295,16 @@
     if(a==='suit-race'){state.suit='RACE SUIT';save();toast('EQUIPPED — RACE SUIT');info('RACE SUIT','Track mode.','<p>Helmet, gloves and a full motorsport suit for race school, track days and the garage branch of the estate.</p><p>Apexes, braking points and machines that are much faster than necessary.</p>');return}
     if(a==='suit-dive'){state.suit='DIVE RIG';save();toast('EQUIPPED — DIVE RIG');info('DIVE RIG','Open water / scuba.','<p>Wetsuit, mask, fins and dive gear for the underwater chapter.</p><p>Open-water swimming, scuba progression, boats, reefs and whatever is below the surface.</p>');return}
     if(a==='snowglobe'){openSnowGlobe();return}
-    if(a==='portrait'){info('MANOR / PAINTING','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>Probably unrelated to the grand piano twenty feet away.</p>');return}
+    if(a==='portrait'){info('MANOR / PAINTING','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>The letters are carved into the back of the frame. They match four notes on the grand piano.</p>');return}
     if(a==='armor-display'){info('MANOR / ARMOR','Older skills','<p>Blacksmithing. Archery. Blades. Craft.</p><p>The armor is not the entrance. The fireplace is.</p>');return}
     if(a==='manor-table'){info('MANOR / TABLE','A life well lived','<p>One boss fight. One adventure. One skill unlock. Repeat until the stories are better than the plans.</p>');return}
-    if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Inside / outside','<p>Fire inside. Snow outside. Brick across the street. Somewhere to be later.</p>');return}
-    if(a==='nyc-bar'){info('NYC / BAR CART','Before going out','<p>Glassware, old bottles, and a dinner jacket waiting nearby.</p><p>The actual mission is still on the desk.</p>');return}
-    if(a==='archive-yale'){info('ARCHIVE / EDUCATION','Yale University','<p>Statistics & Data Science.</p><p>Some chapters fit in a frame. Most of the useful parts do not.</p>');return}
-    if(a==='archive-pontevedra'){info('ARCHIVE / PLACE','Ponte Vedra Beach','<p>A place important enough to earn permanent wall space.</p>');return}
-    if(a==='archive-finish'){info('ARCHIVE / FINISH LINE','Santa Cruz','<p><strong>5:29 total.</strong></p><p>The photograph behind the medal.</p>');return}
+    if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Inside / outside','<p>Fire inside, snow outside, and brick buildings across the street. The room is the warm half of a New York winter night.</p>');return}
+    if(a==='nyc-bar'){info('NYC / BAR CART','Before going out','<p>Glassware and old bottles set beside the dinner jacket. It is the last stop in the room before heading out into the city.</p>');return}
+    if(a==='archive-yale'){info('ARCHIVE / EDUCATION','Yale University','<p><strong>Statistics & Data Science.</strong></p><p>The diploma marks one finished chapter; the rest of the room is for what came after it.</p>');return}
+    if(a==='archive-pontevedra'){info('ARCHIVE / PLACE','Ponte Vedra Beach','<p>Northeast Florida and one of the places that feels foundational enough to show up twice in the estate: here in the archive, and again on the map.</p>');return}
+    if(a==='archive-finish'){info('ARCHIVE / FINISH LINE','Santa Cruz 70.3','<p><strong>5:29 total.</strong></p><p>The finish-line photograph from the first 70.3: the moment the training block became something finished.</p>');return}
     if(a==='archive-index'){info('ARCHIVE / INDEX','The system behind the wall','<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>');return}
-    if(a==='tree'){info('NYC / TREE','One ornament is different','<p>A tiny brass W is hanging deeper in the branches.</p><button id="takeOrnament" class="mini-action">TAKE IT</button>');later(()=>{$q('#takeOrnament').onclick=()=>{collect('ornament');toast('THE ESTATE HAS FOLLOWED YOU TO NEW YORK')}},0);return}
+    if(a==='tree'){info('NYC / TREE','One ornament is different','<p>A tiny brass W is tucked deeper in the branches, clearly not part of the original ornament set.</p><button id="takeOrnament" class="mini-action">TAKE IT</button>');later(()=>{$q('#takeOrnament').onclick=()=>{collect('ornament');toast('FOUND — BRASS W ORNAMENT')}},0);return}
     if(a==='santa-relic'){info('RELIC / COMPLETED','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>');return}
     return baseDoAction(a)
   };
