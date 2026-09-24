@@ -6,7 +6,7 @@ body[data-daypart="dusk"] .living-layer::before{background:linear-gradient(180de
 body[data-daypart="night"] .living-layer::before{background:linear-gradient(180deg,rgba(4,10,19,.34),rgba(2,5,10,.3) 62%,rgba(0,2,5,.44))}
 body[data-daypart="day"] .living-layer::before{background:linear-gradient(180deg,rgba(255,235,195,.025),transparent 60%)}
 
-.world-status{position:absolute;z-index:42;left:50%;top:23px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;pointer-events:none;font:600 7px/1 "DM Sans",sans-serif;letter-spacing:.16em;color:rgba(235,225,203,.65);text-shadow:0 2px 15px rgba(0,0,0,.7);white-space:nowrap}
+.world-status{position:absolute;z-index:42;left:50%;top:66px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;pointer-events:none;font:600 7px/1 "DM Sans",sans-serif;letter-spacing:.16em;color:rgba(235,225,203,.65);text-shadow:0 2px 15px rgba(0,0,0,.7);white-space:nowrap}
 .world-status i{width:2px;height:2px;border-radius:50%;background:#c7ab6b;opacity:.7}
 
 .world-weather-readout{display:grid;gap:4px;margin:1px 0 14px;padding:10px 11px;border:1px solid rgba(229,204,141,.16);background:rgba(192,161,102,.045)}
@@ -21,6 +21,18 @@ body[data-daypart="day"] .living-layer::before{background:linear-gradient(180deg
 .boot-world strong{font-size:9px;letter-spacing:.13em;font-weight:500;color:#eee1c4}
 .boot-return{font-size:6px!important;font-style:normal!important;letter-spacing:.19em!important;color:#9c9079!important;margin:10px 0 0!important}
 #bootLead{min-height:22px}
+.boot-card>*{animation:bootBrief .7s cubic-bezier(.2,.7,.2,1) both}
+.boot-card>.coin-mark{animation-delay:.05s}
+.boot-card>.boot-kicker{animation-delay:.12s}
+.boot-card>.boot-world{animation-delay:.20s}
+.boot-card>#bootLead{animation-delay:.32s}
+.boot-card>p:not(.boot-return){animation-delay:.39s}
+.boot-card>.boot-return{animation-delay:.46s}
+.boot-card>.primary{animation-delay:.54s}
+.boot-world>div{animation:bootCell .48s ease both}
+.boot-world>div:nth-child(1){animation-delay:.24s}.boot-world>div:nth-child(2){animation-delay:.29s}.boot-world>div:nth-child(3){animation-delay:.34s}.boot-world>div:nth-child(4){animation-delay:.39s}.boot-world>div:nth-child(5){animation-delay:.44s}.boot-world>div:nth-child(6){animation-delay:.49s}
+@keyframes bootBrief{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes bootCell{from{opacity:0;background:rgba(8,11,9,.05)}to{opacity:1;background:rgba(8,11,9,.44)}}
 body[data-daypart="night"] .boot-shade{background:linear-gradient(180deg,rgba(1,4,8,.30),rgba(1,4,8,.56)),radial-gradient(circle at 64% 35%,transparent,rgba(0,0,0,.56))}
 body[data-daypart="dusk"] .boot-shade{background:linear-gradient(180deg,rgba(83,48,25,.05),rgba(4,5,5,.28)),radial-gradient(circle at 65% 35%,transparent,rgba(0,0,0,.48))}
 body[data-world-weather="fog"] .boot::after,body[data-world-weather="mist"] .boot::after{content:"";position:absolute;inset:-15%;background:radial-gradient(ellipse at 25% 65%,rgba(220,226,219,.15),transparent 35%),radial-gradient(ellipse at 70% 55%,rgba(220,226,219,.11),transparent 38%);filter:blur(16px);animation:livingFog 12s ease-in-out infinite alternate;pointer-events:none}
@@ -114,7 +126,7 @@ body[data-daypart="night"] .living-glow,body[data-daypart="dusk"] .living-glow{o
 @keyframes travelLabel{0%,20%,100%{opacity:0}45%,72%{opacity:1}}
 
 @media(max-width:880px){
-  .world-status{top:61px;left:12px;right:12px;transform:none;justify-content:center;gap:6px;font-size:5.5px;letter-spacing:.1em;overflow:hidden}
+  .world-status{top:59px;left:12px;right:12px;transform:none;justify-content:center;gap:6px;font-size:5.5px;letter-spacing:.1em;overflow:hidden}
   .world-status span:nth-of-type(2),.world-status i:nth-of-type(2){display:none}
   .boot-card{padding:24px 20px}
   .boot-world{grid-template-columns:1fr 1fr;margin-top:15px}
@@ -123,5 +135,5 @@ body[data-daypart="night"] .living-glow,body[data-daypart="dusk"] .living-glow{o
   .armor-actor{display:none}
 }
 @media(prefers-reduced-motion:reduce){
-  .living-layer *,.weather-fx,.boot::after{animation:none!important}
+  .living-layer *,.weather-fx,.boot::after,.boot-card>*,.boot-world>div{animation:none!important}
 }
