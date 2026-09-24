@@ -193,3 +193,16 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
   .constellation-meta strong{font-size:19px}
   .star-node{min-width:16px;min-height:16px}
 }
+
+/* Small interactive moments inside ordinary story popups */
+.popup-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 10px}
+.popup-choice-grid.three{grid-template-columns:repeat(3,1fr)}
+.popup-choice-grid .mini-action{margin:0;min-height:42px}
+.popup-reveal{min-height:58px;margin-top:10px;padding:11px 12px;border-left:2px solid rgba(216,188,115,.55);background:rgba(216,188,115,.055);color:#cfc4ad}
+.popup-reveal p{margin:0 0 8px}.popup-reveal p:last-child{margin-bottom:0}
+.reveal-code{font:26px "Playfair Display",serif;letter-spacing:.18em;color:#e3ca86;margin:10px 0}
+.mini-action:disabled{opacity:.48;cursor:default}
+@media(max-width:880px){
+  .popup-choice-grid,.popup-choice-grid.three{grid-template-columns:1fr}
+  .popup-choice-grid .mini-action{min-height:44px}
+}
