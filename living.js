@@ -203,7 +203,7 @@
     living.appendChild(f);return f;
   }
   function addArmor(){
-    const a=place(el('div','armor-actor','aria-hidden' in {}?{}:{}),30,39);
+    const a=place(el('div','armor-actor',{'aria-hidden':'true'}),30,39);
     a.innerHTML='<i class="armor-shoulder"></i><i class="armor-arm"><b class="armor-sword"></b></i>';
     if(memory.objectStates.armorRaised)a.classList.add('remembered');
     living.appendChild(a);
@@ -405,6 +405,14 @@
       return;
     }
     return baseDoAction(a);
+  };
+
+  const resetBtn=q('#resetBtn');
+  if(resetBtn)resetBtn.onclick=()=>{
+    ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion',MEM_KEY,'wells.driveBest']
+      .forEach(k=>localStorage.removeItem(k));
+    try{sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem('wells.raven.gone');sessionStorage.removeItem('wells.event.manor');sessionStorage.removeItem('wells.event.window')}catch(e){}
+    location.reload();
   };
 
   // Existing hotspot handlers resolve sceneTo/doAction at click time, so the living wrappers above
