@@ -159,3 +159,13 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
 @media(max-width:880px){
   .fare-meter{top:58px;width:36vw;max-width:180px}
 }
+
+/* Estate Run v3 — pure survival. Collision uses the rendered car/obstacle rectangles. */
+.drive-arcade .fare-meter,.drive-pickups,.drive-destination{display:none!important}
+.arcade-touch{justify-content:flex-end}
+.arcade-touch button{width:64px;height:64px;font-size:22px}
+.drive-obstacle{box-sizing:border-box}
+@media(max-width:880px){
+  .arcade-touch{justify-content:space-between}
+  .arcade-touch button{width:72px;height:64px}
+}

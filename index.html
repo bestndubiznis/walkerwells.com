@@ -10,8 +10,8 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="shortcut icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://images.unsplash.com"/>
-  <link rel="stylesheet" href="/styles.css?v=20260923t"/>
-  <link rel="stylesheet" href="/games.css?v=20260923t"/>
+  <link rel="stylesheet" href="/styles.css?v=20260923u"/>
+  <link rel="stylesheet" href="/games.css?v=20260923u"/>
 </head>
 <body data-season="autumn" data-storm="false">
   <div id="boot" class="boot">
@@ -117,41 +117,35 @@
         <div class="road-glow"></div>
         <div class="lane lane-a"></div><div class="lane lane-b"></div><div class="lane lane-c"></div>
         <div id="driveObstacles" class="road-obstacles"></div>
-        <div id="drivePickups" class="drive-pickups"></div>
-        <div id="driveDestination" class="drive-destination"></div>
       </div>
 
       <div class="drive-hud left arcade-hud">
-        <small>FARE</small>
-        <strong id="driveMission">FIND A PASSENGER</strong>
-        <span>TIME <b id="driveTimer">60.0</b></span>
-        <span>CASH <b>$<span id="driveCash">0</span></b></span>
-        <span>FARES <b id="driveFares">0</b></span>
+        <small>RUN</small>
+        <strong id="driveMission">STAY ALIVE</strong>
+        <span>TIME <b id="driveTimer">0.0</b> SEC</span>
+        <span>SCORE <b id="driveScore">0</b></span>
+        <span>BEST <b id="driveBest">0</b></span>
       </div>
 
       <div class="drive-hud right arcade-hud">
-        <small>RUN</small>
-        <strong id="driveDestinationLabel">NO FARE</strong>
-        <span>FARE <b>$<span id="driveFareValue">0</span></b></span>
-        <span>COMBO <b id="driveStreak">1.0×</b></span>
-        <span>NEAR MISSES <b id="driveScore">0</b></span>
+        <small>CAR</small>
+        <strong id="driveCarLabel">FERRARI</strong>
+        <span>SPEED <b id="driveSpeedSmall">72</b> MPH</span>
+        <span>LEVEL <b id="driveLevel">1</b></span>
       </div>
 
-      <div class="drive-speed arcade-speed"><strong id="driveSpeed">0</strong><span>MPH</span></div>
-      <div class="fare-meter" aria-hidden="true"><i id="fareMeterFill"></i></div>
+      <div class="drive-speed arcade-speed"><strong id="driveSpeed">72</strong><span>MPH</span></div>
 
       <div class="drive-copy arcade-copy">
-        <span id="driveModeLabel">ESTATE EXPRESS</span>
-        <h3 id="driveTitle">Pick them up. Get them there.</h3>
-        <p>← → steer · W accelerate · S brake · near misses build the fare multiplier</p>
+        <span id="driveModeLabel">ESTATE RUN</span>
+        <h3 id="driveTitle">Don't hit anything.</h3>
+        <p>← → or A / D to steer · survive longer and the car keeps getting faster</p>
       </div>
 
       <div id="driveLaneCar" class="drive-lane-car arcade-car"><i></i></div>
 
       <div class="drive-touch arcade-touch">
         <button id="driveLeft" aria-label="Steer left">←</button>
-        <button id="driveGas" aria-label="Accelerate">GO</button>
-        <button id="driveBrake" aria-label="Brake">BRAKE</button>
         <button id="driveRight" aria-label="Steer right">→</button>
       </div>
       <button id="driveExit" class="drive-exit">EXIT RUN</button>
@@ -159,7 +153,7 @@
 
     <div id="toast" class="toast"></div>
   </main>
-  <script src="/app.js?v=20260923t" defer></script>
-  <script src="/enhancements.js?v=20260923t" defer></script>
+  <script src="/app.js?v=20260923u" defer></script>
+  <script src="/enhancements.js?v=20260923u" defer></script>
 </body>
 </html>
