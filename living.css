@@ -1,0 +1,127 @@
+/* WELLS Living Estate v1 */
+.living-layer{position:absolute;inset:0;z-index:23;pointer-events:none;overflow:hidden}
+.living-layer::before{content:"";position:absolute;inset:0;pointer-events:none;transition:background 1.2s ease,opacity 1.2s ease}
+body[data-daypart="dawn"] .living-layer::before{background:linear-gradient(180deg,rgba(176,151,121,.12),rgba(30,34,31,.03) 46%,rgba(5,8,9,.08))}
+body[data-daypart="dusk"] .living-layer::before{background:linear-gradient(180deg,rgba(116,71,44,.08),rgba(40,22,15,.14) 58%,rgba(3,6,8,.22))}
+body[data-daypart="night"] .living-layer::before{background:linear-gradient(180deg,rgba(4,10,19,.34),rgba(2,5,10,.3) 62%,rgba(0,2,5,.44))}
+body[data-daypart="day"] .living-layer::before{background:linear-gradient(180deg,rgba(255,235,195,.025),transparent 60%)}
+
+.world-status{position:absolute;z-index:42;left:50%;top:23px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;pointer-events:none;font:600 7px/1 "DM Sans",sans-serif;letter-spacing:.16em;color:rgba(235,225,203,.65);text-shadow:0 2px 15px rgba(0,0,0,.7);white-space:nowrap}
+.world-status i{width:2px;height:2px;border-radius:50%;background:#c7ab6b;opacity:.7}
+
+.world-weather-readout{display:grid;gap:4px;margin:1px 0 14px;padding:10px 11px;border:1px solid rgba(229,204,141,.16);background:rgba(192,161,102,.045)}
+.world-weather-readout strong{font:15px "Playfair Display",serif;font-weight:500}
+.world-weather-readout span{font-size:7px;letter-spacing:.14em;color:#978d79}
+
+.boot{background-image:linear-gradient(90deg,rgba(5,7,6,.54),rgba(5,7,6,.16)),url('/assets/scenes/estate-hq.webp?v=estate2')}
+.boot-card{width:min(590px,88vw);padding:31px 36px}
+.boot-world{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:18px 0 14px;border:1px solid rgba(235,220,185,.16);background:rgba(255,255,255,.06);text-align:left}
+.boot-world div{padding:10px 12px;background:rgba(8,11,9,.44)}
+.boot-world small{display:block;font-size:6px;letter-spacing:.2em;color:#998e76;margin-bottom:4px}
+.boot-world strong{font-size:9px;letter-spacing:.13em;font-weight:500;color:#eee1c4}
+.boot-return{font-size:6px!important;font-style:normal!important;letter-spacing:.19em!important;color:#9c9079!important;margin:10px 0 0!important}
+#bootLead{min-height:22px}
+body[data-daypart="night"] .boot-shade{background:linear-gradient(180deg,rgba(1,4,8,.30),rgba(1,4,8,.56)),radial-gradient(circle at 64% 35%,transparent,rgba(0,0,0,.56))}
+body[data-daypart="dusk"] .boot-shade{background:linear-gradient(180deg,rgba(83,48,25,.05),rgba(4,5,5,.28)),radial-gradient(circle at 65% 35%,transparent,rgba(0,0,0,.48))}
+body[data-world-weather="fog"] .boot::after,body[data-world-weather="mist"] .boot::after{content:"";position:absolute;inset:-15%;background:radial-gradient(ellipse at 25% 65%,rgba(220,226,219,.15),transparent 35%),radial-gradient(ellipse at 70% 55%,rgba(220,226,219,.11),transparent 38%);filter:blur(16px);animation:livingFog 12s ease-in-out infinite alternate;pointer-events:none}
+body[data-world-weather="rain"] .boot::after,body[data-world-weather="showers"] .boot::after,body[data-world-weather="storm"] .boot::after{content:"";position:absolute;inset:-15%;opacity:.28;background:repeating-linear-gradient(105deg,transparent 0 20px,rgba(220,230,230,.4) 21px 22px);background-size:55px 180px;animation:livingRain .75s linear infinite;pointer-events:none}
+
+body[data-world-weather="rain"] .weather-fx::before,body[data-world-weather="showers"] .weather-fx::before{content:"";position:absolute;inset:-20%;opacity:.34;background:repeating-linear-gradient(106deg,transparent 0 24px,rgba(215,226,226,.34) 25px 26px);background-size:55px 170px;animation:livingRain .7s linear infinite}
+body[data-world-weather="showers"] .weather-fx::before{opacity:.23;animation-duration:1s}
+body[data-world-weather="fog"] .weather-fx::before,body[data-world-weather="mist"] .weather-fx::before{content:"";position:absolute;inset:-20%;background:radial-gradient(ellipse at 15% 65%,rgba(210,218,212,.19),transparent 37%),radial-gradient(ellipse at 67% 58%,rgba(204,214,208,.15),transparent 41%);filter:blur(18px);animation:livingFog 14s ease-in-out infinite alternate}
+body[data-world-weather="overcast"] .living-layer::before{background-color:rgba(15,19,20,.12)}
+body[data-world-weather="haze"] .living-layer::before{background-image:linear-gradient(180deg,rgba(208,174,111,.09),rgba(137,102,58,.035))}
+body[data-world-weather="snow"] .weather-fx,body[data-world-weather="flurries"] .weather-fx{background-image:radial-gradient(circle,rgba(255,255,255,.72) 0 1px,transparent 1.6px);background-size:43px 43px;animation:livingSnow 11s linear infinite;opacity:.54}
+body[data-world-weather="flurries"] .weather-fx{opacity:.3;animation-duration:16s}
+body[data-season="winter"]:not([data-world-weather="snow"]):not([data-world-weather="flurries"]) .weather-fx{background-image:none;animation:none;opacity:1}
+body[data-world-weather="frost"] .living-layer::after{content:"";position:absolute;inset:auto 0 0;height:18%;background:linear-gradient(0deg,rgba(205,224,224,.1),transparent);mix-blend-mode:screen}
+@keyframes livingRain{to{background-position:-25px 180px}}
+@keyframes livingFog{to{transform:translateX(4%) scale(1.04);opacity:.8}}
+@keyframes livingSnow{to{background-position:27px 190px}}
+
+.living-glow{position:absolute;transform:translate(-50%,-50%);border-radius:50%;filter:blur(10px);opacity:.08;mix-blend-mode:screen;transition:opacity .6s,transform .6s}
+body[data-daypart="night"] .living-glow,body[data-daypart="dusk"] .living-glow{opacity:.7}
+.estate-window-glow{width:8%;height:8%;background:radial-gradient(ellipse,#ffd98d 0,rgba(224,160,62,.38) 38%,transparent 70%);filter:blur(8px)}
+.estate-door-glow{width:9%;height:11%;background:radial-gradient(ellipse,#d7ae62,rgba(179,112,41,.18) 45%,transparent 72%);opacity:.15}
+.estate-window-glow.blink{animation:windowBlink 1.8s ease}
+@keyframes windowBlink{0%,18%,55%,100%{opacity:.72}25%,45%{opacity:.03}}
+.manor-window-light{width:18%;height:24%;background:radial-gradient(ellipse,rgba(231,190,109,.42),transparent 68%)}
+.study-lamp-glow{width:22%;height:30%;background:radial-gradient(circle,rgba(246,193,91,.48),rgba(201,129,45,.12) 40%,transparent 70%);opacity:.75!important;transition:width .6s,height .6s,opacity .6s}
+.study-lamp-glow.dim{width:12%;height:17%;opacity:.28!important}
+.garage-headlight{width:13%;height:7%;background:radial-gradient(ellipse,rgba(255,235,184,.74),rgba(221,189,111,.16) 45%,transparent 70%);opacity:.18!important}
+.garage-headlight.ignite{animation:headlightIgnite .9s ease-out}
+@keyframes headlightIgnite{0%{opacity:.15;transform:translate(-50%,-50%) scale(.6)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.55)}100%{opacity:.22;transform:translate(-50%,-50%) scale(1)}}
+.nyc-window-light{width:38%;height:42%;background:radial-gradient(ellipse,rgba(125,173,209,.16),transparent 72%);opacity:.45!important}
+
+.chimney-smoke{position:absolute;width:55px;height:105px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at 50% 80%,rgba(200,205,196,.14),transparent 55%);filter:blur(8px);opacity:.35;animation:chimneyDrift 6s ease-in-out infinite}
+@keyframes chimneyDrift{50%{transform:translate(-35%,-65%) scale(1.18);opacity:.18}}
+
+.living-mote{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(238,218,166,.55);box-shadow:0 0 5px rgba(236,211,151,.3);animation:moteFloat 8s ease-in-out infinite}
+@keyframes moteFloat{50%{transform:translate(14px,-20px);opacity:.25}}
+.living-leaf{position:absolute;left:-5%;width:9px;height:5px;border-radius:80% 15% 75% 20%;background:#75512f;opacity:.55;animation:leafCross 9s linear infinite}
+.living-leaf:nth-of-type(3n){background:#9b6537;transform:rotate(28deg)}
+@keyframes leafCross{0%{transform:translateX(-4vw) rotate(0)}100%{transform:translateX(112vw) translateY(10vh) rotate(620deg)}}
+
+.living-fire{position:absolute;width:90px;height:80px;transform:translate(-50%,-50%);filter:blur(.2px);mix-blend-mode:screen}
+.living-fire::after{content:"";position:absolute;left:50%;top:56%;width:100px;height:70px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(244,122,37,.34),rgba(198,79,25,.08) 46%,transparent 70%);filter:blur(9px);animation:fireGlow 1.4s ease-in-out infinite alternate}
+.living-fire i{position:absolute;left:50%;bottom:20%;width:16px;height:38px;transform-origin:50% 100%;border-radius:50% 50% 48% 48%;background:linear-gradient(0deg,rgba(245,92,26,.16),rgba(255,196,78,.66),rgba(255,236,170,.08));filter:blur(2px);animation:flame 1s ease-in-out infinite alternate}
+.living-fire i:nth-child(2){left:38%;height:29px;animation-delay:-.4s}.living-fire i:nth-child(3){left:62%;height:25px;animation-delay:-.7s}
+.living-fire.flare{animation:fireFlare .75s ease-out}
+@keyframes flame{to{transform:translateX(3px) scale(.8,1.14) rotate(6deg);opacity:.62}}
+@keyframes fireGlow{to{opacity:.58;transform:translate(-50%,-50%) scale(1.08)}}
+@keyframes fireFlare{45%{transform:translate(-50%,-50%) scale(1.35);filter:brightness(1.7)}}
+.manor-fire{width:78px;height:74px}.camp-fire{width:110px;height:92px}
+.fire-spark{position:absolute;width:3px;height:3px;border-radius:50%;background:#f1ba55;box-shadow:0 0 8px #e88a2d;animation:sparkLift 2.3s ease-out infinite}
+@keyframes sparkLift{to{transform:translate(10px,-70px);opacity:0}}
+
+.armor-actor{position:absolute;width:9%;height:28%;transform:translate(-50%,-50%);opacity:.74;mix-blend-mode:screen}
+.armor-shoulder{position:absolute;left:37%;top:33%;width:24%;height:14%;border-radius:45%;background:radial-gradient(ellipse,rgba(212,215,208,.20),transparent 70%)}
+.armor-arm{position:absolute;left:58%;top:38%;width:6px;height:58px;border-radius:6px;background:linear-gradient(rgba(213,218,211,.3),rgba(107,111,107,.08));transform-origin:50% 8%;transform:rotate(46deg);transition:transform .6s cubic-bezier(.2,.9,.2,1)}
+.armor-sword{position:absolute;left:2px;top:-64px;width:2px;height:83px;background:linear-gradient(#f6ead0,#9ca29d 72%,#5e5140);box-shadow:0 0 5px rgba(240,229,207,.35)}
+.armor-sword::after{content:"";position:absolute;left:-8px;bottom:11px;width:18px;height:2px;background:#a78d62}
+.armor-actor.raise .armor-arm{transform:rotate(-64deg)}
+.armor-actor.remembered .armor-arm{transform:rotate(28deg)}
+.armor-actor.raise.remembered .armor-arm{transform:rotate(-64deg)}
+
+.physical-drawer{position:absolute;width:12%;height:5%;transform:translate(-50%,-50%) perspective(100px) rotateX(8deg);background:linear-gradient(180deg,rgba(84,54,32,.05),rgba(35,20,12,.18));border-bottom:1px solid rgba(192,145,89,.12);opacity:.18;transition:transform .75s cubic-bezier(.2,.8,.2,1),opacity .6s}
+.physical-drawer.open{transform:translate(-50%,-18%) perspective(100px) rotateX(8deg);opacity:.48}
+
+.estate-raven{position:absolute;width:42px;height:30px;transform:translate(-50%,-50%);border:0;background:none;pointer-events:auto;cursor:pointer;filter:drop-shadow(0 4px 5px rgba(0,0,0,.55));z-index:4}
+.estate-raven b{position:absolute;left:14px;top:11px;width:18px;height:13px;border-radius:65% 45% 60% 40%;background:#080a0b}
+.estate-raven b::before{content:"";position:absolute;right:-7px;top:1px;border-left:9px solid #080a0b;border-top:3px solid transparent;border-bottom:3px solid transparent}
+.estate-raven b::after{content:"";position:absolute;left:-8px;top:6px;border-right:10px solid #080a0b;border-top:4px solid transparent;border-bottom:4px solid transparent}
+.raven-wing{position:absolute;left:13px;top:6px;width:18px;height:12px;border-radius:80% 20% 70% 20%;background:#111417;transform-origin:90% 70%;transform:rotate(-10deg)}
+.estate-raven:hover .raven-wing{transform:rotate(-24deg)}
+.estate-raven.depart{animation:ravenDepart .9s cubic-bezier(.2,.8,.2,1) forwards;pointer-events:none}
+.estate-raven.depart .raven-wing{animation:ravenWing .13s ease-in-out infinite alternate}
+@keyframes ravenWing{to{transform:rotate(-75deg) scaleY(1.4)}}
+@keyframes ravenDepart{to{transform:translate(220px,-190px) scale(.55);opacity:0}}
+.raven-feather{position:absolute;width:7px;height:30px;transform:translate(-50%,-50%) rotate(28deg);border:0;background:linear-gradient(90deg,#171a1c,#030405 58%,#171a1c);border-radius:100% 0 100% 0;pointer-events:auto;cursor:pointer;filter:drop-shadow(0 2px 6px #000)}
+
+.living-layer.power-flicker{animation:powerFlicker 1.45s linear}
+.living-layer.power-flicker::before{animation:powerGrade 1.45s linear}
+@keyframes powerFlicker{0%,15%,24%,44%,52%,100%{filter:brightness(1)}18%,47%{filter:brightness(.25)}21%,50%{filter:brightness(1.35)}}
+@keyframes powerGrade{0%,100%{background-color:transparent}18%,47%{background-color:rgba(0,0,0,.45)}}
+.living-layer.painting-shift::after{content:"";position:absolute;left:49%;top:16%;width:22%;height:24%;transform:translate(-50%,-50%);border-left:1px solid rgba(222,204,159,.14);animation:paintingShift .85s ease}
+@keyframes paintingShift{50%{transform:translate(-48%,-50%) rotate(1.2deg)}}
+
+.transition.living-travel{background:#090d0b}
+.transition.living-travel::before{content:attr(data-label);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:500 9px "DM Sans",sans-serif;letter-spacing:.34em;color:rgba(231,218,187,.68);opacity:0}
+.transition.living-travel.on::before{animation:travelLabel .72s ease}
+.transition.living-travel[data-mode="door"]{background:linear-gradient(90deg,#070908 0 46%,#141712 49% 51%,#070908 54% 100%)}
+.transition.living-travel[data-mode="garage"]{background:linear-gradient(180deg,#090b0a 0 43%,#20221e 45% 47%,#080a09 51%)}
+.transition.living-travel[data-mode="woods"]{background:radial-gradient(ellipse at center,#172017 0,#080b08 48%,#020302 100%)}
+@keyframes travelLabel{0%,20%,100%{opacity:0}45%,72%{opacity:1}}
+
+@media(max-width:880px){
+  .world-status{top:61px;left:12px;right:12px;transform:none;justify-content:center;gap:6px;font-size:5.5px;letter-spacing:.1em;overflow:hidden}
+  .world-status span:nth-of-type(2),.world-status i:nth-of-type(2){display:none}
+  .boot-card{padding:24px 20px}
+  .boot-world{grid-template-columns:1fr 1fr;margin-top:15px}
+  .boot-world div{padding:8px}
+  .estate-raven{width:36px;height:26px}
+  .armor-actor{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .living-layer *,.weather-fx,.boot::after{animation:none!important}
+}
