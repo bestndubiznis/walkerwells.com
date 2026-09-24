@@ -371,7 +371,7 @@
   function openObservatory(){
     openOverlay(obs);populateStars();moonFound=new Set();
     const ph=moonPhase();q('#moonMeta').textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})+' · '+ph.name+' · '+Math.round(ph.illum*100)+'% illuminated';
-    q('#moonPhaseMask').style.setProperty('--phase',String(ph.frac));
+    q('#moonPhaseMask').style.opacity=String(clamp((1-ph.illum)*.88,.04,.82));
     q('#focusWheel').value='42';q('#focusValue').textContent='42';q('#moon').style.filter='blur(3.8px)';
     q('#signalReadout').textContent=sys.moonWins.includes(today())?'Three anomalous transmissions logged today.':'Bring the optics into focus.';
     q('#alienCraft').classList.toggle('revealed',sys.moonWins.includes(today()));renderCraters();log('observatory','Opened the observatory');
@@ -417,6 +417,16 @@
     'campfire':'Sat by the campfire','camp-compass':'Spun the camp compass','tree-carving':'Inspected the tree carving',
     'santa-relic':'Opened the Santa Cruz 70.3 relic','ski-relic':'Opened the ski backflip relic'
   };
+  const baseCollect=collect;
+  collect=function(id){
+    const had=state.found.has(id);
+    baseCollect(id);
+    if(!had&&state.found.has(id)){
+      const item=items.find(x=>x[0]===id);
+      log('found','Found '+(item?item[1]:String(id).toUpperCase()));
+    }
+  };
+
   const baseDo=doAction;
   doAction=function(a){
     if(a==='map-table'){openMapTable();return}
