@@ -24,6 +24,23 @@ Instead of primitive browser geometry, scenes now use high-resolution real-world
 - NYC December side quest
 - Campfire clearing
 
+### Living Estate
+
+The estate now has a persistent world layer rather than behaving like a fixed collection of scenes:
+
+- visitor-local time and daypart lighting
+- date-seeded, season-aware estate weather
+- arrival briefing with undisclosed location, date, season and conditions
+- return-visit memory and remembered object states
+- animated fire, window light, smoke, leaves, dust, snow, rain, fog and headlights
+- physical scene reactions for the manor armor, study lamp, study drawer, fireplaces and garage
+- a recurring raven that moves through the estate across visits
+- subtle unscripted room events, including window and power flickers
+- cinematic transition treatments between major spaces
+- reduced-motion support for the added animation layer
+
+The original scene art remains the visual foundation. The living layer is deliberately isolated in `living.js` and `living.css` so individual pieces can become more physical over time without rebuilding the entire site.
+
 ## Main spaces
 
 - Estate
