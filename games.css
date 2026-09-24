@@ -125,7 +125,7 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
 .arcade-copy{z-index:84;left:5%;bottom:7%;max-width:430px}
 .arcade-copy h3{font-size:34px;margin:5px 0}
 .arcade-copy span{color:#d7bd78}
-.arcade-car{z-index:83;width:92px;height:46px;bottom:13%;border-radius:42% 42% 18% 18%;background:linear-gradient(180deg,#ce3c29,#6e1713);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 36px rgba(0,0,0,.62),0 0 30px rgba(214,61,39,.18)}
+.arcade-car{z-index:83;width:92px;height:46px;bottom:13%;border-radius:42% 42% 18% 18%;background:linear-gradient(180deg,#ce3c29,#6e1713);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 36px rgba(0,0,0,.62),0 0 30px rgba(214,61,39,.18);transition:none}
 .arcade-car::before,.arcade-car::after{bottom:7px}
 .drive-obstacle{z-index:3;width:54px;height:82px;border-radius:14px 14px 7px 7px;background:linear-gradient(135deg,#1d2322,#656b66);border:1px solid rgba(255,255,255,.11)}
 .drive-obstacle.traffic-van{width:64px;height:96px;background:linear-gradient(135deg,#222827,#767d76)}
@@ -206,3 +206,7 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
   .popup-choice-grid,.popup-choice-grid.three{grid-template-columns:1fr}
   .popup-choice-grid .mini-action{min-height:44px}
 }
+
+/* Estate Run v4 — steering tracks input directly and crashes read instantly. */
+.drive-overlay.hit .arcade-car{animation:driveCrash .28s ease-out}
+@keyframes driveCrash{0%{transform:translateX(-50%) rotate(0)}35%{transform:translateX(-50%) rotate(-7deg) scale(1.04)}70%{transform:translateX(-50%) rotate(5deg) scale(.98)}100%{transform:translateX(-50%) rotate(0)}}
