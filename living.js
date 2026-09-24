@@ -206,8 +206,11 @@
   function addArmor(){
     const a=place(el('div','armor-actor',{'aria-hidden':'true'}),30,39);
     a.innerHTML='<i class="armor-shoulder"></i><i class="armor-arm"><b class="armor-sword"></b></i>';
-    if(memory.objectStates.armorRaised)a.classList.add('remembered');
     living.appendChild(a);
+  }
+  function resetArmorPose(){
+    const actor=q('.armor-actor');
+    if(actor)actor.classList.remove('raise');
   }
   function addDrawer(){
     const d=place(el('div','physical-drawer'),43,77);
@@ -322,6 +325,7 @@
   const baseSceneTo=sceneTo;
   sceneTo=function(name,instant=false){
     const from=state.scene;
+    resetArmorPose();
     syncRememberedCopy();
     if(instant){
       baseSceneTo(name,true);
@@ -359,6 +363,7 @@
   const baseDoAction=doAction;
   doAction=function(a){
     if(!a)return;
+    if(a!=='armor-display')resetArmorPose();
     rememberAction(a);
 
     if(a==='armor-display'){
@@ -418,6 +423,9 @@
     }
     return baseDoAction(a);
   };
+
+  qa('[data-close]').forEach(btn=>btn.addEventListener('click',resetArmorPose));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')resetArmorPose()});
 
   const resetBtn=q('#resetBtn');
   if(resetBtn)resetBtn.onclick=()=>{
