@@ -101,3 +101,50 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
   .globe-big{width:150px;height:150px}
   .timing-game{margin-top:12px}
 }
+
+/* Estate Express — arcade taxi-style driving game */
+.drive-arcade{background:#08100e}
+.drive-arcade .drive-bg{
+  background:
+    linear-gradient(180deg,rgba(4,8,10,.10),rgba(4,7,6,.50)),
+    linear-gradient(90deg,rgba(250,176,65,.11),transparent 35%,rgba(62,191,196,.08)),
+    url('https://images.unsplash.com/photo-1515569067071-ec3b51335dd0?auto=format&fit=crop&w=2400&q=85');
+  filter:saturate(1.25) contrast(1.08) brightness(.82)
+}
+.arcade-skyline{position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,transparent 0 56%,rgba(3,7,6,.38) 79%,rgba(3,7,6,.78));pointer-events:none}
+.arcade-road{width:min(790px,78vw);height:116%;bottom:-17%;transform:translateX(-50%) perspective(720px) rotateX(26deg);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);background:linear-gradient(90deg,#161a19,#303535 49%,#191d1c);box-shadow:0 0 100px rgba(0,0,0,.82)}
+.arcade-road::before{background:repeating-linear-gradient(180deg,transparent 0 48px,rgba(255,255,255,.08) 49px 52px);animation-duration:.42s}
+.arcade-road .lane{width:3px;background:repeating-linear-gradient(180deg,rgba(244,231,181,.72) 0 23px,transparent 24px 58px);animation-duration:.34s}
+.arcade-road .lane-a{left:40%}.arcade-road .lane-b{left:50%}.arcade-road .lane-c{right:40%}
+.arcade-hud{top:8%;min-width:176px;border-color:rgba(229,204,141,.22);background:rgba(5,10,8,.62)}
+.arcade-hud.right{right:4%;left:auto;text-align:right}
+.arcade-hud strong{font:20px/1.1 "Playfair Display",serif;color:#f1dfaa}
+.arcade-hud b{color:#f4e6ba}
+.arcade-speed{top:auto;right:4%;bottom:18%;z-index:86}
+.arcade-speed strong{font-size:64px;line-height:.85}
+.arcade-copy{z-index:84;left:5%;bottom:7%;max-width:430px}
+.arcade-copy h3{font-size:34px;margin:5px 0}
+.arcade-copy span{color:#d7bd78}
+.arcade-car{z-index:83;width:92px;height:46px;bottom:13%;border-radius:42% 42% 18% 18%;background:linear-gradient(180deg,#ce3c29,#6e1713);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 36px rgba(0,0,0,.62),0 0 30px rgba(214,61,39,.18)}
+.arcade-car::before,.arcade-car::after{bottom:7px}
+.drive-obstacle{z-index:3;width:54px;height:82px;border-radius:14px 14px 7px 7px;background:linear-gradient(135deg,#1d2322,#656b66);border:1px solid rgba(255,255,255,.11)}
+.drive-obstacle.traffic-van{width:64px;height:96px;background:linear-gradient(135deg,#222827,#767d76)}
+.drive-pickups,.drive-destination{position:absolute;inset:0;pointer-events:none}
+.drive-passenger,.drive-gate{position:absolute;transform:translate(-50%,-50%);z-index:5}
+.drive-passenger{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:rgba(221,194,92,.16);border:2px solid #e8cd71;box-shadow:0 0 28px rgba(232,205,113,.38);animation:farePulse .7s ease-in-out infinite alternate}
+.drive-passenger b{font:700 10px ui-monospace,monospace;letter-spacing:.12em;color:#f8eab8}.drive-passenger span{position:absolute;right:-6px;top:-14px;font:700 30px "Playfair Display",serif;color:#f3d66f}
+.drive-gate{width:112px;height:48px;border:2px solid #c8e5bf;background:rgba(114,184,122,.16);box-shadow:0 0 34px rgba(123,211,132,.26);display:grid;place-items:center}
+.drive-gate span{font:700 10px ui-monospace,monospace;letter-spacing:.18em;color:#d9f0cf}
+@keyframes farePulse{to{transform:translate(-50%,-50%) scale(1.08)}}
+.arcade-touch{gap:7px}.arcade-touch button{width:58px;height:58px;font-size:15px;font-weight:700}.arcade-touch #driveGas{border-color:rgba(221,194,92,.45)}.arcade-touch #driveBrake{font-size:9px}
+@media(max-width:880px){
+  .arcade-road{width:145vw;height:110%;bottom:-12%}
+  .arcade-hud{top:70px;min-width:132px;padding:8px}.arcade-hud.right{right:10px}.arcade-hud.left{left:10px}
+  .arcade-hud strong{font-size:14px}.arcade-hud span{font-size:6px}
+  .arcade-speed{right:12px;bottom:154px}.arcade-speed strong{font-size:44px}
+  .arcade-copy{left:12px;bottom:150px;max-width:56vw}.arcade-copy h3{font-size:22px}.arcade-copy p{display:none}
+  .arcade-car{width:78px;height:40px;bottom:18%}
+  .arcade-touch{left:10px;right:10px;bottom:calc(12px + env(safe-area-inset-bottom));justify-content:space-between}
+  .arcade-touch button{width:58px;height:58px}
+  .drive-passenger{width:54px;height:54px}.drive-gate{width:92px}
+}

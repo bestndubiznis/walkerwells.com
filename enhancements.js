@@ -173,16 +173,162 @@
     return baseDoAction(a)
   };
 
-  const DRIVE={race:{label:'FERRARI / TRACK',mode:'APEX RUN',title:'Late apex. Clean hands.',speed:112,goal:1.8,lives:2,spawn:650,kind:'cone'},aston:{label:'ASTON / NIGHT',mode:'NIGHT DRIVE',title:'Somewhere after rain.',speed:78,goal:1.45,lives:3,spawn:850,kind:'traffic'},rover:{label:'RANGE / ESTATE',mode:'WET ESTATE ROAD',title:'Rain belongs on the windshield.',speed:56,goal:1.05,lives:3,spawn:750,kind:'mud'}};
-  let driveRAF=0,driveLast=0,driveSpawnAt=0,driveRunning=false,driveObstacles=[],driveMode='aston',driveDistance=0,driveScore=0,driveLives=3;
-  function spawnObstacle(now){const cfg=DRIVE[driveMode]||DRIVE.aston,lanes=[38,50,62],lane=lanes[Math.floor(Math.random()*lanes.length)],el=document.createElement('div');el.className='drive-obstacle '+(cfg.kind==='traffic'?'':cfg.kind);el.style.left=lane+'%';el.style.top='-8%';$q('#roadObstacles').appendChild(el);driveObstacles.push({el,x:lane,y:-8,hit:false});driveSpawnAt=now+cfg.spawn*(.8+Math.random()*.55)}
-  function finishDrive(success,msg){if(!driveRunning)return;driveRunning=false;cancelAnimationFrame(driveRAF);const dist=driveDistance.toFixed(2),score=driveScore,lives=driveLives;later(()=>{$q('#driveOverlay').classList.remove('open');$q('#driveOverlay').setAttribute('aria-hidden','true');info('GARAGE / DRIVE',success?'RUN COMPLETE':'RUN ENDED',`<p>${msg}</p><p><strong>${dist} mi</strong> · ${score} obstacles avoided · ${lives} composure remaining.</p>`)},220)}
-  function driveLoop(now){if(!driveRunning)return;const cfg=DRIVE[driveMode]||DRIVE.aston,dt=Math.min(48,now-driveLast||16);driveLast=now;if(now>driveSpawnAt)spawnObstacle(now);driveDistance+=state.speed*(dt/3600000)*4.2;$q('#driveDistance').textContent=driveDistance.toFixed(2);const vy=(state.speed/72)*(.055*dt);driveObstacles.forEach(o=>{o.y+=vy;o.el.style.top=o.y+'%';if(!o.hit&&o.y>77&&o.y<91&&Math.abs(o.x-state.driveX)<7.5){o.hit=true;driveLives--;$q('#driveLives').textContent=driveLives;$q('#driveOverlay').classList.add('hit');later(()=>$q('#driveOverlay').classList.remove('hit'),260);state.speed=Math.max(38,state.speed-18);$q('#driveSpeed').textContent=Math.round(state.speed);toast(driveMode==='race'?'CONE — LOST TIME':driveMode==='rover'?'MUD HOLE — COMPOSURE -1':'TRAFFIC — COMPOSURE -1');o.el.remove();o.done=true;if(driveLives<=0)finishDrive(false,'Too many mistakes. The estate suggests another run.')}else if(o.y>108){o.el.remove();o.done=true;driveScore++;$q('#driveScore').textContent=driveScore}});driveObstacles=driveObstacles.filter(o=>!o.done);if(driveDistance>=cfg.goal){finishDrive(true,'Clean run. Put the key back before somebody notices.');return}if(driveRunning)driveRAF=requestAnimationFrame(driveLoop)}
-  function steer(d){if(!driveRunning)return;state.driveX=Math.max(36,Math.min(64,state.driveX+d));$q('#driveLaneCar').style.left=state.driveX+'%'}
-  startDrive=function(type){driveRunning=false;cancelAnimationFrame(driveRAF);const cfg=DRIVE[type]||DRIVE.aston;driveMode=type;state.driveX=50;state.speed=cfg.speed;driveDistance=0;driveScore=0;driveLives=cfg.lives;driveObstacles=[];driveRunning=true;driveLast=performance.now();driveSpawnAt=driveLast+700;$q('#driveCarLabel').textContent=cfg.label;$q('#driveModeLabel').textContent=cfg.mode;$q('#driveTitle').textContent=cfg.title;$q('#driveMission').textContent=cfg.goal.toFixed(2)+' MI CLEAN';$q('#driveSpeed').textContent=state.speed;$q('#driveDistance').textContent='0.00';$q('#driveScore').textContent='0';$q('#driveLives').textContent=driveLives;$q('#driveLaneCar').style.left='50%';$q('#roadObstacles').innerHTML='';$q('#driveOverlay').classList.add('open');$q('#driveOverlay').setAttribute('aria-hidden','false');collect('road-key');driveRAF=requestAnimationFrame(driveLoop)};
-  $q('#driveExit').onclick=()=>{driveRunning=false;cancelAnimationFrame(driveRAF);$q('#driveOverlay').classList.remove('open');$q('#driveOverlay').setAttribute('aria-hidden','true');$q('#roadObstacles').innerHTML=''};
-  $q('#driveLeft').onclick=()=>steer(-4);$q('#driveRight').onclick=()=>steer(4);
-  addEventListener('keydown',e=>{if(!driveRunning)return;const k=e.key.toLowerCase();if(k==='a'||e.key==='ArrowLeft')steer(-4);if(k==='d'||e.key==='ArrowRight')steer(4)});
+  const DRIVE={
+    race:{label:'FERRARI',mode:'ESTATE EXPRESS',title:'Redline. No excuses.',base:72,max:132,accel:48,brake:72,handling:47,traffic:720},
+    aston:{label:'ASTON MARTIN',mode:'MIDNIGHT EXPRESS',title:'Fast, composed, expensive.',base:64,max:116,accel:38,brake:64,handling:42,traffic:820},
+    rover:{label:'RANGE ROVER',mode:'COUNTRY EXPRESS',title:'Mud is just another lane.',base:52,max:92,accel:30,brake:58,handling:34,traffic:900}
+  };
+  const DRIVE_STOPS=['THE MANOR','PRIVATE AIRSTRIP','MARINA','CITY CLUB','ALPINE LODGE','THE RANGE','OLD TOWN','TRACK PADDOCK'];
+  let driveRAF=0,driveLast=0,driveSpawnAt=0,drivePickupAt=0,driveRunning=false,driveMode='race';
+  let driveObstacles=[],drivePickups=[],driveDestination=null,driveDistance=0,driveScore=0,driveCash=0,driveStreak=0,driveTimer=45,drivePassenger=false,driveFareStart=0,driveFareTarget=0,driveDestinationLane=50;
+  const driveKeys={left:false,right:false,gas:false,brake:false};
+
+  function driveCfg(){return DRIVE[driveMode]||DRIVE.race}
+  function laneX(){return [38,46,54,62][Math.floor(Math.random()*4)]}
+  function clearDriveObjects(){
+    driveObstacles.forEach(o=>o.el.remove());driveObstacles=[];
+    drivePickups.forEach(o=>o.el.remove());drivePickups=[];
+    if(driveDestination){driveDestination.remove();driveDestination=null}
+    $q('#driveObstacles').innerHTML='';$q('#drivePickups').innerHTML='';$q('#driveDestination').innerHTML='';
+  }
+  function updateDriveHud(){
+    $q('#driveTimer').textContent=Math.max(0,driveTimer).toFixed(1);
+    $q('#driveCash').textContent=Math.round(driveCash);
+    $q('#driveStreak').textContent=driveStreak;
+    $q('#driveDistance').textContent=driveDistance.toFixed(2);
+    $q('#driveScore').textContent=driveScore;
+    $q('#driveSpeed').textContent=Math.round(state.speed);
+  }
+  function spawnTraffic(now){
+    const el=document.createElement('div'),x=laneX(),kind=Math.random()<.18?'van':'car';
+    el.className='drive-obstacle traffic-'+kind;el.style.left=x+'%';el.style.top='-12%';
+    $q('#driveObstacles').appendChild(el);driveObstacles.push({el,x,y:-12,near:false,hit:false});
+    driveSpawnAt=now+driveCfg().traffic*(.72+Math.random()*.62);
+  }
+  function spawnPassenger(now){
+    if(drivePassenger||drivePickups.length)return;
+    const el=document.createElement('div'),x=laneX();
+    el.className='drive-passenger';el.style.left=x+'%';el.style.top='-10%';
+    el.innerHTML='<b>RIDE</b><span>!</span>';
+    $q('#drivePickups').appendChild(el);drivePickups.push({el,x,y:-10});
+    drivePickupAt=now+5200+Math.random()*3500;
+  }
+  function beginFare(){
+    drivePassenger=true;driveStreak=Math.max(1,driveStreak);
+    driveFareStart=driveDistance;driveFareTarget=.42+Math.random()*.46;
+    driveDestinationLane=laneX();
+    const stop=DRIVE_STOPS[Math.floor(Math.random()*DRIVE_STOPS.length)];
+    $q('#driveMission').textContent='DROP OFF';
+    $q('#driveDestinationLabel').textContent=stop;
+    toast('PASSENGER IN — '+stop);
+  }
+  function spawnDestinationGate(){
+    if(!drivePassenger||driveDestination)return;
+    const el=document.createElement('div');el.className='drive-gate';el.style.left=driveDestinationLane+'%';el.style.top='-8%';
+    el.innerHTML='<span>DROP</span>';
+    $q('#driveDestination').appendChild(el);driveDestination=el;
+  }
+  function completeFare(){
+    const remaining=Math.max(0,driveTimer),bonus=Math.round(120+remaining*8+driveStreak*55);
+    driveCash+=bonus;driveTimer=Math.min(60,driveTimer+9);driveStreak++;
+    drivePassenger=false;driveDestination?.remove();driveDestination=null;
+    $q('#driveMission').textContent='FIND A PASSENGER';$q('#driveDestinationLabel').textContent='NO FARE';
+    toast('FARE +$'+bonus+' · +9 SEC');
+    drivePickupAt=performance.now()+900;
+  }
+  function crash(){
+    driveStreak=0;driveTimer=Math.max(0,driveTimer-4.5);state.speed=Math.max(34,state.speed-32);
+    $q('#driveOverlay').classList.add('hit');later(()=>$q('#driveOverlay').classList.remove('hit'),260);
+    toast('TRAFFIC — 4.5 SEC LOST');
+  }
+  function finishDrive(){
+    if(!driveRunning)return;driveRunning=false;cancelAnimationFrame(driveRAF);
+    const cash=Math.round(driveCash),fares=Math.max(0,driveStreak-1),dist=driveDistance.toFixed(2),near=driveScore;
+    later(()=>{$q('#driveOverlay').classList.remove('open');$q('#driveOverlay').setAttribute('aria-hidden','true');clearDriveObjects();
+      info('GARAGE / ESTATE EXPRESS','SHIFT OVER',`<p><strong>$${cash}</strong> earned · ${dist} mi · ${near} near misses.</p><p>The point is not to drive clean. The point is to make the clock nervous.</p>`);
+    },180);
+  }
+  function driveLoop(now){
+    if(!driveRunning)return;
+    const cfg=driveCfg(),dt=Math.min(42,now-driveLast||16);driveLast=now;
+    driveTimer-=dt/1000;if(driveTimer<=0){driveTimer=0;updateDriveHud();finishDrive();return}
+    if(driveKeys.gas)state.speed=Math.min(cfg.max,state.speed+cfg.accel*dt/1000);
+    else state.speed=Math.max(cfg.base,state.speed-10*dt/1000);
+    if(driveKeys.brake)state.speed=Math.max(26,state.speed-cfg.brake*dt/1000);
+    const steer=(driveKeys.right?1:0)-(driveKeys.left?1:0);
+    if(steer){state.driveX=Math.max(34,Math.min(66,state.driveX+steer*cfg.handling*dt/1000));$q('#driveLaneCar').style.left=state.driveX+'%'}
+    if(now>driveSpawnAt)spawnTraffic(now);
+    if(now>drivePickupAt)spawnPassenger(now);
+
+    driveDistance+=state.speed*(dt/3600000)*4.8;
+    const vy=(state.speed/74)*(.062*dt);
+
+    driveObstacles.forEach(o=>{
+      o.y+=vy;o.el.style.top=o.y+'%';
+      const dx=Math.abs(o.x-state.driveX);
+      if(!o.hit&&o.y>76&&o.y<91&&dx<6.2){o.hit=true;crash();o.el.remove();o.done=true}
+      else if(!o.near&&o.y>82&&o.y<94&&dx>=6.2&&dx<10.5){o.near=true;driveScore++;driveCash+=15+driveStreak*3;toast('NEAR MISS +$'+(15+driveStreak*3))}
+      if(o.y>112){o.el.remove();o.done=true}
+    });
+    driveObstacles=driveObstacles.filter(o=>!o.done);
+
+    drivePickups.forEach(p=>{
+      p.y+=vy*.9;p.el.style.top=p.y+'%';
+      if(p.y>76&&p.y<92&&Math.abs(p.x-state.driveX)<7.5){p.el.remove();p.done=true;beginFare()}
+      else if(p.y>108){p.el.remove();p.done=true}
+    });
+    drivePickups=drivePickups.filter(p=>!p.done);
+
+    if(drivePassenger&&!driveDestination&&driveDistance-driveFareStart>=driveFareTarget)spawnDestinationGate();
+    if(driveDestination){
+      const y=parseFloat(driveDestination.style.top)||-8,ny=y+vy*.92;driveDestination.style.top=ny+'%';
+      if(ny>77&&ny<93){
+        if(Math.abs(driveDestinationLane-state.driveX)<8){completeFare()}
+      }else if(ny>108){
+        driveDestination.remove();driveDestination=null;driveStreak=0;driveTimer=Math.max(0,driveTimer-6);
+        drivePassenger=false;$q('#driveMission').textContent='FIND A PASSENGER';$q('#driveDestinationLabel').textContent='MISSED DROP';
+        toast('MISSED DROP — 6 SEC LOST');drivePickupAt=now+1000;
+      }
+    }
+    updateDriveHud();
+    if(driveRunning)driveRAF=requestAnimationFrame(driveLoop);
+  }
+  function setDriveKey(k,v){if(k in driveKeys)driveKeys[k]=v}
+  startDrive=function(type){
+    driveRunning=false;cancelAnimationFrame(driveRAF);clearDriveObjects();
+    driveMode=type==='aston'?'aston':type==='rover'?'rover':'race';
+    const cfg=driveCfg();state.driveX=50;state.speed=cfg.base;driveDistance=0;driveScore=0;driveCash=0;driveStreak=0;driveTimer=45;drivePassenger=false;driveDestination=null;
+    driveLast=performance.now();driveSpawnAt=driveLast+500;drivePickupAt=driveLast+700;
+    Object.keys(driveKeys).forEach(k=>driveKeys[k]=false);
+    $q('#driveCarLabel').textContent=cfg.label;$q('#driveModeLabel').textContent=cfg.mode;$q('#driveTitle').textContent=cfg.title;
+    $q('#driveMission').textContent='FIND A PASSENGER';$q('#driveDestinationLabel').textContent='NO FARE';
+    $q('#driveLaneCar').style.left='50%';$q('#driveOverlay').classList.add('open');$q('#driveOverlay').setAttribute('aria-hidden','false');
+    updateDriveHud();collect('road-key');driveRunning=true;driveRAF=requestAnimationFrame(driveLoop);
+  };
+  $q('#driveExit').onclick=()=>{driveRunning=false;cancelAnimationFrame(driveRAF);clearDriveObjects();$q('#driveOverlay').classList.remove('open');$q('#driveOverlay').setAttribute('aria-hidden','true')};
+
+  const bindHold=(el,key)=>{
+    if(!el)return;
+    const on=e=>{e.preventDefault();setDriveKey(key,true)},off=e=>{e.preventDefault();setDriveKey(key,false)};
+    el.addEventListener('pointerdown',on);el.addEventListener('pointerup',off);el.addEventListener('pointercancel',off);el.addEventListener('pointerleave',off);
+  };
+  bindHold($q('#driveLeft'),'left');bindHold($q('#driveRight'),'right');bindHold($q('#driveGas'),'gas');bindHold($q('#driveBrake'),'brake');
+
+  addEventListener('keydown',e=>{
+    if(!driveRunning)return;const k=e.key.toLowerCase();
+    if(['arrowleft','arrowright','arrowup','arrowdown','a','d','w','s'].includes(k))e.preventDefault();
+    if(k==='a'||k==='arrowleft')setDriveKey('left',true);
+    if(k==='d'||k==='arrowright')setDriveKey('right',true);
+    if(k==='w'||k==='arrowup')setDriveKey('gas',true);
+    if(k==='s'||k==='arrowdown')setDriveKey('brake',true);
+  });
+  addEventListener('keyup',e=>{
+    if(!driveRunning)return;const k=e.key.toLowerCase();
+    if(k==='a'||k==='arrowleft')setDriveKey('left',false);
+    if(k==='d'||k==='arrowright')setDriveKey('right',false);
+    if(k==='w'||k==='arrowup')setDriveKey('gas',false);
+    if(k==='s'||k==='arrowdown')setDriveKey('brake',false);
+  });
 
   document.body.dataset.scene=state.scene;renderHotspots(scenes[state.scene]);renderProps(scenes[state.scene]);$q('#sceneBg').style.backgroundPosition=bgPos(scenes[state.scene]);
 })();
