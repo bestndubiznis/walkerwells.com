@@ -288,6 +288,12 @@
     if(a==='map-route'){openRoute();return}
     if(a==='stars-game'){openStars();return}
     if(a==='wardrobe-watch'){openWatch();return}
+    if(a==='suit-web'){state.suit='WEB SUIT';save();toast('EQUIPPED — WEB SUIT');info('WEB SUIT','Urban acrobat loadout.','<p>A red-and-white masked suit built for vertical movement, quick reactions, and pure comic-book energy.</p><p>Less disguise, more alter ego.</p>');return}
+    if(a==='suit-ski'){state.suit='SKI KIT';save();toast('EQUIPPED — SKI KIT');info('SKI KIT','Alpine storm gear.','<p>Technical shell, helmet, goggles and boots for the mountain chapter.</p><p>Ski days, cold air, backflips, touring, and eventually much bigger mountains.</p>');return}
+    if(a==='suit-operative'){state.suit='FIELD OPERATIVE';save();toast('EQUIPPED — FIELD OPERATIVE');info('FIELD OPERATIVE','Black-tie espionage loadout.','<p>A dinner-jacket setup for casinos, impossible plans, old hotels and pretending everything is completely under control.</p><p>British field-agent energy without requiring an explanation.</p>');return}
+    if(a==='suit-cowboy'){state.suit='COWBOY RIG';save();toast('EQUIPPED — COWBOY RIG');info('COWBOY RIG','Frontier chapter.','<p>Boots, denim, hat, leather and the version of the estate that owns a horse and has somewhere to ride it.</p><p>Western myth, ranch skills, open country and a few questionable decisions.</p>');return}
+    if(a==='suit-race'){state.suit='RACE SUIT';save();toast('EQUIPPED — RACE SUIT');info('RACE SUIT','Track mode.','<p>Helmet, gloves and a full motorsport suit for race school, track days and the garage branch of the estate.</p><p>Apexes, braking points and machines that are much faster than necessary.</p>');return}
+    if(a==='suit-dive'){state.suit='DIVE RIG';save();toast('EQUIPPED — DIVE RIG');info('DIVE RIG','Open water / scuba.','<p>Wetsuit, mask, fins and dive gear for the underwater chapter.</p><p>Open-water swimming, scuba progression, boats, reefs and whatever is below the surface.</p>');return}
     if(a==='snowglobe'){openSnowGlobe();return}
     if(a==='portrait'){info('MANOR / PAINTING','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>Probably unrelated to the grand piano twenty feet away.</p>');return}
     if(a==='armor-display'){info('MANOR / ARMOR','Older skills','<p>Blacksmithing. Archery. Blades. Craft.</p><p>The armor is not the entrance. The fireplace is.</p>');return}

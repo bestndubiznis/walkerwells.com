@@ -5,7 +5,7 @@ const IMG={
   manor:"https://images.unsplash.com/photo-1757524784105-cf1d1938abc7?auto=format&fit=crop&w=2400&q=88",
   garage:"/assets/scenes/garage-hq.webp?v=garage2",
   study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
-  wardrobe:"https://images.unsplash.com/photo-1765766600589-ddad380d6534?auto=format&fit=crop&w=2400&q=88",
+  wardrobe:"/assets/scenes/wardrobe-hq.webp?v=wardrobe2",
   archive:"/assets/scenes/archive-hq.webp?v=archive2",
   map:"/assets/scenes/map-room-hq.webp?v=map2",
   nyc:"https://images.unsplash.com/photo-1616486788371-62d930495c44?auto=format&fit=crop&w=2400&q=88",
@@ -58,17 +58,22 @@ const scenes={
     collectibles:[]
   },
   wardrobe:{
-    title:"The dressing room.",eye:"WELLS / WARDROBE",copy:"Choose the genre before choosing the destination.",
-    hint:"Open cabinets. Check shelves. One outfit is much less sensible than the others.",
+    title:"The dressing room.",eye:"WELLS / DRESSING ROOM",copy:"Not formalwear. Loadouts.",
+    hint:"Click the actual outfit cases: web suit, ski kit, field operative, cowboy, race suit, or dive rig.",
     bg:IMG.wardrobe,
+    bgPos:"center center",
+    bgPosMobile:"center center",
     hotspots:[
-      {x:62,y:50,w:45,h:58,label:"WARDROBE",sub:"Dinner / race / snow / water / western / spider",action:"suit"},
-      {x:15,y:50,w:22,h:58,label:"MIRROR",sub:"Current loadout",action:"mirror"},
-      {x:52,y:72,w:15,h:16,label:"WATCH CASE",sub:"Mechanical / small / expensive-looking",action:"wardrobe-watch"},
-      {x:83,y:30,w:16,h:23,label:"TOP SHELF",sub:"Something red is tucked behind a hat box",action:"wardrobe-mask"},
-      {x:30,y:80,w:20,h:14,label:"HALL DOOR",sub:"Back to manor",go:"manor"}
+      {x:10,y:40,w:14,h:54,label:"WEB SUIT",sub:"Red / white masked acrobat rig",action:"suit-web"},
+      {x:24,y:40,w:14,h:54,label:"SKI KIT",sub:"Alpine storm gear",action:"suit-ski"},
+      {x:36,y:35,w:11,h:42,label:"FIELD OPERATIVE",sub:"Black-tie espionage loadout",action:"suit-operative"},
+      {x:64,y:38,w:12,h:46,label:"COWBOY RIG",sub:"Frontier chapter",action:"suit-cowboy"},
+      {x:78,y:40,w:13,h:52,label:"RACE SUIT",sub:"Track mode",action:"suit-race"},
+      {x:92,y:40,w:13,h:54,label:"DIVE RIG",sub:"Open water / scuba",action:"suit-dive"},
+      {x:50,y:58,w:16,h:13,label:"WATCH CASE",sub:"Mechanical / small / expensive-looking",action:"wardrobe-watch"},
+      {x:50,y:33,w:13,h:24,label:"HALL / MANOR",sub:"Back to the house",go:"manor"}
     ],
-    collectibles:[{x:55,y:65,id:"watch",icon:"◉"}]
+    collectibles:[]
   },
   garage:{
     title:"The garage.",eye:"WELLS / GARAGE",copy:"Four machines, one wall of gear, and several extremely defensible reasons to leave the house.",
