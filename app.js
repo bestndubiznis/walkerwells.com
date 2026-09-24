@@ -282,7 +282,7 @@ function doAction(a){
   if(a==="mirror"){info("DRESSING ROOM","Current loadout","<p>Currently equipped: <strong>"+state.suit+"</strong>.</p>");return}
   if(a==="fieldnotes"){info("FIELD NOTES","Capabilities worth building","<p>Navigation, flying, sailing, ski touring, racing, diving, moto, strength, and craft.</p><p>The list is intentionally unfinished. The point is to keep adding things that are useful, difficult, or make for a better story.</p>");return}
   if(a==="armory"){collect("iron-key");info("HIDDEN ROOM / I","The armory","<p>Armor, blades, blacksmithing, craft. A room for learning things older than the house.</p><span class='tag'>FORGE</span><span class='tag'>SWORD</span><span class='tag'>CRAFT</span>");return}
-  if(a==="estate-window"){info("ESTATE / FOUND","A lit window","<p>A folded note is trapped behind the old latch:</p><p><em>Capability &gt; hobby. Stories &gt; stats.</em></p>");return}
+  if(a==="estate-window"){info("ESTATE / WINDOW","A note behind the latch","<p>A folded card is caught behind the old window latch.</p><p><em>Capability &gt; hobby. Stories &gt; stats.</em></p><p>It reads more like a rule for the house than a motto.</p>");return}
   if(a==="estate-gate"){info("ESTATE / FOUND","The garden urn","<p>The stone is older than the rest of the garden. A small brass plate at its base is worn almost smooth.</p><p>The only readable words are:</p><p><strong>DISCIPLINE · ADVENTURE · GOOD COMPANY</strong></p>");return}
   if(a==="portrait"){info("MANOR / FOUND","No plaque.","<p>The frame is older than the painting. Four tiny season marks are carved into the back.</p>");return}
   if(a==="fireplace"){
@@ -296,38 +296,38 @@ function doAction(a){
     setTimeout(()=>$("[data-note]").forEach(b=>b.onclick=()=>{pianoSequence.push(b.dataset.note);if(pianoSequence.slice(-4).join("")==="CEGB"){collect("watch");toast("CHORD ACCEPTED — DRAWER RELEASED");pianoSequence=[]}else if(pianoSequence.length>8)pianoSequence=[]}),0);
     return
   }
-  if(a==="study-map"){info("STUDY / MAP","Red thread.","<p>California → Alaska → St. Moritz → BVI → Mongolia. No sane itinerary connects them. Good.</p>");return}
-  if(a==="study-drawer"){collect("playing-card");info("STUDY / DRAWER","Not very locked.","<p>A single playing card. No note.</p>");return}
+  if(a==="study-map"){info("STUDY / MAP","A route in red pencil","<p>California → Alaska → St. Moritz → BVI → Mongolia.</p><p>It is not a practical itinerary. It is a map of places and adventures that keep resurfacing.</p>");return}
+  if(a==="study-drawer"){collect("playing-card");info("STUDY / DRAWER","A card in the back","<p>The drawer catches halfway open. Behind the papers is a single playing card, worn at the corners.</p>");return}
   if(a==="typewriter"){info("STUDY / TYPEWRITER","One unfinished sentence","<p><em>Learn enough things to become difficult to...</em></p>");return}
-  if(a==="study-lamp"){toast("LAMP — LOW");document.querySelector(".scene-bg").animate([{filter:"brightness(.95)"},{filter:"brightness(.68)"},{filter:"brightness(.95)"}],{duration:900});info("STUDY / FOUND","Pencil marks in the margin","<p>Someone wrote: <em>One boss fight. One adventure. One skill unlock.</em></p>");return}
-  if(a==="study-shelf"){collect("playing-card");info("STUDY / SHELF","One book is backwards.","<p>Behind it: a playing card and a folded note.</p>");return}
-  if(a==="armor-rack"){info("ARMORY / RACK","The older skills","<p>Blacksmithing. Archery. Blades. Craft. Things that reward patience instead of scrolling.</p>");return}
-  if(a==="weapon-wall"){info("ARMORY / WALL","A sword with no plaque","<p>The point is not owning it. The point is knowing how it was made.</p>");return}
+  if(a==="study-lamp"){toast("LAMP — LOW");document.querySelector(".scene-bg").animate([{filter:"brightness(.95)"},{filter:"brightness(.68)"},{filter:"brightness(.95)"}],{duration:900});info("STUDY / LAMP","Writing in the margin","<p>Lowering the lamp makes a faint pencil note visible beside the desk:</p><p><em>One boss fight. One adventure. One skill unlock.</em></p>");return}
+  if(a==="study-shelf"){collect("playing-card");info("STUDY / SHELF","A book facing the wrong way","<p>Pulling it out reveals a narrow space behind the shelf: a playing card and a folded note tucked out of sight.</p>");return}
+  if(a==="armor-rack"){info("ARMORY / RACK","Armor and older skills","<p>The rack is a reminder that some skills are physical, slow, and learned by repetition: blacksmithing, archery, blades, and craft.</p>");return}
+  if(a==="weapon-wall"){info("ARMORY / WALL","The sword wall","<p>The interesting part is not the object itself. It is the chain of skills behind it: design, heat, hammer, grind, temper, finish.</p>");return}
   if(a==="forge"){
     info("ARMORY / FORGE","Strike when the marker is centered","<div class='forge-game'><div class='forge-track'><i id='forgeMarker'></i><span></span></div><button id='forgeStrike'>STRIKE</button></div>");
     setTimeout(()=>{let pos=0,dir=1,t=setInterval(()=>{const m=$("#forgeMarker");if(!m){clearInterval(t);return}pos+=dir*3;if(pos>=96||pos<=0)dir*=-1;m.style.left=pos+"%"},30);$("#forgeStrike").onclick=()=>{clearInterval(t);if(pos>43&&pos<57){collect("iron-key");toast("CLEAN STRIKE — FORGE MARK FOUND")}else toast("MISS — TRY AGAIN")}},0);return}
   if(a==="wardrobe-watch"){collect("watch");toast("FOUND — WATCH");return}
   if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","The red mask","<p>Tucked behind the formalwear is a red mask from the least formal outfit in the room.</p>");return}
   if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet is an old race-school token: a reminder that the garage is supposed to lead to actual track time, not just parked cars.</p>");return}
-  if(a==="track-map"){info("GARAGE / WALL","Track map","<p>Kart → coaching → HPDE → time trial → race license → wheel-to-wheel.</p>");return}
+  if(a==="track-map"){info("GARAGE / WALL","Driving progression","<p>Karting → coaching → HPDE → time trial → race license → wheel-to-wheel.</p><p>The wall is less about a specific track than the progression from driving fast to actually knowing what you are doing.</p>");return}
   if(a==="archive-yale"){info("ARCHIVE / EDUCATION","Yale University","<p><strong>Statistics & Data Science.</strong></p><p>The diploma marks one finished chapter; the rest of the room is for what came after it.</p>");return}
   if(a==="archive-pontevedra"){info("ARCHIVE / PLACE","Ponte Vedra Beach","<p>Northeast Florida and one of the places that feels foundational enough to show up twice in the estate: here in the archive, and again on the map.</p>");return}
   if(a==="archive-finish"){info("ARCHIVE / FINISH LINE","Santa Cruz 70.3","<p><strong>5:29 total.</strong></p><p>The finish-line photograph from the first 70.3: the moment the training block became something finished.</p>");return}
   if(a==="archive-index"){info("ARCHIVE / INDEX","The system behind the wall","<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>");return}
   if(a==="garage-porsche"){info("GARAGE / PORSCHE","911","<p>Smaller, sharper, and more precise than the rest of the garage.</p><p>The long-term appeal is learning to drive it properly: braking, weight transfer, line choice, and track pace.</p>");return}
   if(a==="santa-relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>");return}
-  if(a==="ski-relic"){collect("ski-pass");info("RELIC / UNLOCKED","SKI BACKFLIP","<p>Unlocked. Next objective: make it boring.</p>");return}
-  if(a==="locked-drawer"){info("ARCHIVE / ???","Unmarked drawer","<p>It does not open. Yet.</p>");return}
+  if(a==="ski-relic"){collect("ski-pass");info("ARCHIVE / SKIING","First backflip","<p>The backflip moved from intimidating to possible. The next stage is repetition: make the trick reliable, then build toward 360s, bigger terrain, touring, and backcountry skiing.</p>");return}
+  if(a==="locked-drawer"){info("ARCHIVE / DRAWER","Unmarked drawer","<p>The drawer is locked. Whatever belongs here has not been earned yet.</p>");return}
   if(a==="compass-case"){collect("compass");toast("FOUND — COMPASS");return}
-  if(a==="map-route"){info("MAP ROOM / ROUTE","A pencil line across the ocean","<p>The route begins in California and ends somewhere that does not have a direct flight home.</p>");return}
-  if(a==="camp-compass"){collect("compass");info("CLEARING / FOUND","Old compass","<p>Still points north. Annoyingly practical.</p>");return}
-  if(a==="tree-carving"){info("CLEARING / TREE","Three letters. One date.","<p>No explanation. Some lore should stay lore.</p>");return}
+  if(a==="map-route"){info("MAP ROOM / ROUTE","The next route","<p>The travel books are full of routes that connect mountains, islands, open country, and places that require a little more effort to reach.</p>");return}
+  if(a==="camp-compass"){collect("compass");info("CLEARING / COMPASS","An old field compass","<p>Scratched, useful, and still accurate. The kind of object that belongs in a place built around learning how to navigate.</p>");return}
+  if(a==="tree-carving"){info("CLEARING / TREE","An old carving","<p>Three initials and a date have been cut into the bark. It feels less like a clue than the kind of mark people leave when a place matters to them.</p>");return}
   if(a==="tree"){collect("ornament");info("NYC / TREE","The wrong ornament","<p>A tiny brass W. It definitely came from the estate.</p>");return}
   if(a==="snowglobe"){toast("SNOW GLOBE — SHAKEN");$("#weatherFx").animate([{opacity:.35},{opacity:.9},{opacity:.35}],{duration:900});return}
-  if(a==="pirate"){collect("pirate-coin");info("HIDDEN ROOM / II","The chart room","<p>Pirates, passages, nautical charts, navigation tools, and routes that look better on paper.</p>");return}
-  if(a==="boss"){info("ARCHIVE / 01","Boss Fights","<p>Major objectives with clean finish lines.</p><span class='tag'>IRON DISTANCE</span><span class='tag'>EXPEDITION RACE</span><span class='tag'>SPARTAN ULTRA</span>");return}
-  if(a==="adventure"){info("ARCHIVE / 02","Adventures","<p>Worth doing because the story is better afterwards.</p><span class='tag'>ALCATRAZ</span><span class='tag'>MONGOLIA</span><span class='tag'>SAILING PASSAGE</span>");return}
-  if(a==="skill"){info("ARCHIVE / 03","Skill Unlocks","<p>Capabilities that compound.</p><span class='tag'>BACKFLIP</span><span class='tag'>PILOT</span><span class='tag'>NAVIGATION</span><span class='tag'>WINGFOIL</span>");return}
+  if(a==="pirate"){collect("pirate-coin");info("HIDDEN ROOM / CHARTS","The chart room","<p>Nautical charts, old navigation tools, island passages, and the romantic version of getting somewhere by water instead of flying there.</p>");return}
+  if(a==="boss"){info("ARCHIVE / BOSS FIGHTS","Major objectives","<p>Big goals with a clear finish line and enough difficulty to organize a season around them.</p><span class='tag'>IRON DISTANCE</span><span class='tag'>EXPEDITION RACE</span><span class='tag'>ULTRA ENDURANCE</span>");return}
+  if(a==="adventure"){info("ARCHIVE / ADVENTURES","Trips worth the story","<p>Experiences that do not need a medal to justify themselves.</p><span class='tag'>ALCATRAZ</span><span class='tag'>MONGOLIA MOTO</span><span class='tag'>SAILING PASSAGE</span>");return}
+  if(a==="skill"){info("ARCHIVE / SKILLS","Capabilities that compound","<p>Skills that make future adventures possible, safer, or simply more interesting.</p><span class='tag'>BACKFLIP</span><span class='tag'>PILOT</span><span class='tag'>NAVIGATION</span><span class='tag'>WINGFOIL</span>");return}
   if(a==="relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>First 70.3 completed. The next question is what gets harder from here.</p>");return}
   if(a.startsWith("place-")){
     const k=a.slice(6);
@@ -363,12 +363,12 @@ function doAction(a){
     collect("map-pin");info("MAP PIN",titles[k]||k.toUpperCase(),"<p>"+(copy[k]||"Pinned.")+"</p>");return
   }
   if(a==="mission"){info("MISSION DESK","Winter formal","<div class='dossier'><p><strong>New York · 8:40 PM · Snow</strong></p><p>Current outfit: "+state.suit+".</p><p>The plan is simple: leave the apartment, find somewhere worth going, and come back with a better story than you started with.</p></div>");return}
-  if(a==="windows"){info("NYC / DECEMBER","Best version of the city.","<p>Snow outside. Fire inside. Somewhere to be later.</p>");return}
-  if(a==="campfire"){info("THE CLEARING","No scoreboard.","<p>Some things do not need to become metrics.</p>");return}
-  if(a==="stars"){collect("star-map");info("THE SKY","Unofficial constellations","<p>Motorcycle. Sailboat. Shark. Skier. Sword.</p>");return}
+  if(a==="windows"){info("NYC / VIEW","December in Manhattan","<p>Snow on the fire escapes, warm windows across the street, and the city glowing below.</p>");return}
+  if(a==="campfire"){info("THE CLEARING","By the fire","<p>A place to sit for a minute without turning it into a challenge.</p>");return}
+  if(a==="stars"){collect("star-map");info("THE SKY","Unofficial constellations","<p>The estate has five: Sword, Sailboat, Shark, Skier, and Motorcycle.</p>");return}
   if(a==="tent"){info("BREVARD / NORTH CAROLINA","Camp country.","<p><strong>Brevard, North Carolina.</strong> One of those places that feels permanently tied to summer and being outside.</p><p>Camp Carolina. Dolly\'s ice cream. Sliding Rock. The Blue Ridge Parkway. The Appalachian Trail.</p><p>Mountains, campfires, cold water, long roads through the Blue Ridge, and the kind of memories that make a tent belong in the estate.</p>");return}
-  if(a==="moto"){collect("race-token");info("GARAGE / DIRT","Mongolia starts here.","<p>Trail riding → camping → desert → multi-day expedition.</p>");return}
-  if(a==="bike"){info("GARAGE / CARBON","The engine is the problem.","<p>Road. Mountain. Long climbs. Bad ideas measured in watts.</p>");return}
+  if(a==="moto"){collect("race-token");info("GARAGE / DIRT BIKE","From trail riding to expedition","<p>Trail riding → dirt-bike camping → desert riding → multi-day expedition.</p><p>The long-term version is a trip like Mongolia, where the motorcycle is part of the route rather than the destination.</p>");return}
+  if(a==="bike"){info("GARAGE / BIKE","Human-powered machine","<p>Road rides, mountain bikes, long climbs, and endurance measured in watts instead of horsepower.</p>");return}
   if(a.startsWith("drive-")){startDrive(a.slice(6));return}
 }
 
