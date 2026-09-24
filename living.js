@@ -69,7 +69,7 @@
     winter:[['clear',23],['frost',23],['snow',20],['overcast',18],['fog',10],['flurries',6]]
   };
   const weatherNames={
-    clear:'CLEAR',showers:'PASSING SHOWERS',mist:'MORNING MIST',overcast:'OVERCAST',
+    clear:'CLEAR',showers:'PASSING SHOWERS',mist:'MIST',overcast:'OVERCAST',
     wind:'WINDY',haze:'HAZY',storm:'THUNDERSTORM',rain:'LIGHT RAIN',fog:'LOW FOG',
     frost:'FROST',snow:'SNOW',flurries:'LIGHT FLURRIES'
   };
@@ -136,6 +136,7 @@
   }
   function updateStatus(){
     document.body.dataset.season=state.season;
+    if(bootTime)bootTime.textContent=clock(new Date());
     if(worldStatus){
       worldStatus.innerHTML='<span>'+clock(new Date())+'</span><i></i><span>LOCATION — UNDISCLOSED</span><i></i><span>'+String(state.season).toUpperCase()+'</span><i></i><span>'+currentWeatherLabel()+'</span>';
     }
@@ -308,9 +309,20 @@
     if(to==='camp')return 'woods';
     return 'fade';
   }
+  function syncRememberedCopy(){
+    const drawer=scenes.study?.hotspots?.find(h=>h.action==='study-drawer');
+    const lamp=scenes.study?.hotspots?.find(h=>h.action==='study-lamp');
+    const armor=scenes.manor?.hotspots?.find(h=>h.action==='armor-display');
+    if(drawer)drawer.sub=memory.objectStates.drawerOpen?'Open now / you already found what was caught behind it':'It sticks halfway';
+    if(lamp)lamp.sub=memory.objectStates.studyLampDim?'Still dim from your last visit':'Turn it down and something appears';
+    if(armor&&memory.objectStates.armorRaised)armor.sub='It moved the last time you touched it';
+  }
+  syncRememberedCopy();
+
   const baseSceneTo=sceneTo;
   sceneTo=function(name,instant=false){
     const from=state.scene;
+    syncRememberedCopy();
     if(instant){
       baseSceneTo(name,true);
       markScene(name);renderLiving(name);
@@ -355,7 +367,7 @@
         actor.classList.remove('raise');
         void actor.offsetWidth;
         actor.classList.add('raise');
-        memory.objectStates.armorRaised=true;saveMemory();
+        memory.objectStates.armorRaised=true;saveMemory();syncRememberedCopy();
       }
       ambientLater(()=>baseDoAction(a),650);
       return;
@@ -367,7 +379,7 @@
     }
     if(a==='study-lamp'){
       memory.objectStates.studyLampDim=!memory.objectStates.studyLampDim;
-      saveMemory();renderLiving('study');
+      saveMemory();syncRememberedCopy();renderLiving('study');
       if(memory.objectStates.studyLampDim){
         q('#sceneBg')?.animate([{filter:'brightness(1)'},{filter:'brightness(.72)'}],{duration:620,fill:'forwards'});
         ambientLater(()=>info('STUDY / LAMP','Writing in the margin','<p>As the lamp drops low, pencil pressure marks emerge on the page.</p><p><strong>One boss fight. One adventure. One skill unlock.</strong></p><p>The lamp will still be dim when you come back.</p>'),360);
@@ -382,7 +394,7 @@
       setTimeout(()=>{
         const btn=q('#pullDrawer');
         if(btn)btn.addEventListener('click',()=>{
-          memory.objectStates.drawerOpen=true;saveMemory();
+          memory.objectStates.drawerOpen=true;saveMemory();syncRememberedCopy();
           const drawer=q('.physical-drawer');if(drawer)drawer.classList.add('open');
         },{once:true});
       },0);
