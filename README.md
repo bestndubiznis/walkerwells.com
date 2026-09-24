@@ -81,3 +81,19 @@ GitHub Pages deploys automatically from `main`.
 Custom domain:
 
 `walkerwells.com`
+
+
+### Estate Systems v2
+
+The second interactive systems layer deepens the estate without replacing the scene artwork:
+
+- room-by-room physical dimmers with persistent full / low / off lighting states
+- a visitor-local analog manor clock with real moving hands and hourly chime behavior
+- a physical map table that retains the original map-room locations and projects them geographically
+- custom saved map pins with descriptions, geocoding, manual placement fallback, drag repositioning, editing and removal
+- an observatory reached through the estate telescope, with current lunar phase metadata and a date-seeded lunar anomaly mini-game
+- a persistent visitor notebook grouped by date, logging rooms, discoveries, interactions, map changes, lunar results, outfit changes and Bad Ideas status changes
+- manual visitor notes saved into the same dated notebook
+- tangible controls throughout the new systems: draggable pins, a focus wheel, light dimmers, physical notebook, telescope and manor clock
+
+Persistent Estate Systems data is stored locally in the browser under `wells.systems.v2`. The original map-room artwork and its existing hotspots remain intact.
