@@ -10,8 +10,8 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="shortcut icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://images.unsplash.com"/>
-  <link rel="stylesheet" href="/styles.css?v=20260923s"/>
-  <link rel="stylesheet" href="/games.css?v=20260923s"/>
+  <link rel="stylesheet" href="/styles.css?v=20260923t"/>
+  <link rel="stylesheet" href="/games.css?v=20260923t"/>
 </head>
 <body data-season="autumn" data-storm="false">
   <div id="boot" class="boot">
@@ -124,25 +124,26 @@
       <div class="drive-hud left arcade-hud">
         <small>FARE</small>
         <strong id="driveMission">FIND A PASSENGER</strong>
-        <span>TIME <b id="driveTimer">45.0</b></span>
+        <span>TIME <b id="driveTimer">60.0</b></span>
         <span>CASH <b>$<span id="driveCash">0</span></b></span>
-        <span>STREAK <b id="driveStreak">0</b>x</span>
+        <span>FARES <b id="driveFares">0</b></span>
       </div>
 
       <div class="drive-hud right arcade-hud">
         <small>RUN</small>
         <strong id="driveDestinationLabel">NO FARE</strong>
-        <span>DISTANCE <b id="driveDistance">0.00</b> MI</span>
+        <span>FARE <b>$<span id="driveFareValue">0</span></b></span>
+        <span>COMBO <b id="driveStreak">1.0×</b></span>
         <span>NEAR MISSES <b id="driveScore">0</b></span>
-        <span>CAR <b id="driveCarLabel">FERRARI</b></span>
       </div>
 
       <div class="drive-speed arcade-speed"><strong id="driveSpeed">0</strong><span>MPH</span></div>
+      <div class="fare-meter" aria-hidden="true"><i id="fareMeterFill"></i></div>
 
       <div class="drive-copy arcade-copy">
         <span id="driveModeLabel">ESTATE EXPRESS</span>
         <h3 id="driveTitle">Pick them up. Get them there.</h3>
-        <p>← → steer · W accelerate · S brake · near misses build cash</p>
+        <p>← → steer · W accelerate · S brake · near misses build the fare multiplier</p>
       </div>
 
       <div id="driveLaneCar" class="drive-lane-car arcade-car"><i></i></div>
@@ -158,7 +159,7 @@
 
     <div id="toast" class="toast"></div>
   </main>
-  <script src="/app.js?v=20260923s" defer></script>
-  <script src="/enhancements.js?v=20260923s" defer></script>
+  <script src="/app.js?v=20260923t" defer></script>
+  <script src="/enhancements.js?v=20260923t" defer></script>
 </body>
 </html>

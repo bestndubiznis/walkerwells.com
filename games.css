@@ -148,3 +148,14 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
   .arcade-touch button{width:58px;height:58px}
   .drive-passenger{width:54px;height:54px}.drive-gate{width:92px}
 }
+
+/* Estate Express v2 — scoring now revolves around fares, urgency, and risky driving. */
+.fare-meter{position:absolute;z-index:86;left:50%;top:8%;width:min(300px,28vw);height:7px;transform:translateX(-50%);background:rgba(10,14,11,.68);border:1px solid rgba(255,255,255,.14);overflow:hidden}
+.fare-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#89b77a,#dfc772);transition:width .12s linear}
+.fare-meter i.late{background:linear-gradient(90deg,#d86548,#e6a75e)}
+.drive-passenger.fare-hot{border-color:#e48759;box-shadow:0 0 32px rgba(228,135,89,.38)}
+.drive-passenger.fare-vip{border-color:#efe0a0;box-shadow:0 0 36px rgba(239,224,160,.48)}
+.drive-passenger.fare-long{border-color:#89b9cb;box-shadow:0 0 30px rgba(137,185,203,.34)}
+@media(max-width:880px){
+  .fare-meter{top:58px;width:36vw;max-width:180px}
+}
