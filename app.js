@@ -15,8 +15,8 @@ const IMG={
 
 const scenes={
   estate:{
-    title:"The estate.",eye:"WELLS / ESTATE",copy:"A place made out of future stories.",
-    hint:"Click the actual house, wings, gardens, and lit details. Hold D if you want the world to give up its secrets.",
+    title:"The estate.",eye:"WELLS / ESTATE",copy:"A private world built from places, skills, machines, memories, and things still worth doing.",
+    hint:"Start with the house, then follow the grounds. Hold D to reveal the interaction zones.",
     bg:IMG.estate,
     bgPos:"center center",
     bgPosMobile:"center center",
@@ -46,8 +46,8 @@ const scenes={
     collectibles:[]
   },
   study:{
-    title:"The study.",eye:"WELLS / STUDY",copy:"Old books, a real writing desk, a lamp, and an unreasonable number of future plans.",
-    hint:"The desk itself is the game board.",
+    title:"The study.",eye:"WELLS / STUDY",copy:"Plans, field notes, maps, and the ideas that keep surviving the edit.",
+    hint:"The desk, books, lamp, drawer, and shelves all hold something.",
     bg:IMG.study,
     hotspots:[
       {x:52,y:62,w:48,h:34,label:"DESK / BAD IDEAS",sub:"Change the status of every bad idea",action:"ideas"},
@@ -60,8 +60,8 @@ const scenes={
     collectibles:[]
   },
   wardrobe:{
-    title:"The dressing room.",eye:"WELLS / DRESSING ROOM",copy:"Not formalwear. Loadouts.",
-    hint:"Click the actual outfit cases: web suit, ski kit, field operative, cowboy, race suit, or dive rig.",
+    title:"The dressing room.",eye:"WELLS / DRESSING ROOM",copy:"Six outfits for six very different versions of the day.",
+    hint:"Choose an outfit to equip it, then inspect the watch case before you leave.",
     bg:IMG.wardrobe,
     bgPos:"center center",
     bgPosMobile:"center center",
@@ -78,8 +78,8 @@ const scenes={
     collectibles:[]
   },
   garage:{
-    title:"The garage.",eye:"WELLS / GARAGE",copy:"Four machines, one wall of gear, and several extremely defensible reasons to leave the house.",
-    hint:"Click the actual cars, dirt bike, helmet rack, or tool wall.",
+    title:"The garage.",eye:"WELLS / GARAGE",copy:"Cars, bikes, track gear, and the machinery behind the louder ideas.",
+    hint:"Every vehicle and most of the gear has its own branch of the story.",
     bg:IMG.garage,
     hotspots:[
       {x:28,y:58,w:48,h:40,label:"FERRARI",sub:"Track mode / start it, then drive",action:"drive-race"},
@@ -159,8 +159,8 @@ const scenes={
     collectibles:[]
   },
   armory:{
-    title:"The armory.",eye:"WELLS / HIDDEN ROOM",copy:"Armor and steel instead of another menu.",
-    hint:"The racks, helmets, and forge marks are interactive.",
+    title:"The armory.",eye:"WELLS / HIDDEN ROOM",copy:"A hidden room for blades, armor, forge work, and skills older than the rest of the house.",
+    hint:"Inspect the armor, weapon wall, and forge mark. The secret door leads back to the manor.",
     bg:IMG.armory,
     hotspots:[
       {x:35,y:52,w:28,h:58,label:"ARMOR RACK",sub:"Old steel / no cosplay explanation",action:"armor-rack"},
@@ -279,8 +279,8 @@ function doAction(a){
   if(!a)return;
   if(a==="ideas"){openPanel("ideas");return}
   if(a==="suit"){openPanel("suit");return}
-  if(a==="mirror"){info("DRESSING ROOM","Current loadout","<p>"+state.suit+". That is apparently the answer.</p>");return}
-  if(a==="fieldnotes"){info("FIELD NOTES","A portfolio of capabilities","<p>Navigation. Pilot. Sailing. Ski touring. Racing. Diving. Moto. Strength. Craft.</p><p>The exact list is allowed to change.</p>");return}
+  if(a==="mirror"){info("DRESSING ROOM","Current loadout","<p>Currently equipped: <strong>"+state.suit+"</strong>.</p>");return}
+  if(a==="fieldnotes"){info("FIELD NOTES","Capabilities worth building","<p>Navigation, flying, sailing, ski touring, racing, diving, moto, strength, and craft.</p><p>The list is intentionally unfinished. The point is to keep adding things that are useful, difficult, or make for a better story.</p>");return}
   if(a==="armory"){collect("iron-key");info("HIDDEN ROOM / I","The armory","<p>Armor, blades, blacksmithing, craft. A room for learning things older than the house.</p><span class='tag'>FORGE</span><span class='tag'>SWORD</span><span class='tag'>CRAFT</span>");return}
   if(a==="estate-window"){info("ESTATE / FOUND","A lit window","<p>A folded note is trapped behind the old latch:</p><p><em>Capability &gt; hobby. Stories &gt; stats.</em></p>");return}
   if(a==="estate-gate"){info("ESTATE / FOUND","The garden urn","<p>The stone is older than the rest of the garden. A small brass plate at its base is worn almost smooth.</p><p>The only readable words are:</p><p><strong>DISCIPLINE · ADVENTURE · GOOD COMPANY</strong></p>");return}
@@ -307,14 +307,14 @@ function doAction(a){
     info("ARMORY / FORGE","Strike when the marker is centered","<div class='forge-game'><div class='forge-track'><i id='forgeMarker'></i><span></span></div><button id='forgeStrike'>STRIKE</button></div>");
     setTimeout(()=>{let pos=0,dir=1,t=setInterval(()=>{const m=$("#forgeMarker");if(!m){clearInterval(t);return}pos+=dir*3;if(pos>=96||pos<=0)dir*=-1;m.style.left=pos+"%"},30);$("#forgeStrike").onclick=()=>{clearInterval(t);if(pos>43&&pos<57){collect("iron-key");toast("CLEAN STRIKE — FORGE MARK FOUND")}else toast("MISS — TRY AGAIN")}},0);return}
   if(a==="wardrobe-watch"){collect("watch");toast("FOUND — WATCH");return}
-  if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","This does not belong with the tuxedos.","<p>Correct.</p>");return}
-  if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet: an old race-school token and a note that says TRACK ONLY.</p>");return}
+  if(a==="wardrobe-mask"){collect("spider-mask");info("WARDROBE / FOUND","The red mask","<p>Tucked behind the formalwear is a red mask from the least formal outfit in the room.</p>");return}
+  if(a==="helmet"){collect("race-token");info("GARAGE / FOUND","Helmet shelf","<p>Inside the helmet is an old race-school token: a reminder that the garage is supposed to lead to actual track time, not just parked cars.</p>");return}
   if(a==="track-map"){info("GARAGE / WALL","Track map","<p>Kart → coaching → HPDE → time trial → race license → wheel-to-wheel.</p>");return}
-  if(a==="archive-yale"){info("ARCHIVE / EDUCATION","Yale University","<p>Statistics & Data Science.</p><p>Some chapters fit in a frame. Most of the useful parts do not.</p>");return}
-  if(a==="archive-pontevedra"){info("ARCHIVE / PLACE","Ponte Vedra Beach","<p>A place important enough to earn permanent wall space.</p>");return}
-  if(a==="archive-finish"){info("ARCHIVE / FINISH LINE","Santa Cruz","<p><strong>5:29 total.</strong></p><p>The photograph behind the medal.</p>");return}
+  if(a==="archive-yale"){info("ARCHIVE / EDUCATION","Yale University","<p><strong>Statistics & Data Science.</strong></p><p>The diploma marks one finished chapter; the rest of the room is for what came after it.</p>");return}
+  if(a==="archive-pontevedra"){info("ARCHIVE / PLACE","Ponte Vedra Beach","<p>Northeast Florida and one of the places that feels foundational enough to show up twice in the estate: here in the archive, and again on the map.</p>");return}
+  if(a==="archive-finish"){info("ARCHIVE / FINISH LINE","Santa Cruz 70.3","<p><strong>5:29 total.</strong></p><p>The finish-line photograph from the first 70.3: the moment the training block became something finished.</p>");return}
   if(a==="archive-index"){info("ARCHIVE / INDEX","The system behind the wall","<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>");return}
-  if(a==="garage-porsche"){info("GARAGE / PORSCHE","911","<p>The back-bay car. Smaller, sharper, and deliberately less theatrical.</p><p>Its own drive branch can come later. For now, it stays parked.</p>");return}
+  if(a==="garage-porsche"){info("GARAGE / PORSCHE","911","<p>Smaller, sharper, and more precise than the rest of the garage.</p><p>The long-term appeal is learning to drive it properly: braking, weight transfer, line choice, and track pace.</p>");return}
   if(a==="santa-relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>");return}
   if(a==="ski-relic"){collect("ski-pass");info("RELIC / UNLOCKED","SKI BACKFLIP","<p>Unlocked. Next objective: make it boring.</p>");return}
   if(a==="locked-drawer"){info("ARCHIVE / ???","Unmarked drawer","<p>It does not open. Yet.</p>");return}
@@ -328,7 +328,7 @@ function doAction(a){
   if(a==="boss"){info("ARCHIVE / 01","Boss Fights","<p>Major objectives with clean finish lines.</p><span class='tag'>IRON DISTANCE</span><span class='tag'>EXPEDITION RACE</span><span class='tag'>SPARTAN ULTRA</span>");return}
   if(a==="adventure"){info("ARCHIVE / 02","Adventures","<p>Worth doing because the story is better afterwards.</p><span class='tag'>ALCATRAZ</span><span class='tag'>MONGOLIA</span><span class='tag'>SAILING PASSAGE</span>");return}
   if(a==="skill"){info("ARCHIVE / 03","Skill Unlocks","<p>Capabilities that compound.</p><span class='tag'>BACKFLIP</span><span class='tag'>PILOT</span><span class='tag'>NAVIGATION</span><span class='tag'>WINGFOIL</span>");return}
-  if(a==="relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>No speech. Put the proof in the case and keep moving.</p>");return}
+  if(a==="relic"){collect("vault-seal");info("RELIC / COMPLETED","IRONMAN 70.3 — SANTA CRUZ","<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p><p>First 70.3 completed. The next question is what gets harder from here.</p>");return}
   if(a.startsWith("place-")){
     const k=a.slice(6);
     const titles={
@@ -340,18 +340,18 @@ function doAction(a){
     };
     const copy={
       sf:"Home base now — Pacific water, hills, bikes, and the place the estate is being imagined from.",
-      banff:"One of the mountain pins. Banff belongs in the room.",
-      santamonica:"A California pin on the western edge of the map.",
-      peru:"A South America pin that earned a permanent place on the wall.",
+      banff:"Banff and the Canadian Rockies: big mountains, cold water, and the kind of landscape that makes the next trip feel obvious.",
+      santamonica:"Santa Monica: a California chapter on the Pacific, very different from the mountains and East Coast places elsewhere on the wall.",
+      peru:"Peru: one of the trips that pushed the map well beyond the familiar parts of the United States and Europe.",
       costarica:"Six weeks in Costa Rica.",
       london:"Born in London. The map starts here before it goes anywhere else.",
       europe:"During my gap year, I backpacked around Europe solo for four months.",
       japan:"Coming soon: Japan in 2027.",
-      vail:"Vail, Colorado — another mountain pin in the collection.",
+      vail:"Vail, Colorado: skiing, altitude, and another piece of the mountain side of the map.",
       seasia:"Southeast Asia — a trip with friends.",
       southafrica:"South Africa — a childhood safari trip.",
       pontevedra:"Ponte Vedra Beach / Northeast Florida — one of the places that feels foundational enough to show up in both the archive and the map room.",
-      ct:"Connecticut — another Northeast chapter.",
+      ct:"Connecticut: a Northeast chapter and one of the places tied to the years before San Francisco.",
       bahamas:"The Bahamas — many New Years spent here.",
       jamaica:"Jamaica — where I learned to scuba dive.",
       california:"Cliffs, bikes, long roads, dry hills, cold Pacific water.",
@@ -362,7 +362,7 @@ function doAction(a){
     };
     collect("map-pin");info("MAP PIN",titles[k]||k.toUpperCase(),"<p>"+(copy[k]||"Pinned.")+"</p>");return
   }
-  if(a==="mission"){info("MISSION TERMINAL","OPERATION: WINTER FORMAL","<div class='dossier'>LOCATION: NEW YORK<br>TIME: 20:40<br>ATTIRE: "+state.suit+"<br>VEHICLE: BLACK GRAND TOURER<br>WEATHER: SNOW<br><br>OBJECTIVE:<br>LEAVE THE APARTMENT LOOKING LIKE YOU KNOW WHERE YOU ARE GOING.<br><br>SECONDARY OBJECTIVE:<br>DO SOMETHING WORTH RETELLING.</div>");return}
+  if(a==="mission"){info("MISSION DESK","Winter formal","<div class='dossier'><p><strong>New York · 8:40 PM · Snow</strong></p><p>Current outfit: "+state.suit+".</p><p>The plan is simple: leave the apartment, find somewhere worth going, and come back with a better story than you started with.</p></div>");return}
   if(a==="windows"){info("NYC / DECEMBER","Best version of the city.","<p>Snow outside. Fire inside. Somewhere to be later.</p>");return}
   if(a==="campfire"){info("THE CLEARING","No scoreboard.","<p>Some things do not need to become metrics.</p>");return}
   if(a==="stars"){collect("star-map");info("THE SKY","Unofficial constellations","<p>Motorcycle. Sailboat. Shark. Skier. Sword.</p>");return}
