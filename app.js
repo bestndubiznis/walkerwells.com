@@ -1,7 +1,7 @@
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 
 const IMG={
-  estate:"https://images.unsplash.com/photo-1761767274100-b7bad43be8cf?auto=format&fit=crop&w=2400&q=88",
+  estate:"/assets/scenes/estate-hq.webp?v=estate2",
   manor:"https://images.unsplash.com/photo-1757524784105-cf1d1938abc7?auto=format&fit=crop&w=2400&q=88",
   garage:"/assets/scenes/garage-hq.webp?v=garage2",
   study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
@@ -16,18 +16,20 @@ const IMG={
 const scenes={
   estate:{
     title:"The estate.",eye:"WELLS / ESTATE",copy:"A place made out of future stories.",
-    hint:"Move across the architecture. Hold D if you want the world to give up its secrets.",
+    hint:"Click the actual house, wings, gardens, and lit details. Hold D if you want the world to give up its secrets.",
     bg:IMG.estate,
+    bgPos:"center center",
+    bgPosMobile:"center center",
     hotspots:[
-      {x:50,y:80,w:16,h:24,label:"FRONT DOOR",sub:"Enter the manor",go:"manor"},
-      {x:43,y:76,w:10,h:22,label:"WEST WING",sub:"Relics / capability archive",go:"archive"},
-      {x:58,y:76,w:10,h:22,label:"EAST WING",sub:"Maps / routes / next destinations",go:"map"},
-      {x:14,y:72,w:24,h:36,label:"THE GROVE",sub:"A path disappears into the trees",go:"camp"},
-      {x:88,y:78,w:20,h:34,label:"EAST DRIVE",sub:"The garage is around the bend",go:"garage"},
-      {x:51,y:69,w:7,h:10,label:"A LIT WINDOW",sub:"Someone left something upstairs",action:"estate-window"},
-      {x:9,y:87,w:13,h:14,label:"OLD GATE PLAQUE",sub:"Worn brass / almost unreadable",action:"estate-gate"}
+      {x:53,y:73,w:10,h:15,label:"FRONT DOOR",sub:"Enter the manor",go:"manor"},
+      {x:42,y:66,w:18,h:24,label:"WEST WING",sub:"Relics / capability archive",go:"archive"},
+      {x:65,y:66,w:18,h:24,label:"EAST WING",sub:"Maps / routes / next destinations",go:"map"},
+      {x:17,y:72,w:25,h:30,label:"WEST GROUNDS",sub:"A path disappears into the trees",go:"camp"},
+      {x:84,y:73,w:24,h:28,label:"EAST DRIVE",sub:"The garage is around the bend",go:"garage"},
+      {x:53,y:60,w:11,h:12,label:"A LIT WINDOW",sub:"Someone left something upstairs",action:"estate-window"},
+      {x:80,y:79,w:14,h:13,label:"GARDEN URN",sub:"Old stone / almost unreadable",action:"estate-gate"}
     ],
-    collectibles:[{x:90,y:76,id:"road-key",icon:"◆"}]
+    collectibles:[{x:86,y:79,id:"road-key",icon:"◆"}]
   },
   manor:{
     title:"The manor.",eye:"WELLS / MANOR",copy:"A real room now: fireplace, piano, doors, and things that should not quite be there.",
@@ -281,7 +283,7 @@ function doAction(a){
   if(a==="fieldnotes"){info("FIELD NOTES","A portfolio of capabilities","<p>Navigation. Pilot. Sailing. Ski touring. Racing. Diving. Moto. Strength. Craft.</p><p>The exact list is allowed to change.</p>");return}
   if(a==="armory"){collect("iron-key");info("HIDDEN ROOM / I","The armory","<p>Armor, blades, blacksmithing, craft. A room for learning things older than the house.</p><span class='tag'>FORGE</span><span class='tag'>SWORD</span><span class='tag'>CRAFT</span>");return}
   if(a==="estate-window"){info("ESTATE / FOUND","A lit window","<p>A folded note is trapped behind the old latch:</p><p><em>Capability &gt; hobby. Stories &gt; stats.</em></p>");return}
-  if(a==="estate-gate"){info("ESTATE / FOUND","The gate plaque","<p>The brass is worn almost smooth. The only readable words are:</p><p><strong>DISCIPLINE · ADVENTURE · GOOD COMPANY</strong></p>");return}
+  if(a==="estate-gate"){info("ESTATE / FOUND","The garden urn","<p>The stone is older than the rest of the garden. A small brass plate at its base is worn almost smooth.</p><p>The only readable words are:</p><p><strong>DISCIPLINE · ADVENTURE · GOOD COMPANY</strong></p>");return}
   if(a==="portrait"){info("MANOR / FOUND","No plaque.","<p>The frame is older than the painting. Four tiny season marks are carved into the back.</p>");return}
   if(a==="fireplace"){
     fireplaceKnocks++;clearTimeout(fireplaceTimer);fireplaceTimer=setTimeout(()=>fireplaceKnocks=0,1600);
