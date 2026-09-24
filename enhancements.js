@@ -14,8 +14,8 @@
   scenes.manor={
     title:"The manor.",
     eye:"WELLS / MANOR",
-    copy:"The center of the house: firelight, old wood, books, armor, and a grand piano.",
-    hint:"The fireplace, piano, armor, painting, study doorway, and center table all lead somewhere.",
+    copy:"The heart of the estate: firelight, old wood, books, armor, and a grand piano.",
+    hint:"Explore the fireplace, piano, armor, painting, study doorway, and center table.",
     bg:IMG.manor,
     bgPos:"center center",
     hotspots:[
@@ -30,8 +30,8 @@
   scenes.camp={
     title:"The campfire.",
     eye:"WELLS / CAMPFIRE",
-    copy:"Mountain air, firelight, Brevard memories, and a sky worth staying awake for.",
-    hint:"Brevard memories live in the tent, fire, compass, carved tree, and night sky.",
+    copy:"A quiet clearing in the mountains, built around Brevard memories, firelight, and a very good night sky.",
+    hint:"Explore the tent, fire, compass, carved tree, or trace a constellation overhead.",
     bg:IMG.camp,
     bgPos:"center center",
     bgPosMobile:"26% center",
@@ -47,31 +47,31 @@
   scenes.nyc={
     title:"New York. December.",
     eye:"WELLS / NYC",
-    copy:"A Manhattan apartment in December: Christmas tree lit, snow outside, and somewhere to be later.",
-    hint:"Explore the tree, mission desk, windows, dinner jacket, fireplace, bar cart, and snow globe.",
+    copy:"A Manhattan apartment in December: Christmas tree lit, snow outside, and the city waiting downstairs.",
+    hint:"Explore the tree, mission desk, view, dinner jacket, fireplace, bar cart, and snow globe.",
     bg:IMG.nyc,
     bgPos:"center center",
     hotspots:[
-      {x:35,y:37,w:25,h:48,label:"CHRISTMAS TREE",sub:"One ornament is different",action:"tree"},
+      {x:35,y:37,w:25,h:48,label:"CHRISTMAS TREE",sub:"A brass ornament is tucked inside",action:"tree"},
       {x:61,y:49,w:30,h:26,label:"MISSION DESK",sub:"Tonight’s plan and current outfit",action:"mission"},
       {x:70,y:25,w:45,h:38,label:"THE VIEW",sub:"Snowy brick buildings across the street",action:"windows"},
       {x:92,y:44,w:13,h:30,label:"DINNER JACKET",sub:"Suit up",action:"suit"},
       {x:7,y:46,w:14,h:34,label:"FIREPLACE",sub:"Warm room / cold city",action:"nyc-fireplace"},
-      {x:91,y:61,w:12,h:23,label:"BAR CART",sub:"A quiet pre-city ritual",action:"nyc-bar"}
+      {x:91,y:61,w:12,h:23,label:"BAR CART",sub:"One last stop before heading out",action:"nyc-bar"}
     ],
     props:[{x:57,y:70,type:"snowglobe",action:"snowglobe",label:"SNOW GLOBE"}]
   };
   scenes.archive={
     title:"The archive.",
     eye:"WELLS / ARCHIVE",
-    copy:"A room for finished things: education, races, places, and skills that made it out of the planning stage.",
-    hint:"Each framed object opens the story behind it, from Yale and Santa Cruz to the ski backflip and Ponte Vedra.",
+    copy:"A room for things that became real: education, races, places, and skills worth keeping on the wall.",
+    hint:"Open the framed stories, then use the archive index to browse what comes next.",
     bg:IMG.archive,
     bgPos:"center center",
     hotspots:[
       {x:41,y:23,w:15,h:22,label:"YALE DIPLOMA",sub:"Education / one frame",action:"archive-yale"},
       {x:57,y:24,w:16,h:23,label:"IRONMAN 70.3",sub:"Santa Cruz / 5:29",action:"santa-relic"},
-      {x:16,y:28,w:18,h:35,label:"SKI BACKFLIP",sub:"Unlocked / make it boring",action:"ski-relic"},
+      {x:16,y:28,w:18,h:35,label:"SKI BACKFLIP",sub:"First backflip / next progression",action:"ski-relic"},
       {x:78,y:23,w:20,h:24,label:"PONTE VEDRA BEACH",sub:"A place that belongs on the wall",action:"archive-pontevedra"},
       {x:61,y:42,w:11,h:18,label:"FINISH LINE",sub:"The day behind the medal",action:"archive-finish"},
       {x:52,y:74,w:36,h:20,label:"ARCHIVE INDEX",sub:"Boss fights / adventures / skill unlocks",action:"archive-index"}
@@ -82,7 +82,7 @@
     title:"The map room.",
     eye:"WELLS / MAP ROOM",
     copy:"A map of where the story started, where it wandered, and where it is heading next.",
-    hint:"The photographs and pins open the trips behind them; the travel books hold the next route.",
+    hint:"Open the photographs and pins for the trips behind them, or use the travel books to plot the next route.",
     bg:IMG.map,
     bgPos:"center center",
     hotspots:[
@@ -280,6 +280,111 @@
 
   function openSnowGlobe(){info('NYC / SNOW GLOBE','Shake it','<p class="game-note">Drag the globe hard from side to side, or use the button.</p><div class="snowglobe-game"><div id="globeBig" class="globe-big"></div><div class="shake-meter"><i id="shakeFill"></i></div><button id="shakeButton" class="mini-action">SHAKE</button></div>');let energy=0,lastX=null,down=false,globe=$q('#globeBig');const snow=()=>{for(let i=0;i<12;i++){const f=document.createElement('i');f.className='snowflake';f.textContent='•';f.style.left=(10+Math.random()*80)+'%';f.style.top=(Math.random()*25)+'%';globe.appendChild(f);later(()=>f.remove(),800)}};const add=n=>{energy=Math.min(100,energy+n);$q('#shakeFill').style.width=energy+'%';snow();if(energy>=100&&!globe.classList.contains('revealed')){globe.classList.add('revealed');toast('SOMETHING IS INSIDE THE BASE');later(()=>{const b=document.createElement('button');b.className='mini-action';b.textContent='OPEN THE BASE';b.onclick=()=>{collect('ornament');info('NYC / FOUND','A tiny brass W','<p>A small brass W, brought from the estate and hidden in the tree.</p>')};$q('#infoBody').appendChild(b)},300)}};globe.onpointerdown=e=>{down=true;lastX=e.clientX;globe.setPointerCapture(e.pointerId)};globe.onpointermove=e=>{if(!down)return;const d=Math.abs(e.clientX-lastX);if(d>18){add(Math.min(18,d/2));lastX=e.clientX}};globe.onpointerup=()=>{down=false;lastX=null};$q('#shakeButton').onclick=()=>add(20)}
 
+  function bindPopupChoices(items,onPick){
+    later(()=>{
+      items.forEach(([id])=>{
+        const el=$q('#'+id);
+        if(el)el.onclick=()=>onPick(id,el);
+      });
+    },0);
+  }
+
+  function openManorPainting(){
+    info('MANOR / PAINTING','The frame has a secret','<p>The portrait looks ordinary until you notice the frame sits slightly proud of the wall.</p><button id="liftFrame" class="mini-action">LIFT THE FRAME</button><div id="paintingReveal" class="popup-reveal"></div>');
+    bindPopupChoices([['liftFrame']],()=>{
+      $q('#paintingReveal').innerHTML='<p>Four letters are carved into the wood:</p><div class="reveal-code">C · E · G · B</div><p>They match four notes on the grand piano across the room.</p>';
+      $q('#liftFrame').disabled=true;
+      toast('PIANO CLUE FOUND');
+    });
+  }
+
+  function openArmorInspect(){
+    info('MANOR / ARMOR','A well-used display','<p>The armor is decorative now, but the details point toward older skills scattered around the estate.</p><div class="popup-choice-grid"><button id="armorVisor" class="mini-action">LIFT VISOR</button><button id="armorGauntlet" class="mini-action">CHECK GAUNTLET</button><button id="armorShield" class="mini-action">LOOK BEHIND SHIELD</button></div><div id="armorReveal" class="popup-reveal"></div>');
+    bindPopupChoices([['armorVisor'],['armorGauntlet'],['armorShield']],id=>{
+      const copy={
+        armorVisor:'<p><strong>Archery.</strong> A worn leather finger tab has been tucked inside the helmet.</p>',
+        armorGauntlet:'<p><strong>Blacksmithing.</strong> The knuckles are darkened with old forge soot.</p>',
+        armorShield:'<p><strong>Hidden-room clue.</strong> Scratched into the wall behind the shield: <em>five knocks at the fire.</em></p>'
+      };
+      $q('#armorReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openManorTable(){
+    info('MANOR / TABLE','The three-part rule','<p>The notebook on the table reduces the whole philosophy to three kinds of objectives.</p><div class="popup-choice-grid three"><button id="ruleBoss" class="mini-action">BOSS FIGHT</button><button id="ruleAdventure" class="mini-action">ADVENTURE</button><button id="ruleSkill" class="mini-action">SKILL UNLOCK</button></div><div id="ruleReveal" class="popup-reveal"><p>Pick one.</p></div>');
+    bindPopupChoices([['ruleBoss'],['ruleAdventure'],['ruleSkill']],id=>{
+      const copy={
+        ruleBoss:'<p><strong>Boss Fight:</strong> a goal with a clean finish line. An Ironman, an expedition race, a major competition.</p>',
+        ruleAdventure:'<p><strong>Adventure:</strong> something worth doing because the story is better afterward. A sailing passage, a moto trip, a strange route somewhere new.</p>',
+        ruleSkill:'<p><strong>Skill Unlock:</strong> a capability that compounds. Flying, navigation, backcountry skiing, racing, diving, blacksmithing.</p>'
+      };
+      $q('#ruleReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openArchiveIndex(){
+    info('ARCHIVE / INDEX','How the archive is organized','<p>The estate sorts future plans into three shelves.</p><div class="popup-choice-grid three"><button id="indexBoss" class="mini-action">BOSS FIGHTS</button><button id="indexAdventure" class="mini-action">ADVENTURES</button><button id="indexSkill" class="mini-action">SKILL UNLOCKS</button></div><div id="indexReveal" class="popup-reveal"><p>Choose a shelf.</p></div>');
+    bindPopupChoices([['indexBoss'],['indexAdventure'],['indexSkill']],id=>{
+      const copy={
+        indexBoss:'<p><strong>Boss Fights</strong></p><p>Major objectives with an unmistakable finish line: long-course racing, expedition events, difficult competitions.</p>',
+        indexAdventure:'<p><strong>Adventures</strong></p><p>Trips that exist mostly because they would make a great story: dirt-bike expeditions, sailing passages, big mountain days, unusual routes.</p>',
+        indexSkill:'<p><strong>Skill Unlocks</strong></p><p>Abilities worth earning for their own sake: pilot training, navigation, racing, diving, ski touring, forging, and more.</p>'
+      };
+      $q('#indexReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openNYCView(){
+    info('NYC / VIEW','December in Manhattan','<p>Snow on the fire escapes, warm windows across the street, and the city glowing below.</p><button id="dimNYC" class="mini-action">DIM THE ROOM</button><div id="nycReveal" class="popup-reveal"><p>The view gets better when the glass stops reflecting the room.</p></div>');
+    bindPopupChoices([['dimNYC']],()=>{
+      const bg=$q('#sceneBg');
+      if(bg)bg.animate([{filter:'brightness(1)'},{filter:'brightness(.72) saturate(.92)'},{filter:'brightness(1)'}],{duration:1400});
+      $q('#nycReveal').innerHTML='<p>For a second the apartment disappears from the glass and the whole window becomes New York.</p>';
+      toast('ROOM LIGHTS DOWN');
+    });
+  }
+
+  function openCampfire(){
+    info('THE CLEARING','Stay by the fire','<p>No timer, no score. Just a fire that could use another log.</p><button id="addLog" class="mini-action">ADD A LOG</button><div id="fireReveal" class="popup-reveal"><p>Fire level: <strong>1 / 4</strong></p></div>');
+    later(()=>{
+      let level=1;
+      const btn=$q('#addLog'),out=$q('#fireReveal');
+      if(!btn||!out)return;
+      btn.onclick=()=>{
+        level=Math.min(4,level+1);
+        const lines=[
+          '',
+          '',
+          '<p>Fire level: <strong>2 / 4</strong></p><p>The coals catch and the clearing gets a little warmer.</p>',
+          '<p>Fire level: <strong>3 / 4</strong></p><p>Now it is the kind of fire people stop talking around for a minute.</p>',
+          '<p>Fire level: <strong>4 / 4</strong></p><p>Perfect. Leave it there.</p>'
+        ];
+        out.innerHTML=lines[level];
+        if(level===4){btn.disabled=true;toast('FIRE — PERFECT');}
+      };
+    },0);
+  }
+
+  function openFieldNotes(){
+    const pages=[
+      ['NAVIGATION','Maps, route finding, wilderness judgment, and being harder to lose.'],
+      ['FLIGHT','Private pilot training and enough competence to make the sky feel accessible.'],
+      ['MOUNTAINS','Ski touring, backcountry travel, bigger terrain, better judgment.'],
+      ['WATER','Scuba, open-water confidence, sailing, and the skills that make islands more interesting.'],
+      ['MACHINES','Track driving, motorcycles, dirt, and learning what the machine is actually telling you.']
+    ];
+    info('STUDY / FIELD NOTES','Capabilities worth collecting','<p>The notebook is less a bucket list than a running inventory of things worth learning.</p><button id="randomFieldPage" class="mini-action">OPEN A RANDOM PAGE</button><div id="fieldReveal" class="popup-reveal"></div>');
+    later(()=>{
+      const btn=$q('#randomFieldPage'),out=$q('#fieldReveal'); if(!btn||!out)return;
+      let last=-1;
+      btn.onclick=()=>{
+        let i=Math.floor(Math.random()*pages.length); if(i===last)i=(i+1)%pages.length; last=i;
+        out.innerHTML='<p><strong>'+pages[i][0]+'</strong></p><p>'+pages[i][1]+'</p>';
+      };
+      btn.click();
+    },0);
+  }
+
   const baseDoAction=doAction;
   doAction=function(a){
     if(a==='piano'){openPiano();return}
@@ -295,17 +400,20 @@
     if(a==='suit-race'){state.suit='RACE SUIT';save();toast('EQUIPPED — RACE SUIT');info('RACE SUIT','Track mode.','<p>Helmet, gloves and a full motorsport suit for race school, track days and the garage branch of the estate.</p><p>Apexes, braking points and machines that are much faster than necessary.</p>');return}
     if(a==='suit-dive'){state.suit='DIVE RIG';save();toast('EQUIPPED — DIVE RIG');info('DIVE RIG','Open water / scuba.','<p>Wetsuit, mask, fins and dive gear for the underwater chapter.</p><p>Open-water swimming, scuba progression, boats, reefs and whatever is below the surface.</p>');return}
     if(a==='snowglobe'){openSnowGlobe();return}
-    if(a==='portrait'){info('MANOR / PAINTING','Four letters behind the frame','<p><strong>C · E · G · B</strong></p><p>The letters are carved into the back of the frame. They match four notes on the grand piano.</p>');return}
-    if(a==='armor-display'){info('MANOR / ARMOR','Older skills','<p>Blacksmithing. Archery. Blades. Craft.</p><p>The armor is not the entrance. The fireplace is.</p>');return}
-    if(a==='manor-table'){info('MANOR / TABLE','A life well lived','<p>One boss fight. One adventure. One skill unlock. Repeat until the stories are better than the plans.</p>');return}
-    if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Inside / outside','<p>Fire inside, snow outside, and brick buildings across the street. The room is the warm half of a New York winter night.</p>');return}
+    if(a==='portrait'){openManorPainting();return}
+    if(a==='armor-display'){openArmorInspect();return}
+    if(a==='manor-table'){openManorTable();return}
+    if(a==='nyc-fireplace'){info('NYC / FIREPLACE','Firelight in December','<p>The apartment is warm, the street is cold, and the city is close enough to hear through the windows.</p><p>This is the part of winter in New York worth keeping.</p>');return}
     if(a==='nyc-bar'){info('NYC / BAR CART','Before going out','<p>Glassware and old bottles set beside the dinner jacket. It is the last stop in the room before heading out into the city.</p>');return}
     if(a==='archive-yale'){info('ARCHIVE / EDUCATION','Yale University','<p><strong>Statistics & Data Science.</strong></p><p>The diploma marks one finished chapter; the rest of the room is for what came after it.</p>');return}
     if(a==='archive-pontevedra'){info('ARCHIVE / PLACE','Ponte Vedra Beach','<p>Northeast Florida and one of the places that feels foundational enough to show up twice in the estate: here in the archive, and again on the map.</p>');return}
     if(a==='archive-finish'){info('ARCHIVE / FINISH LINE','Santa Cruz 70.3','<p><strong>5:29 total.</strong></p><p>The finish-line photograph from the first 70.3: the moment the training block became something finished.</p>');return}
-    if(a==='archive-index'){info('ARCHIVE / INDEX','The system behind the wall','<p><strong>Boss Fights</strong> — major objectives with clean finish lines.</p><p><strong>Adventures</strong> — worth doing because the story is better afterwards.</p><p><strong>Skill Unlocks</strong> — capabilities that compound.</p>');return}
+    if(a==='archive-index'){openArchiveIndex();return}
     if(a==='tree'){info('NYC / TREE','One ornament is different','<p>A tiny brass W is tucked deeper in the branches, clearly not part of the original ornament set.</p><button id="takeOrnament" class="mini-action">TAKE IT</button>');later(()=>{$q('#takeOrnament').onclick=()=>{collect('ornament');toast('FOUND — BRASS W ORNAMENT')}},0);return}
     if(a==='santa-relic'){info('RELIC / COMPLETED','IRONMAN 70.3 — SANTA CRUZ','<p><strong>5:29 total.</strong></p><p>Swim 37:55 · Bike 2:57:05 · Run 1:44:55.</p>');return}
+    if(a==='windows'){openNYCView();return}
+    if(a==='campfire'){openCampfire();return}
+    if(a==='fieldnotes'){openFieldNotes();return}
     return baseDoAction(a)
   };
 
