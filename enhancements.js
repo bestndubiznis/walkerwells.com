@@ -570,22 +570,31 @@
     rover:{label:'RANGE ROVER',mode:'COUNTRY RUN',title:'Thread the gaps.',base:58,max:126,handling:42,spawn:1100}
   };
   let driveRAF=0,driveLast=0,driveSpawnAt=0,driveRunning=false,driveMode='race';
-  let driveObstacles=[],driveElapsed=0,drivePoints=0,driveLevel=1;
+  let driveObstacles=[],driveElapsed=0,drivePoints=0,driveLevel=1,drivePrevCarRect=null;
   const driveKeys={left:false,right:false};
 
   function driveCfg(){return DRIVE[driveMode]||DRIVE.race}
   function clearDriveObjects(){
     driveObstacles.forEach(o=>o.el.remove());driveObstacles=[];
+    drivePrevCarRect=null;
     $q('#driveObstacles').innerHTML='';
   }
   function roadLaneX(){
     return [37,43.5,50,56.5,63][Math.floor(Math.random()*5)];
   }
-  function rectsOverlap(a,b,pad=0){
-    return a.left+pad < b.right-pad &&
-           a.right-pad > b.left+pad &&
-           a.top+pad < b.bottom-pad &&
-           a.bottom-pad > b.top+pad;
+  function rectsOverlap(a,b,expand=0){
+    return a.left-expand < b.right+expand &&
+           a.right+expand > b.left-expand &&
+           a.top-expand < b.bottom+expand &&
+           a.bottom+expand > b.top-expand;
+  }
+  function unionRect(a,b){
+    return {
+      left:Math.min(a.left,b.left),
+      right:Math.max(a.right,b.right),
+      top:Math.min(a.top,b.top),
+      bottom:Math.max(a.bottom,b.bottom)
+    };
   }
   function spawnObstacle(now){
     const cfg=driveCfg();
@@ -601,7 +610,7 @@
       el.className='drive-obstacle traffic-'+kind;
       el.style.left=x+'%';el.style.top='-14%';
       $q('#driveObstacles').appendChild(el);
-      driveObstacles.push({el,x,y:-14});
+      driveObstacles.push({el,x,y:-14,prevRect:null});
     });
     const speedFactor=state.speed/cfg.base;
     const baseGap=Math.max(520,cfg.spawn-(driveElapsed*7));
@@ -647,15 +656,19 @@
     if(now>driveSpawnAt)spawnObstacle(now);
     const vy=(state.speed/72)*(.060*dt);
     const carRect=$q('#driveLaneCar').getBoundingClientRect();
+    const carSweep=drivePrevCarRect?unionRect(drivePrevCarRect,carRect):carRect;
 
     for(const o of driveObstacles){
       o.y+=vy;o.el.style.top=o.y+'%';
-      if(o.y>68&&o.y<102){
-        const obstacleRect=o.el.getBoundingClientRect();
-        if(rectsOverlap(carRect,obstacleRect,5)){finishDrive();return}
+      const obstacleRect=o.el.getBoundingClientRect();
+      const obstacleSweep=o.prevRect?unionRect(o.prevRect,obstacleRect):obstacleRect;
+      if(o.y>58&&o.y<110 && rectsOverlap(carSweep,obstacleSweep,2)){
+        finishDrive();return
       }
+      o.prevRect=obstacleRect;
       if(o.y>114){o.el.remove();o.done=true}
     }
+    drivePrevCarRect=carRect;
     driveObstacles=driveObstacles.filter(o=>!o.done);
     updateDriveHud();
     if(driveRunning)driveRAF=requestAnimationFrame(driveLoop);
@@ -665,7 +678,7 @@
     driveRunning=false;cancelAnimationFrame(driveRAF);clearDriveObjects();
     driveMode=type==='aston'?'aston':type==='rover'?'rover':'race';
     const cfg=driveCfg();
-    state.driveX=50;state.speed=cfg.base;driveElapsed=0;drivePoints=0;driveLevel=1;
+    state.driveX=50;state.speed=cfg.base;driveElapsed=0;drivePoints=0;driveLevel=1;drivePrevCarRect=null;
     driveLast=performance.now();driveSpawnAt=driveLast+650;
     Object.keys(driveKeys).forEach(k=>driveKeys[k]=false);
     $q('#driveCarLabel').textContent=cfg.label;$q('#driveModeLabel').textContent=cfg.mode;$q('#driveTitle').textContent=cfg.title;
