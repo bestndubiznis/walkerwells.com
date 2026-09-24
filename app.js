@@ -32,8 +32,8 @@ const scenes={
     collectibles:[{x:86,y:79,id:"road-key",icon:"◆"}]
   },
   manor:{
-    title:"The manor.",eye:"WELLS / MANOR",copy:"A real room now: fireplace, piano, doors, and things that should not quite be there.",
-    hint:"Click the piano, fireplace, doors, desk objects, or anything that looks deliberately placed.",
+    title:"The manor.",eye:"WELLS / MANOR",copy:"The center of the house: firelight, old wood, books, armor, and a grand piano.",
+    hint:"The fireplace, piano, painting, study doorway, and other objects each open a different part of the house.",
     bg:IMG.manor,
     hotspots:[
       {x:16,y:52,w:18,h:32,label:"STUDY DOOR",sub:"Plans / bad ideas",go:"study"},
@@ -92,8 +92,8 @@ const scenes={
     collectibles:[]
   },
   archive:{
-    title:"The archive.",eye:"WELLS / ARCHIVE",copy:"Not a résumé. The things that actually earned wall space.",
-    hint:"Click the specific relics: Yale, Santa Cruz 70.3, the ski backflip, Ponte Vedra Beach, or the archive index.",
+    title:"The archive.",eye:"WELLS / ARCHIVE",copy:"A room for finished things: education, races, places, and skills that made it out of the planning stage.",
+    hint:"Each framed object opens the story behind it, from Yale and Santa Cruz to the ski backflip and Ponte Vedra.",
     bg:IMG.archive,
     hotspots:[
       {x:41,y:23,w:15,h:22,label:"YALE DIPLOMA",sub:"Education / one frame",action:"archive-yale"},
@@ -106,8 +106,8 @@ const scenes={
     collectibles:[]
   },
   map:{
-    title:"The map room.",eye:"WELLS / MAP ROOM",copy:"Where I came from, where I disappeared to, and what is next.",
-    hint:"Click the framed trips, map pins, and travel books. The room is the itinerary.",
+    title:"The map room.",eye:"WELLS / MAP ROOM",copy:"A map of where the story started, where it wandered, and where it is heading next.",
+    hint:"The photographs and pins open the trips behind them; the travel books hold the next route.",
     bg:IMG.map,
     hotspots:[
       {x:13,y:8,w:17,h:12,label:"SAN FRANCISCO",sub:"Home base",action:"place-sf"},
@@ -131,7 +131,7 @@ const scenes={
   },
   camp:{
     title:"The campfire.",eye:"WELLS / CAMPFIRE",copy:"Mountain air, firelight, Brevard memories, and a sky worth staying awake for.",
-    hint:"Click the actual tent, fire, compass, carved tree, or the night sky.",
+    hint:"Brevard memories live in the tent, fire, compass, carved tree, and night sky.",
     bg:IMG.camp,
     bgPos:"center center",
     bgPosMobile:"26% center",
@@ -145,8 +145,8 @@ const scenes={
     collectibles:[]
   },
   nyc:{
-    title:"New York. December.",eye:"WELLS / NYC",copy:"A real New York interior with an actual Christmas tree. No palm trees. No G-Wagen.",
-    hint:"The tree, windows, room, and mission terminal are all active.",
+    title:"New York. December.",eye:"WELLS / NYC",copy:"A Manhattan apartment in December: Christmas tree lit, snow outside, and somewhere to be later.",
+    hint:"Explore the tree, mission desk, windows, dinner jacket, fireplace, bar cart, and snow globe.",
     bg:IMG.nyc,
     hotspots:[
       {x:50,y:52,w:30,h:44,label:"CHRISTMAS TREE",sub:"One ornament is wrong",action:"tree"},
