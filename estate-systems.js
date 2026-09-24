@@ -262,7 +262,10 @@
     if(custom){
       q('#deletePin').onclick=()=>{sys.customPins=sys.customPins.filter(x=>x.id!==p.id);save();selectedPin=null;renderPins();q('#mapSelection').innerHTML='<small>PIN REMOVED</small><h3>The table closes the gap.</h3><p>The rest of the map is unchanged.</p>';log('map','Removed '+p.name+' from the map')};
       q('#editPinDesc').onclick=()=>{
-        const text=prompt('Update the note for '+p.name,p.desc||'');if(text===null)return;p.desc=text.slice(0,240);save();selectPin(p);log('map','Updated '+p.name+' on the map');
+        q('#mapSelection').innerHTML=`<small>EDIT PIN NOTE</small><h3>${esc(p.name)}</h3><textarea id="inlinePinNote" class="inline-pin-note" maxlength="240">${esc(p.desc||'')}</textarea><div class="pin-actions"><button id="savePinNote">SAVE NOTE</button><button id="cancelPinNote">CANCEL</button></div>`;
+        q('#inlinePinNote').focus();
+        q('#savePinNote').onclick=()=>{p.desc=q('#inlinePinNote').value.trim().slice(0,240);save();selectPin(p);log('map','Updated '+p.name+' on the map')};
+        q('#cancelPinNote').onclick=()=>selectPin(p);
       };
     }
   }
@@ -310,12 +313,12 @@
       const res=await fetch(url,{headers:{'Accept':'application/json'}});
       if(!res.ok)throw new Error('lookup');
       const data=await res.json();
-      if(!data.length){status.textContent='No match. Use PLACE MANUALLY.';manualDraft={name,desc};return}
+      if(!data.length){status.textContent='No match. Click the map to place it manually.';manualDraft={name,desc};q('#manualPinGuide').classList.add('show');return}
       addCustomPin(name,desc,Number(data[0].lat),Number(data[0].lon),'geocoded');
       status.textContent='Pinned '+name+'. Drag the pin if you want to fine-tune it.';
     }catch(err){
-      status.textContent='Map lookup unavailable. Click PLACE MANUALLY instead.';
-      manualDraft={name,desc};
+      status.textContent='Map lookup unavailable. Click the map to place it manually.';
+      manualDraft={name,desc};q('#manualPinGuide').classList.add('show');
     }
   };
   function addCustomPin(name,desc,lat,lon,source){
