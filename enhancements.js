@@ -421,6 +421,109 @@
     },0);
   }
 
+
+  function openStudyMap(){
+    info('STUDY / MAP','Follow the red pencil line','<p>The desk map is covered in routes that are half plan, half provocation.</p><div class="popup-choice-grid"><button id="mapNorth" class="mini-action">ALASKA</button><button id="mapAlps" class="mini-action">ST. MORITZ</button><button id="mapIslands" class="mini-action">BVI</button><button id="mapSteppe" class="mini-action">MONGOLIA</button></div><div id="studyMapReveal" class="popup-reveal"><p>Choose a destination.</p></div>');
+    bindPopupChoices([['mapNorth'],['mapAlps'],['mapIslands'],['mapSteppe']],id=>{
+      const copy={
+        mapNorth:'<p><strong>Alaska.</strong> Big terrain, cold water, long days, and the kind of logistics that make a trip feel earned before it even starts.</p>',
+        mapAlps:'<p><strong>St. Moritz.</strong> Winter machinery, clean mountain lines, good coats, and enough snow to justify traveling for it.</p>',
+        mapIslands:'<p><strong>BVI.</strong> Sailing, diving, moving water, and islands close enough together to make the route itself part of the day.</p>',
+        mapSteppe:'<p><strong>Mongolia.</strong> Dirt bikes, open country, remote camps, navigation, and a road that stops pretending to be a road.</p>'
+      };
+      $q('#studyMapReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openStudyDrawer(){
+    info('STUDY / DRAWER','The drawer sticks halfway','<p>It opens about six inches and stops.</p><button id="pullDrawer" class="mini-action">PULL HARDER</button><div id="drawerReveal" class="popup-reveal"><p>Something is caught behind it.</p></div>');
+    bindPopupChoices([['pullDrawer']],()=>{
+      collect('playing-card');
+      $q('#drawerReveal').innerHTML='<p>The drawer comes free with a scrape. Behind it is a single playing card and a folded scrap of paper.</p><p><em>Keep one thing in reserve.</em></p>';
+      $q('#pullDrawer').disabled=true;
+      toast('FOUND — PLAYING CARD');
+    });
+  }
+
+  function openStudyLamp(){
+    info('STUDY / LAMP','Turn the lamp down','<p>The page beneath it looks blank at full brightness.</p><button id="dimStudyLamp" class="mini-action">DIM THE LAMP</button><div id="lampReveal" class="popup-reveal"><p>The paper has faint pencil pressure marks.</p></div>');
+    bindPopupChoices([['dimStudyLamp']],()=>{
+      const bg=$q('#sceneBg');
+      if(bg)bg.animate([{filter:'brightness(1)'},{filter:'brightness(.62) saturate(.9)'},{filter:'brightness(.86)'}],{duration:1150,fill:'forwards'});
+      $q('#lampReveal').innerHTML='<p>As the room darkens, the indentations become readable:</p><p><strong>One boss fight. One adventure. One skill unlock.</strong></p>';
+      $q('#dimStudyLamp').disabled=true;
+      toast('MARGIN NOTE FOUND');
+    });
+  }
+
+  function openStudyShelf(){
+    info('STUDY / SHELVES','One book is facing the wrong way','<p>Most of the shelf is exactly where it belongs. Three books are worth checking.</p><div class="popup-choice-grid three"><button id="shelfAtlas" class="mini-action">ATLAS</button><button id="shelfHistory" class="mini-action">HISTORY</button><button id="shelfReverse" class="mini-action">BACKWARDS BOOK</button></div><div id="shelfReveal" class="popup-reveal"><p>Pick one.</p></div>');
+    bindPopupChoices([['shelfAtlas'],['shelfHistory'],['shelfReverse']],id=>{
+      if(id==='shelfReverse'){
+        collect('playing-card');
+        $q('#shelfReveal').innerHTML='<p>The backwards book is hollow. Inside: a playing card and a penciled list of routes that have not happened yet.</p>';
+        toast('HIDDEN COMPARTMENT');
+      }else if(id==='shelfAtlas'){
+        $q('#shelfReveal').innerHTML='<p>The atlas is heavily marked around coastlines, mountain ranges, and places that require more than one flight to reach.</p>';
+      }else{
+        $q('#shelfReveal').innerHTML='<p>The history book falls open to explorers, pilots, sailors, and people who kept choosing the longer route.</p>';
+      }
+    });
+  }
+
+  function openGaragePorsche(){
+    info('GARAGE / PORSCHE','911','<p>The smaller car in the back bay: less theater, more precision.</p><div class="popup-choice-grid three"><button id="porscheCoast" class="mini-action">COAST ROAD</button><button id="porscheTrack" class="mini-action">TRACK</button><button id="porscheNight" class="mini-action">NIGHT DRIVE</button></div><div id="porscheReveal" class="popup-reveal"><p>Pick the road.</p></div>');
+    bindPopupChoices([['porscheCoast'],['porscheTrack'],['porscheNight']],id=>{
+      const copy={
+        porscheCoast:'<p><strong>Coast road.</strong> Early morning, cold air, empty turns, and no reason to arrive quickly.</p>',
+        porscheTrack:'<p><strong>Track.</strong> Braking points, clean inputs, repeatable laps, and finding speed by removing drama.</p>',
+        porscheNight:'<p><strong>Night drive.</strong> City lights, quiet roads, and the kind of car that feels better the less attention it gets.</p>'
+      };
+      $q('#porscheReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openTrackMap(){
+    info('GARAGE / TRACK WALL','The progression board','<p>The wall map is less about one track than the order of operations.</p><div class="popup-choice-grid"><button id="trackKart" class="mini-action">1 · KARTING</button><button id="trackCoach" class="mini-action">2 · COACHING</button><button id="trackHpde" class="mini-action">3 · HPDE</button><button id="trackRace" class="mini-action">4 · RACE LICENSE</button></div><div id="trackReveal" class="popup-reveal"><p>Choose a stage.</p></div>');
+    bindPopupChoices([['trackKart'],['trackCoach'],['trackHpde'],['trackRace']],id=>{
+      const copy={
+        trackKart:'<p><strong>Karting:</strong> learn vision, lines, racecraft, and how obvious every mistake becomes when there is nowhere for the car to hide it.</p>',
+        trackCoach:'<p><strong>Coaching:</strong> replace instinct with repeatable technique. Braking, turn-in, balance, and data.</p>',
+        trackHpde:'<p><strong>HPDE:</strong> put the technique into a real car at real speed, with enough structure to learn without pretending it is a race.</p>',
+        trackRace:'<p><strong>Race license:</strong> the point where speed is no longer enough. Starts, traffic, passing, defending, judgment, consistency.</p>'
+      };
+      $q('#trackReveal').innerHTML=copy[id];
+    });
+  }
+
+  function openCompass(){
+    info('CLEARING / COMPASS','Still works','<p>The brass compass has been sitting on the log long enough to collect ash.</p><button id="spinCompass" class="mini-action">SPIN IT</button><div id="compassReveal" class="popup-reveal"><p>The needle is steady.</p></div>');
+    later(()=>{
+      const btn=$q('#spinCompass'),out=$q('#compassReveal');
+      if(!btn||!out)return;
+      let spins=0;
+      btn.onclick=()=>{
+        spins++;
+        const options=[
+          'The needle swings, overshoots, and settles north.',
+          'North again. Annoyingly dependable.',
+          'Still north. At this point the compass is making a point.'
+        ];
+        out.innerHTML='<p>'+options[Math.min(spins-1,options.length-1)]+'</p>';
+        collect('compass');
+        if(spins>=3)btn.textContent='STILL NORTH';
+      };
+    },0);
+  }
+
+  function openTreeCarving(){
+    info('CLEARING / TREE','Something under the moss','<p>The carving is shallow enough that weather has almost erased it.</p><button id="brushCarving" class="mini-action">BRUSH AWAY MOSS</button><div id="treeReveal" class="popup-reveal"><p>Only a few cuts are visible.</p></div>');
+    bindPopupChoices([['brushCarving']],()=>{
+      $q('#treeReveal').innerHTML='<p>Three small trees. A mountain line. One date.</p><p>No explanation was carved with it, which is probably why it belongs here.</p>';
+      $q('#brushCarving').disabled=true;
+    });
+  }
+
   const baseDoAction=doAction;
   doAction=function(a){
     if(a==='piano'){openPiano();return}
@@ -450,6 +553,14 @@
     if(a==='windows'){openNYCView();return}
     if(a==='campfire'){openCampfire();return}
     if(a==='fieldnotes'){openFieldNotes();return}
+    if(a==='study-map'){openStudyMap();return}
+    if(a==='study-drawer'){openStudyDrawer();return}
+    if(a==='study-lamp'){openStudyLamp();return}
+    if(a==='study-shelf'){openStudyShelf();return}
+    if(a==='garage-porsche'){openGaragePorsche();return}
+    if(a==='track-map'){openTrackMap();return}
+    if(a==='camp-compass'){openCompass();return}
+    if(a==='tree-carving'){openTreeCarving();return}
     return baseDoAction(a)
   };
 
