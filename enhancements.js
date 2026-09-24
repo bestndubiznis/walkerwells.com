@@ -369,16 +369,52 @@
     const pages=[
       ['NAVIGATION','Maps, route finding, wilderness judgment, and being harder to lose.'],
       ['FLIGHT','Private pilot training and enough competence to make the sky feel accessible.'],
-      ['MOUNTAINS','Ski touring, backcountry travel, bigger terrain, better judgment.'],
+      ['MOUNTAINS','Ski touring, backcountry travel, bigger terrain, and better judgment in places where mistakes matter.'],
       ['WATER','Scuba, open-water confidence, sailing, and the skills that make islands more interesting.'],
-      ['MACHINES','Track driving, motorcycles, dirt, and learning what the machine is actually telling you.']
+      ['MACHINES','Track driving, motorcycles, dirt, and learning what the machine is actually telling you.'],
+      ['ENDURANCE','Long-course racing, adventure events, and building an engine that makes very long days feel possible.'],
+      ['SKIING','Backflip first. Then 360s, bigger lines, touring, deep snow, and eventually the mountains that require a plane to reach.'],
+      ['DIRT BIKES','Trail riding, camping off the bike, desert, multi-day expeditions, and the confidence to keep going when the road disappears.'],
+      ['SAILING','Navigation, weather, seamanship, living aboard for a while, and eventually making passages instead of just renting boats.'],
+      ['DIVING','Better buoyancy, deeper training, wrecks, liveaboards, and enough time underwater that it stops feeling foreign.'],
+      ['SURF / FOIL','Surfing, wingfoiling, wind, balance, and learning to move through water without brute-forcing it.'],
+      ['HORSES','Riding well enough that a horse feels like a partner instead of transportation. Ranch days, open country, and eventually real competence.'],
+      ['RACING','Karting, coaching, track days, racecraft, and earning the right to drive quickly around other people who are also trying to drive quickly.'],
+      ['WILDERNESS','Navigation, campcraft, weather, first aid, cold, heat, and knowing what to do when the plan stops being useful.'],
+      ['STRENGTH','Enough strength, mobility, and body control to make every other skill easier: lifting, carrying, climbing over things, landing well.'],
+      ['RACQUET SPORTS','Tennis, golf, and the lifetime sports that are still fun when the more ridiculous ideas need a rest day.'],
+      ['CRAFT','Blacksmithing, leather, wood, mechanical objects, and learning how beautiful things are actually made.'],
+      ['ARCHERY','A quiet skill built on repetition, control, and getting the same movement right enough times that the result becomes boring.'],
+      ['MARKSMANSHIP','Sport shooting as a discipline: safety, control, consistency, and performing cleanly under pressure.'],
+      ['MOTO EXPEDITION','The long version of dirt biking: luggage, navigation, bad roads, remote camps, and enough mechanical sense to keep the trip moving.'],
+      ['ADVENTURE RACING','Navigation, running, biking, paddling, problem-solving, and continuing to make decisions after everyone is tired.'],
+      ['PILOTING','Not just getting a license. Weather judgment, planning, radio confidence, cross-country flying, and making aviation genuinely useful.'],
+      ['OCEAN','Cold water, currents, long swims, boats, diving, surfing, and becoming much more comfortable with a part of the world that covers most of it.'],
+      ['WINTER','Avalanche education, touring, cold-weather systems, mountain travel, and turning winter from a season into terrain.'],
+      ['ROAD BIKE','Long climbs, descending well, better bike fitness, and eventually being the kind of cyclist who does not treat the bike leg as damage control.'],
+      ['RUNNING','Keep the speed from disappearing while building the durability to run well after doing something difficult first.'],
+      ['EXPEDITION FITNESS','Carry weight. Move for hours. Sleep badly. Get up and do it again. Fitness that survives the removal of ideal conditions.'],
+      ['DRIVING','Car control, braking, vision, race lines, wet conditions, and knowing the difference between speed and competence.'],
+      ['FIELDCRAFT','Packing light, fixing small problems, choosing routes, reading weather, making camp, and generally needing fewer things to go right.'],
+      ['THE RULE','One boss fight. One adventure. One skill unlock. Repeat until the stories are better than the plans.']
     ];
-    info('STUDY / FIELD NOTES','Capabilities worth collecting','<p>The notebook is less a bucket list than a running inventory of things worth learning.</p><button id="randomFieldPage" class="mini-action">OPEN A RANDOM PAGE</button><div id="fieldReveal" class="popup-reveal"></div>');
+
+    info(
+      'STUDY / FIELD NOTES',
+      'Capabilities worth collecting',
+      '<p>The notebook is less a bucket list than a running inventory of things worth learning.</p><button id="randomFieldPage" class="mini-action">OPEN A RANDOM PAGE</button><div id="fieldReveal" class="popup-reveal"></div>'
+    );
+
     later(()=>{
-      const btn=$q('#randomFieldPage'),out=$q('#fieldReveal'); if(!btn||!out)return;
-      let last=-1;
+      const btn=$q('#randomFieldPage'),out=$q('#fieldReveal');
+      if(!btn||!out)return;
+      let last=-1,seen=[];
       btn.onclick=()=>{
-        let i=Math.floor(Math.random()*pages.length); if(i===last)i=(i+1)%pages.length; last=i;
+        if(seen.length>=pages.length)seen=[];
+        const available=pages.map((_,i)=>i).filter(i=>i!==last&&!seen.includes(i));
+        let i=available[Math.floor(Math.random()*available.length)];
+        if(i===undefined)i=(last+1)%pages.length;
+        last=i;seen.push(i);
         out.innerHTML='<p><strong>'+pages[i][0]+'</strong></p><p>'+pages[i][1]+'</p>';
       };
       btn.click();
