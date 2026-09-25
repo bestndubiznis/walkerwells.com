@@ -55,8 +55,8 @@
     if(!scenes[scene].hotspots.some(h=>h.action===spot.action))scenes[scene].hotspots.push(spot);
   }
   ensureHotspot('map',{x:52,y:53,w:35,h:33,label:'PHYSICAL MAP TABLE',sub:'Pins / routes / add a place',action:'map-table'});
-  ensureHotspot('study',{x:88,y:43,w:17,h:38,label:'BRASS TELESCOPE',sub:'Observatory / lunar scan',action:'observatory'});
-  ensureHotspot('study',{x:64,y:72,w:17,h:15,label:'VISITOR NOTEBOOK',sub:'The estate keeps a dated record',action:'visitor-notebook'});
+  ensureHotspot('study',{x:88,y:48,w:17,h:46,label:'BRASS TELESCOPE',sub:'Observatory / lunar scan',action:'observatory'});
+  ensureHotspot('study',{x:58,y:62,w:16,h:11,label:'VISITOR NOTEBOOK',sub:'The estate keeps a dated record',action:'visitor-notebook'});
 
   const systemLayer=document.createElement('div');
   systemLayer.id='systemsLayer';systemLayer.className='systems-layer';
@@ -208,11 +208,8 @@
       clock.onclick=openClock;systemLayer.appendChild(clock);hands();
     }
     if(room==='study'){
-      const tel=document.createElement('button');tel.className='study-telescope';tel.type='button';tel.setAttribute('aria-label','Use the brass telescope');
-      tel.innerHTML='<span class="telescope-tube"><i class="lens"></i><i class="eyepiece"></i><i class="focus-ring"></i></span><span class="telescope-yoke"></span><span class="telescope-tripod"><i></i><i></i><i></i></span>';
-      tel.onclick=openObservatory;systemLayer.appendChild(tel);
-      const book=document.createElement('button');book.className='physical-notebook';book.type='button';book.setAttribute('aria-label','Open visitor notebook');
-      book.innerHTML='<i></i><b>W</b>';book.onclick=openJournal;systemLayer.appendChild(book);
+      // The telescope and notebook are now painted into the Study backplate.
+      // Their aligned hotspot zones open the observatory and visitor notebook.
     }
     if(room==='map'){
       const table=document.createElement('button');table.className='map-table-object';table.type='button';table.setAttribute('aria-label','Open physical map table');
