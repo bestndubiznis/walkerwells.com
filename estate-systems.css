@@ -93,3 +93,51 @@ body[data-room-lights="1"] .study-lamp-glow{opacity:.36!important}
   .journal-panel{width:100%!important}.journal-book{min-height:350px;padding:20px 17px}.journal-entries{max-height:230px}
 }
 @media(prefers-reduced-motion:reduce){.estate-clock>em::after,.starfield i,.alien-craft.revealed{animation:none!important}}
+
+/* Estate Systems v2.1 — real geography + study observatory */
+.leaflet-world-map{position:absolute;inset:0;z-index:1;background:#a58e64;font-family:"DM Sans",system-ui,sans-serif}
+.physical-world-map .leaflet-tile-pane{filter:sepia(.52) saturate(.58) contrast(.92) brightness(.88)}
+.physical-world-map .leaflet-overlay-pane{filter:sepia(.18)}
+.physical-world-map .leaflet-control-zoom{border:1px solid rgba(70,51,31,.42)!important;box-shadow:0 5px 16px rgba(48,31,18,.18)!important}
+.physical-world-map .leaflet-control-zoom a{background:rgba(221,204,165,.92);color:#33291d;border-color:rgba(80,61,37,.24);font:18px/30px Georgia,serif}
+.physical-world-map .leaflet-control-zoom a:hover{background:#efe2bf;color:#211b13}
+.physical-world-map .leaflet-control-attribution{background:rgba(226,211,177,.82)!important;color:#5d503d;font-size:7px!important}
+.physical-world-map .leaflet-control-attribution a{color:#443825}
+.physical-world-map::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 80px 20px rgba(55,35,20,.34);mix-blend-mode:multiply}
+.physical-world-map::after{z-index:4;opacity:.42;mix-blend-mode:multiply}
+.wells-map-marker{background:transparent;border:0}
+.wells-map-marker i{position:absolute;left:50%;top:2px;width:13px;height:13px;border-radius:50% 50% 50% 0;background:#8f2f26;border:1px solid #57221d;transform:translateX(-50%) rotate(-45deg);box-shadow:0 3px 5px rgba(0,0,0,.35)}
+.wells-map-marker i::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:#e7d9b8;transform:translate(-50%,-50%)}
+.wells-map-marker.custom i{background:#274b52;border-color:#16363d}.wells-map-marker.custom i::after{background:#a9d0cb}
+.wells-map-marker.selected i{background:#c99b3e;border-color:#71521c;box-shadow:0 0 0 5px rgba(201,155,62,.2),0 4px 8px rgba(0,0,0,.32)}
+.wells-map-marker.dragging i{transform:translateX(-50%) translateY(-5px) rotate(-45deg);filter:brightness(1.18)}
+.wells-map-tooltip{border:1px solid rgba(68,52,33,.34)!important;background:rgba(231,216,181,.96)!important;color:#2f281e!important;box-shadow:0 7px 18px rgba(42,29,17,.22)!important;font:600 7px "DM Sans",sans-serif!important;letter-spacing:.08em!important;padding:5px 7px!important}
+.wells-map-tooltip::before{border-top-color:rgba(231,216,181,.96)!important}
+.pin-nudge{display:grid;grid-template-columns:1fr repeat(4,30px);gap:5px;align-items:center;margin-top:9px}
+.pin-nudge span{font-size:5px;letter-spacing:.13em;color:#716854}.pin-nudge button{height:28px;border:1px solid #45453d;background:#0e110d;color:#d8ccb1;cursor:pointer}
+.map-attribution{display:none}
+
+/* The observatory now lives inside the Study as a floor-standing brass telescope. */
+.study-telescope{position:absolute;left:88%;top:52%;width:170px;height:310px;transform:translate(-50%,-50%) perspective(700px) rotateY(-5deg);border:0;background:transparent;pointer-events:auto;cursor:pointer;z-index:5;filter:drop-shadow(0 18px 15px rgba(0,0,0,.48));transition:transform .32s ease,filter .32s ease}
+.study-telescope:hover{transform:translate(-50%,-52%) perspective(700px) rotateY(-3deg) scale(1.025);filter:drop-shadow(0 20px 18px rgba(0,0,0,.54))}
+.telescope-tube{position:absolute;left:14px;top:31px;width:139px;height:34px;border-radius:19px 7px 8px 19px;background:linear-gradient(180deg,#302619 0,#b18b49 10%,#735427 29%,#2f281e 47%,#a47b39 70%,#4e3a21 91%,#1c1813 100%);border:1px solid #9b7941;box-shadow:inset 0 3px 5px rgba(255,227,160,.22),inset 0 -6px 10px rgba(24,17,10,.5),0 4px 7px rgba(0,0,0,.32);transform:rotate(-15deg);transform-origin:58% 55%}
+.telescope-tube::before{content:"";position:absolute;right:13px;top:-4px;width:7px;height:40px;border-radius:4px;background:linear-gradient(90deg,#2b2116,#b28743 45%,#44311c);box-shadow:inset 1px 0 rgba(255,230,173,.25)}
+.telescope-tube::after{content:"";position:absolute;left:19px;top:-3px;width:6px;height:38px;border-radius:3px;background:linear-gradient(90deg,#392a18,#b78e45,#5a3f20)}
+.telescope-tube .lens{position:absolute;left:-8px;top:3px;width:18px;height:27px;border-radius:50% 28% 28% 50%;background:radial-gradient(circle at 35% 40%,#78939a 0,#22363d 26%,#101a1e 56%,#020607 72%);border:3px solid #6d552e;box-shadow:inset 0 0 8px rgba(144,188,196,.28),0 0 0 1px #2b2116}
+.telescope-tube .lens::after{content:"";position:absolute;left:3px;top:3px;width:5px;height:9px;border-radius:50%;background:rgba(214,237,234,.34);filter:blur(.5px)}
+.telescope-tube .eyepiece{position:absolute;right:-18px;top:8px;width:21px;height:17px;border-radius:2px 8px 8px 2px;background:linear-gradient(180deg,#1a1b18,#545043 50%,#11120f);border-right:5px solid #0a0c0a}
+.telescope-tube .focus-ring{position:absolute;right:35px;bottom:-16px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#4b3a21 0 29%,#b18c48 31% 44%,#3b2c1b 46%);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.telescope-yoke{position:absolute;left:76px;top:69px;width:34px;height:45px;border:6px solid #806232;border-top:0;border-radius:0 0 17px 17px;background:linear-gradient(90deg,transparent 0 30%,rgba(19,16,12,.3) 31% 69%,transparent 70%);box-shadow:inset 1px 0 rgba(235,203,129,.15)}
+.telescope-yoke::after{content:"";position:absolute;left:50%;bottom:-18px;width:24px;height:21px;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 35% 25%,#b6924d,#6d5129 58%,#2e2418 78%);border:1px solid #a58042}
+.telescope-tripod{position:absolute;left:87px;top:119px;width:4px;height:22px;background:#846635}
+.telescope-tripod>i{position:absolute;left:0;top:14px;width:7px;height:159px;border-radius:5px 5px 2px 2px;background:linear-gradient(90deg,#352719,#a88040 42%,#6a4b27 67%,#211a12);transform-origin:50% 0;box-shadow:2px 3px 4px rgba(0,0,0,.25)}
+.telescope-tripod>i:nth-child(1){transform:rotate(17deg)}.telescope-tripod>i:nth-child(2){transform:rotate(-18deg)}.telescope-tripod>i:nth-child(3){transform:rotate(1deg) translateY(4px);filter:brightness(.74)}
+.telescope-tripod::after{content:"";position:absolute;left:2px;top:72px;width:57px;height:4px;background:#584125;transform:translateX(-50%) rotate(3deg);opacity:.72}
+body[data-room-lights="2"] .study-telescope{filter:brightness(.62) drop-shadow(0 18px 15px rgba(0,0,0,.58))}
+body[data-room-lights="1"] .study-telescope{filter:brightness(.83) drop-shadow(0 18px 15px rgba(0,0,0,.5))}
+
+@media(max-width:880px){
+  .physical-world-map{min-height:460px;touch-action:pan-x pan-y}.physical-world-map .leaflet-control-attribution{font-size:6px!important;max-width:70%;line-height:1.2}
+  .study-telescope{left:86%;top:43%;transform:translate(-50%,-50%) scale(.68);transform-origin:center}.study-telescope:hover{transform:translate(-50%,-50%) scale(.7)}
+  .pin-nudge{grid-template-columns:1fr repeat(4,28px)}
+}
