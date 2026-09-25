@@ -213,7 +213,7 @@
     if(actor)actor.classList.remove('raise');
   }
   function addDrawer(){
-    const d=place(el('div','physical-drawer'),43,77);
+    const d=place(el('div','physical-drawer'),80,72);
     if(memory.objectStates.drawerOpen)d.classList.add('open');
     living.appendChild(d);
   }
@@ -283,7 +283,7 @@
       addArmor();
     }
     if(sceneName==='study'){
-      addGlow('study-lamp-glow'+(memory.objectStates.studyLampDim?' dim':''),72,42);
+      addGlow('study-lamp-glow'+(memory.objectStates.studyLampDim?' dim':''),64,48);
       addDrawer();
     }
     if(sceneName==='garage'){
