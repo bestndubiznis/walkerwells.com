@@ -210,3 +210,34 @@ body[data-scene="camp"] .scene.interacting .scene-bg{
 /* Estate Run v4 — steering tracks input directly and crashes read instantly. */
 .drive-overlay.hit .arcade-car{animation:driveCrash .28s ease-out}
 @keyframes driveCrash{0%{transform:translateX(-50%) rotate(0)}35%{transform:translateX(-50%) rotate(-7deg) scale(1.04)}70%{transform:translateX(-50%) rotate(5deg) scale(.98)}100%{transform:translateX(-50%) rotate(0)}}
+
+
+/* Dirt Bike / Stunt Run */
+.moto-overlay{position:fixed;inset:0;z-index:140;display:none;overflow:hidden;background:#070908;color:#f0e5c8}
+.moto-overlay.open{display:block}
+.moto-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.moto-overlay::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 44%,transparent 0 62%,rgba(0,0,0,.15) 82%,rgba(0,0,0,.52) 100%)}
+.moto-hud{position:absolute;z-index:4;top:28px;display:grid;gap:3px;min-width:150px;padding:11px 13px;border:1px solid rgba(230,216,180,.14);background:rgba(6,9,7,.42);backdrop-filter:blur(10px)}
+.moto-hud small,.moto-hud span{font-size:6.5px;letter-spacing:.17em;color:#998f79}.moto-hud strong{font:24px "Playfair Display",serif;font-weight:500;color:#eddfba}
+.moto-hud-left{left:28px}.moto-hud-right{right:28px;text-align:right}.moto-hud-right span b{color:#d8bd76;font-weight:600}
+.moto-hud-center{left:50%;transform:translateX(-50%);min-width:230px;text-align:center}.moto-hud-center strong{font-size:17px;letter-spacing:.04em}.moto-hud-center span{color:#b4a88f}
+.moto-close{position:absolute;z-index:7;right:28px;bottom:28px;border:1px solid rgba(231,217,181,.22);background:rgba(8,11,9,.56);backdrop-filter:blur(12px);padding:10px 13px;font-size:7px;letter-spacing:.16em;color:#e8dcc0;cursor:pointer}
+.moto-close:hover{border-color:#b79c61;background:rgba(20,22,17,.8)}
+.moto-start,.moto-crash{position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);width:min(470px,calc(100vw - 32px));padding:28px;border:1px solid rgba(225,204,148,.25);background:rgba(8,11,9,.78);backdrop-filter:blur(17px);box-shadow:0 25px 80px rgba(0,0,0,.5)}
+.moto-start small,.moto-crash small{font-size:7px;letter-spacing:.22em;color:#b89a5a}.moto-start h2,.moto-crash h2{font:42px "Playfair Display",serif;font-weight:500;margin:7px 0 10px}.moto-start p{font:11px/1.65 "DM Sans",sans-serif;color:#b9b09d;max-width:410px}
+.moto-start button,.moto-crash button{width:100%;border:1px solid #73613e;background:#171913;color:#f1e6c8;padding:12px 14px;margin-top:15px;font-size:7px;letter-spacing:.17em;cursor:pointer}
+.moto-start button:hover,.moto-crash button:hover{background:#eee0bd;color:#141611}.moto-start>span{display:block;margin-top:10px;font-size:6px;letter-spacing:.16em;color:#766f60}
+.moto-crash>div{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.moto-crash>div span{display:grid;gap:4px;border:1px solid rgba(231,217,181,.12);padding:12px;font-size:6px;letter-spacing:.15em;color:#827967}.moto-crash>div b{font:24px "Playfair Display",serif;color:#ead9b3}
+.moto-crash #motoExitCrash{margin-top:7px;border-color:#30332d;background:#0c0f0c;color:#958d7c}
+.moto-control-hint{position:absolute;z-index:4;left:28px;bottom:28px;display:flex;align-items:center;gap:8px;font-size:6px;letter-spacing:.15em;color:#837b69}.moto-control-hint i{width:19px;height:19px;border:1px solid #8d7d5c;border-radius:50%;position:relative}.moto-control-hint i::after{content:"";position:absolute;inset:5px;border-radius:50%;background:#bd9d58;animation:motoHold 1.25s ease-in-out infinite}
+@keyframes motoHold{0%,100%{transform:scale(.45);opacity:.45}50%{transform:scale(1);opacity:1}}
+.moto-canvas.crashed{animation:motoCrashFlash .28s ease-out}
+@keyframes motoCrashFlash{30%{filter:brightness(1.7) sepia(.65) saturate(1.7);transform:translateX(-4px)}65%{transform:translateX(3px)}100%{filter:none;transform:none}}
+body.moto-playing{overflow:hidden}
+@media(max-width:880px){
+  .moto-hud{top:12px;padding:8px;min-width:102px}.moto-hud-left{left:10px}.moto-hud-right{right:10px}.moto-hud strong{font-size:17px}.moto-hud small,.moto-hud span{font-size:5.5px}
+  .moto-hud-center{top:62px;min-width:190px}.moto-hud-center strong{font-size:14px}.moto-hud-center span{font-size:5.5px}
+  .moto-start,.moto-crash{padding:22px}.moto-start h2,.moto-crash h2{font-size:34px}.moto-start p{font-size:10px}
+  .moto-control-hint{left:12px;bottom:14px;max-width:62vw}.moto-close{right:12px;bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){.moto-control-hint i::after{animation:none}}
