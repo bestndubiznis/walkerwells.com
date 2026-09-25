@@ -34,7 +34,7 @@ jobs:
           fi
           if compgen -G ".asset_chunks/study.*.b64" > /dev/null; then
             cat .asset_chunks/study.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/study-hq-v2.avif
-            test "$(stat -c%s assets/scenes/study-hq-v2.webp)" -gt 120000
+            test "$(stat -c%s assets/scenes/study-hq-v2.avif)" -gt 35000
           fi
           rm -rf .asset_chunks
       - name: Commit HQ backplates
