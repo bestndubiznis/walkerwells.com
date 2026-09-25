@@ -423,7 +423,7 @@
 
 
   function openStudyMap(){
-    info('STUDY / MAP','Follow the red pencil line','<p>The desk map is covered in routes that are half plan, half provocation.</p><div class="popup-choice-grid"><button id="mapNorth" class="mini-action">ALASKA</button><button id="mapAlps" class="mini-action">ST. MORITZ</button><button id="mapIslands" class="mini-action">BVI</button><button id="mapSteppe" class="mini-action">MONGOLIA</button></div><div id="studyMapReveal" class="popup-reveal"><p>Choose a destination.</p></div>');
+    info('STUDY / GLOBE','Spin it until somewhere wins','<p>The globe beside the window has four routes marked in faint red pencil: half plan, half provocation.</p><div class="popup-choice-grid"><button id="mapNorth" class="mini-action">ALASKA</button><button id="mapAlps" class="mini-action">ST. MORITZ</button><button id="mapIslands" class="mini-action">BVI</button><button id="mapSteppe" class="mini-action">MONGOLIA</button></div><div id="studyMapReveal" class="popup-reveal"><p>Choose a destination.</p></div>');
     bindPopupChoices([['mapNorth'],['mapAlps'],['mapIslands'],['mapSteppe']],id=>{
       const copy={
         mapNorth:'<p><strong>Alaska.</strong> Big terrain, cold water, long days, and the kind of logistics that make a trip feel earned before it even starts.</p>',
