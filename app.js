@@ -51,6 +51,9 @@ const scenes={
     bg:IMG.study,
     bgPos:"center center",
     bgPosMobile:"63% center",
+    hotspotAspect:16/9,
+    hotspotPositionX:.5,
+    hotspotPositionY:.5,
     hotspots:[
       {x:60,y:74,w:47,h:32,label:"DESK / BAD IDEAS",sub:"Change the status of every bad idea",action:"ideas"},
       {x:41,y:62,w:14,h:11,label:"FIELD NOTES",sub:"Notes stacked beside the fire",action:"fieldnotes"},
@@ -260,8 +263,23 @@ function sceneTo(name,instant=false){
   if(instant){go();return}
   $("#transition").classList.add("on");setTimeout(go,420);
 }
+function hotspotRect(h,s){
+  let x=h.x,y=h.y,w=h.w||10,height=h.h||12;
+  if(s.hotspotAspect && innerWidth>880){
+    const rect=$("#scene").getBoundingClientRect(),cw=rect.width,ch=rect.height,ar=s.hotspotAspect;
+    let dw,dh;
+    if(cw/ch>ar){dw=cw;dh=cw/ar}else{dh=ch;dw=ch*ar}
+    const px=s.hotspotPositionX??.5,py=s.hotspotPositionY??.5;
+    const ox=(cw-dw)*px,oy=(ch-dh)*py;
+    x=(ox+dw*(h.x/100))/cw*100;
+    y=(oy+dh*(h.y/100))/ch*100;
+    w=dw*(w/100)/cw*100;
+    height=dh*(height/100)/ch*100;
+  }
+  return {x,y,w,height};
+}
 function renderHotspots(s){
-  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>'<button class="hotspot" data-hot="'+i+'" style="left:'+h.x+'%;top:'+h.y+'%;width:'+(h.w||10)+'%;height:'+(h.h||12)+'%" aria-label="'+h.label+'"></button>').join("");
+  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>{const r=hotspotRect(h,s);return '<button class="hotspot" data-hot="'+i+'" style="left:'+r.x+'%;top:'+r.y+'%;width:'+r.w+'%;height:'+r.height+'%" aria-label="'+h.label+'"></button>'}).join("");
   $("#collectibleLayer").innerHTML="";
   $$("[data-hot]").forEach(b=>{
     const h=s.hotspots[+b.dataset.hot];
