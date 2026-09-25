@@ -4,7 +4,7 @@ const IMG={
   estate:"/assets/scenes/estate-hq.webp?v=estate2",
   manor:"https://images.unsplash.com/photo-1757524784105-cf1d1938abc7?auto=format&fit=crop&w=2400&q=88",
   garage:"/assets/scenes/garage-hq.webp?v=garage2",
-  study:"https://images.unsplash.com/photo-1761116182930-8c82e7e9d873?auto=format&fit=crop&w=2400&q=88",
+  study:"/assets/scenes/study-hq-v2.avif?v=study4",
   wardrobe:"/assets/scenes/wardrobe-hq.webp?v=wardrobe2",
   archive:"/assets/scenes/archive-hq.webp?v=archive2",
   map:"/assets/scenes/map-room-hq.webp?v=map2",
@@ -47,15 +47,17 @@ const scenes={
   },
   study:{
     title:"The study.",eye:"WELLS / STUDY",copy:"Plans, field notes, maps, and the ideas that keep surviving the edit.",
-    hint:"The desk, books, lamp, drawer, and shelves all hold something.",
+    hint:"The desk, shelves, lamp, globe, notebook, drawers, and telescope are all part of the room.",
     bg:IMG.study,
+    bgPos:"center center",
+    bgPosMobile:"63% center",
     hotspots:[
-      {x:52,y:62,w:48,h:34,label:"DESK / BAD IDEAS",sub:"Change the status of every bad idea",action:"ideas"},
-      {x:34,y:51,w:18,h:18,label:"OPEN BOOK",sub:"Field notes",action:"fieldnotes"},
-      {x:55,y:54,w:18,h:18,label:"MAP / PAPERS",sub:"A route that should not exist",action:"study-map"},
-      {x:43,y:77,w:18,h:16,label:"DESK DRAWER",sub:"It sticks halfway",action:"study-drawer"},
-      {x:72,y:42,w:16,h:22,label:"LAMP",sub:"Turn it down and something appears",action:"study-lamp"},
-      {x:14,y:57,w:15,h:38,label:"LIBRARY SHELVES",sub:"A title is out of order",action:"study-shelf"}
+      {x:60,y:74,w:47,h:32,label:"DESK / BAD IDEAS",sub:"Change the status of every bad idea",action:"ideas"},
+      {x:41,y:62,w:14,h:11,label:"FIELD NOTES",sub:"Notes stacked beside the fire",action:"fieldnotes"},
+      {x:76,y:50,w:11,h:18,label:"GLOBE / ROUTES",sub:"A route that should not exist",action:"study-map"},
+      {x:80,y:73,w:12,h:27,label:"DESK DRAWERS",sub:"One sticks halfway",action:"study-drawer"},
+      {x:64,y:48,w:13,h:25,label:"DESK LAMP",sub:"Turn it down and something appears",action:"study-lamp"},
+      {x:13,y:38,w:25,h:67,label:"LIBRARY SHELVES",sub:"A title is out of order",action:"study-shelf"}
     ],
     collectibles:[]
   },
