@@ -9,8 +9,9 @@
   };
   const nowISO=()=>new Date().toISOString();
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')||{}}catch(e){return {}}};
-  const sys=Object.assign({lights:{},customPins:[],journal:[],moonWins:[],clockChimes:0},read());
+  const sys=Object.assign({lights:{},customPins:[],journal:[],moonWins:[],clockChimes:0,pinOverrides:{},hiddenPins:[]},read());
   sys.lights=sys.lights||{};sys.customPins=sys.customPins||[];sys.journal=sys.journal||[];sys.moonWins=sys.moonWins||[];
+  sys.pinOverrides=sys.pinOverrides||{};sys.hiddenPins=sys.hiddenPins||[];
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(sys))}catch(e){}};
   const hash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
   const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -42,7 +43,7 @@
     {id:'seasia',name:'Southeast Asia',lat:13.7563,lon:100.5018,desc:'Trip with friends.'},
     {id:'southafrica',name:'South Africa',lat:-30.5595,lon:22.9375,desc:'Childhood safari.'},
     {id:'pontevedra',name:'Ponte Vedra',lat:30.2397,lon:-81.3856,desc:'Northeast Florida.'},
-    {id:'ct',name:'Connecticut',lat:41.6032,lon:-73.0877,desc:'Northeast chapter.'},
+    {id:'ct',name:'New Haven, Connecticut',lat:41.3083,lon:-72.9279,desc:'Northeast chapter.'},
     {id:'bahamas',name:'Bahamas',lat:25.0343,lon:-77.3963,desc:'Many New Years.'},
     {id:'jamaica',name:'Jamaica',lat:18.1096,lon:-77.2975,desc:'Learned to scuba dive.'}
   ];
@@ -221,7 +222,22 @@
   // ── Physical map table / real world geography ───────────────────────
   let selectedPin=null,manualDraft=null,leafletMap=null,markerLayer=null;
   const markerById=new Map();
-  function allPins(){return [...corePins,...sys.customPins]}
+  function allPins(){
+    const builtIns=corePins
+      .filter(p=>!sys.hiddenPins.includes(p.id))
+      .map(p=>Object.assign({},p,sys.pinOverrides[p.id]||{}, {custom:false}));
+    return [...builtIns,...sys.customPins];
+  }
+  function persistPinPosition(p){
+    if(p.custom)return save();
+    sys.pinOverrides[p.id]=Object.assign({},sys.pinOverrides[p.id]||{},{lat:p.lat,lon:p.lon});
+    save();
+  }
+  function persistPinNote(p){
+    if(p.custom)return save();
+    sys.pinOverrides[p.id]=Object.assign({},sys.pinOverrides[p.id]||{},{desc:p.desc});
+    save();
+  }
 
   function mapMarkerIcon(p){
     return L.divIcon({
@@ -259,19 +275,17 @@
     markerLayer.clearLayers();markerById.clear();
     allPins().forEach(p=>{
       const marker=L.marker([p.lat,p.lon],{
-        icon:mapMarkerIcon(p),draggable:!!p.custom,keyboard:true,title:p.name,
+        icon:mapMarkerIcon(p),draggable:true,keyboard:true,title:p.name,
         alt:p.name
       }).addTo(markerLayer);
       marker.bindTooltip(esc(p.name),{direction:'top',offset:[0,-20],opacity:.95,className:'wells-map-tooltip'});
       marker.on('click',()=>selectPin(p));
-      if(p.custom){
-        marker.on('dragstart',()=>marker.getElement()?.classList.add('dragging'));
-        marker.on('dragend',()=>{
-          marker.getElement()?.classList.remove('dragging');
-          const ll=marker.getLatLng();p.lat=ll.lat;p.lon=ll.lng;save();selectPin(p);
-          log('map','Moved '+p.name+' on the map');
-        });
-      }
+      marker.on('dragstart',()=>marker.getElement()?.classList.add('dragging'));
+      marker.on('dragend',()=>{
+        marker.getElement()?.classList.remove('dragging');
+        const ll=marker.getLatLng();p.lat=ll.lat;p.lon=ll.lng;persistPinPosition(p);selectPin(p);
+        log('map','Moved '+p.name+' on the map');
+      });
       markerById.set(p.id,marker);
     });
     q('#mapPinCount').textContent=allPins().length+' PINS';
@@ -283,26 +297,38 @@
   function selectPin(p){
     selectedPin=p;markSelectedPin(p.id);
     const custom=!!p.custom;
-    q('#mapSelection').innerHTML=`<small>${custom?'YOUR PIN':'ESTATE PIN'}</small><h3>${esc(p.name)}</h3><p>${esc(p.desc||'No description yet.')}</p><div class="pin-coords">${Math.abs(p.lat).toFixed(2)}° ${p.lat>=0?'N':'S'} · ${Math.abs(p.lon).toFixed(2)}° ${p.lon>=0?'E':'W'}</div>${custom?'<div class="pin-actions"><button id="editPinDesc">EDIT NOTE</button><button id="deletePin">REMOVE PIN</button></div><div class="pin-nudge"><span>FINE POSITION</span><button data-nudge="0,.35">↑</button><button data-nudge="-.35,0">←</button><button data-nudge=".35,0">→</button><button data-nudge="0,-.35">↓</button></div>':''}`;
+    q('#mapSelection').innerHTML=`<small>${custom?'YOUR PIN':'ESTATE PIN'}</small><h3>${esc(p.name)}</h3><p>${esc(p.desc||'No description yet.')}</p><div class="pin-coords">${Math.abs(p.lat).toFixed(2)}° ${p.lat>=0?'N':'S'} · ${Math.abs(p.lon).toFixed(2)}° ${p.lon>=0?'E':'W'}</div><div class="pin-actions"><button id="editPinDesc">EDIT NOTE</button><button id="deletePin">REMOVE PIN</button></div><div class="pin-nudge"><span>FINE POSITION</span><button data-nudge="0,.35">↑</button><button data-nudge="-.35,0">←</button><button data-nudge=".35,0">→</button><button data-nudge="0,-.35">↓</button></div>${!custom&&sys.pinOverrides[p.id]?'<button id="resetPin" class="pin-reset">RESET DEFAULT POSITION</button>':''}`;
     markerById.get(p.id)?.openTooltip();
-    if(custom){
-      q('#deletePin').onclick=()=>{
-        sys.customPins=sys.customPins.filter(x=>x.id!==p.id);save();selectedPin=null;renderPins();
-        q('#mapSelection').innerHTML='<small>PIN REMOVED</small><h3>The table closes the gap.</h3><p>The rest of the map is unchanged.</p>';
-        log('map','Removed '+p.name+' from the map');
+
+    q('#deletePin').onclick=()=>{
+      if(custom)sys.customPins=sys.customPins.filter(x=>x.id!==p.id);
+      else if(!sys.hiddenPins.includes(p.id))sys.hiddenPins.push(p.id);
+      save();selectedPin=null;renderPins();
+      q('#mapSelection').innerHTML='<small>PIN REMOVED</small><h3>The table closes the gap.</h3><p>You can restore the estate defaults with Reset Local Progress.</p>';
+      log('map','Removed '+p.name+' from the map');
+    };
+
+    q('#editPinDesc').onclick=()=>{
+      q('#mapSelection').innerHTML=`<small>EDIT PIN NOTE</small><h3>${esc(p.name)}</h3><textarea id="inlinePinNote" class="inline-pin-note" maxlength="240">${esc(p.desc||'')}</textarea><div class="pin-actions"><button id="savePinNote">SAVE NOTE</button><button id="cancelPinNote">CANCEL</button></div>`;
+      q('#inlinePinNote').focus();
+      q('#savePinNote').onclick=()=>{
+        p.desc=q('#inlinePinNote').value.trim().slice(0,240);persistPinNote(p);selectPin(p);log('map','Updated '+p.name+' on the map');
       };
-      q('#editPinDesc').onclick=()=>{
-        q('#mapSelection').innerHTML=`<small>EDIT PIN NOTE</small><h3>${esc(p.name)}</h3><textarea id="inlinePinNote" class="inline-pin-note" maxlength="240">${esc(p.desc||'')}</textarea><div class="pin-actions"><button id="savePinNote">SAVE NOTE</button><button id="cancelPinNote">CANCEL</button></div>`;
-        q('#inlinePinNote').focus();
-        q('#savePinNote').onclick=()=>{p.desc=q('#inlinePinNote').value.trim().slice(0,240);save();selectPin(p);log('map','Updated '+p.name+' on the map')};
-        q('#cancelPinNote').onclick=()=>selectPin(p);
-      };
-      qa('[data-nudge]').forEach(btn=>btn.onclick=()=>{
-        const [dLon,dLat]=btn.dataset.nudge.split(',').map(Number);
-        p.lon=clamp(p.lon+dLon,-179.8,179.8);p.lat=clamp(p.lat+dLat,-84.8,84.8);save();
-        markerById.get(p.id)?.setLatLng([p.lat,p.lon]);selectPin(p);log('map','Fine-tuned '+p.name+' on the map');
-      });
-    }
+      q('#cancelPinNote').onclick=()=>selectPin(p);
+    };
+
+    qa('[data-nudge]').forEach(btn=>btn.onclick=()=>{
+      const [dLon,dLat]=btn.dataset.nudge.split(',').map(Number);
+      p.lon=clamp(p.lon+dLon,-179.8,179.8);p.lat=clamp(p.lat+dLat,-84.8,84.8);persistPinPosition(p);
+      markerById.get(p.id)?.setLatLng([p.lat,p.lon]);selectPin(p);log('map','Fine-tuned '+p.name+' on the map');
+    });
+
+    const reset=q('#resetPin');
+    if(reset)reset.onclick=()=>{
+      delete sys.pinOverrides[p.id];save();renderPins();
+      const fresh=allPins().find(x=>x.id===p.id);if(fresh)selectPin(fresh);
+      log('map','Reset '+p.name+' to its default position');
+    };
   }
   function openMapTable(){
     openOverlay(mapOverlay);q('#mapAddForm').hidden=true;q('#manualPinGuide').classList.remove('show');manualDraft=null;
