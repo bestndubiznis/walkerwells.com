@@ -22,19 +22,26 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p assets/scenes
-          cat .asset_chunks/manor.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/manor-cinematic-hq.avif
-          cat .asset_chunks/nyc.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/nyc-christmas-hq.avif
-          test "$(stat -c%s assets/scenes/manor-cinematic-hq.avif)" -gt 60000
-          test "$(stat -c%s assets/scenes/nyc-christmas-hq.avif)" -gt 60000
-          rm -f assets/scenes/_probe-manor.avif assets/scenes/_probe-nyc.avif
+          if compgen -G ".asset_chunks/manor.*.b64" > /dev/null; then
+            cat .asset_chunks/manor.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/manor-cinematic-hq.avif
+            test "$(stat -c%s assets/scenes/manor-cinematic-hq.avif)" -gt 60000
+            rm -f assets/scenes/_probe-manor.avif
+          fi
+          if compgen -G ".asset_chunks/nyc.*.b64" > /dev/null; then
+            cat .asset_chunks/nyc.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/nyc-christmas-hq.avif
+            test "$(stat -c%s assets/scenes/nyc-christmas-hq.avif)" -gt 60000
+            rm -f assets/scenes/_probe-nyc.avif
+          fi
+          if compgen -G ".asset_chunks/study.*.b64" > /dev/null; then
+            cat .asset_chunks/study.*.b64 | tr -d '\n\r' | base64 -d > assets/scenes/study-hq-v2.webp
+            test "$(stat -c%s assets/scenes/study-hq-v2.webp)" -gt 120000
+          fi
           rm -rf .asset_chunks
-          sed -i 's/hq1/hq2/g' enhancements.js
-          sed -i 's/20260923h/20260923i/g' index.html
       - name: Commit HQ backplates
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Install full-resolution manor and NYC backplates"
+          git commit -m "Install generated scene backplates"
           git push
