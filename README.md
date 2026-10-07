@@ -107,8 +107,15 @@ Persistent Estate Systems data is stored locally in the browser under `wells.sys
 - Motion follows the operating system until a visitor explicitly changes it in Settings.
 - `storage.js` keeps the estate usable if browser storage is unavailable. Visitor notes and progress remain local to the browser; blocked storage falls back to the current visit.
 
+### Objects with a life of their own
+
+- The manor sentinel offers three directional sword parries, reactive blade poses, sparks, sound, replay, and an optional unhurried mode. Completing the duel awards the forge mark and opens the armory.
+- The old compass can be dragged, adjusted with a keyboard slider, or turned in 15-degree steps. Three bearings chart a route and award the compass.
+- The campfire accepts dragged or tapped logs, grows warmer, releases embers, and remembers its warmth in the clearing.
+- `encounter-rules.js` isolates deterministic progression; `encounters.js` owns interaction lifecycles and cancels animation and observers when closed. Progress uses `wells.encounters.v1` and participates in Reset Progress.
+
 ### Verification
 
-Run `node --test tests/*.test.cjs` for storage regression checks and `node --check` on changed JavaScript files. Preview with `python3 -m http.server 4173 --bind 127.0.0.1`.
+Run `node --test tests/*.test.cjs` for storage and encounter regression checks and `node --check` on changed JavaScript files. Preview with `python3 -m http.server 4173 --bind 127.0.0.1`.
 
 Browser smoke checks: enter the estate; rapidly switch rooms; use Back and Forward; reload a room link; open and close panels with Escape; cycle Tab in a panel; type D in the journal; use phone Rooms and Estate Controls; launch and exit both garage games.
