@@ -14,8 +14,20 @@ test('a swept pass collides once and grants temporary contact protection',()=>{
 test('close passes reward precision while distant passes do not build a combo',()=>{
  const g=new RoadRun();g.start();g.speed=100;g.traffic=[{z:.01,x:.32,speed:40},{z:.02,x:-.6,speed:40}];g.step(1/120);assert.equal(g.near,1);assert.equal(g.combo,1);assert.equal(g.health,3);assert.ok(g.score>=125);
 });
-test('checkpoints add time once and a completed road run cannot keep scoring',()=>{
- const g=new RoadRun();g.start();g.distance=999.9;g.speed=100;g.step(1/120);assert.equal(g.checkpoint,1);assert.ok(g.time>86);const time=g.time;g.step(1/120);assert.ok(g.time<time);g.distance=2999.9;g.step(1/120);assert.equal(g.won,true);const score=g.score;advance(g,2);assert.equal(g.score,score);
+test('checkpoints keep extending the clock beyond the old finish line, once per gate',()=>{
+ const g=new RoadRun();g.start();g.speed=100;
+ for(let n=1;n<=8;n++){g.distance=n*750-.1;const before=g.time;g.step(1/120);assert.equal(g.checkpoint,n);assert.ok(g.time>before+17);const time=g.time;g.step(1/120);assert.ok(g.time<time)}
+ assert.equal(g.phase,'running');assert.equal(g.nextCheckpoint,6750);
+});
+test('missing the checkpoint ends the run when time expires and stops scoring',()=>{
+ const g=new RoadRun();g.start();g.time=.01;advance(g,.1);assert.equal(g.phase,'finished');assert.equal(g.reason,'Out of time.');const score=g.score;advance(g,5);assert.equal(g.score,score);
+});
+test('traffic approaches faster and spawns more often as survival time grows, even when braking',()=>{
+ const young=new RoadRun(),old=new RoadRun();young.start();old.start();old.elapsed=120;
+ assert.ok(old.trafficPace>young.trafficPace);assert.ok(old.spawnInterval<young.spawnInterval);
+ for(const g of [young,old]){g.traffic=[{z:100,x:0,speed:50}];g.step(1/120,{brake:true})}
+ assert.ok(old.traffic[0].z<young.traffic[0].z);assert.ok(young.traffic[0].z<100);
+ old.pause();const pace=old.trafficPace;advance(old,10);assert.equal(old.trafficPace,pace);
 });
 test('the bike can complete the authored trail with gas and neutral balance',()=>{
  const g=new TrailRun();g.start();advance(g,30,{gas:true});assert.equal(g.phase,'finished');assert.equal(g.won,true);assert.ok(g.stuntScore>0);assert.ok(g.distance>=368);
@@ -28,4 +40,17 @@ test('bike pause preserves position and airborne balance is independent of gas',
 });
 test('a controlled rotation and release can land full flips and finish the trail',()=>{
  const g=new TrailRun();g.start();for(let i=0;i<3600&&g.phase==='running';i++)g.step(1/120,{gas:true,lean:g.airborne&&g.airtime<.6?1:0});assert.equal(g.won,true);assert.ok(g.flips>=1);
+});
+
+for(const angle of [1.3,-1.3,Math.PI*2+1.3])test('wheel-first landing can be saved at angle '+angle,()=>{
+ const g=new TrailRun();g.start();Object.assign(g,{x:150,y:47,vx:20,vy:-100,airborne:true,angle,omega:7,airSpin:angle,airtime:.8});
+ advance(g,.08);assert.equal(g.phase,'running');assert.equal(g.airborne,false);assert.equal(g.recovering,true);
+ advance(g,.6);assert.equal(g.phase,'running');assert.ok(Math.abs(Math.atan2(Math.sin(g.angle),Math.cos(g.angle)))<.2);
+ if(angle>6)assert.ok(g.flips>=1);
+});
+test('an inverted rider-first landing still crashes',()=>{
+ const g=new TrailRun();g.start();Object.assign(g,{x:150,y:45,vx:20,vy:-100,airborne:true,angle:Math.PI,omega:0});advance(g,.15);assert.equal(g.phase,'finished');assert.equal(g.reason,'Frame or rider down.');
+});
+test('missing a gate on the shoulder does not grant time later',()=>{
+ const g=new RoadRun();g.start();g.speed=100;g.distance=749.9;g.x=1.1;const time=g.time;g.step(1/120);assert.equal(g.checkpoint,1);assert.ok(g.time<time);g.x=0;g.step(1/120);assert.ok(g.time<time);assert.equal(g.nextCheckpoint,1500);
 });

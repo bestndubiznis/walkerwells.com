@@ -116,10 +116,10 @@ Persistent Estate Systems data is stored locally in the browser under `wells.sys
 
 ### Garage games
 
-- Ferrari and Aston Martin road runs now have perspective scenery, bends, distinct handling, cruise/gas/brake controls, traffic, close-pass multipliers, three-contact tolerance, and a three-kilometre finish. Checkpoints add time.
-- The dirt-bike trail separates throttle and airborne lean, with landing assistance when lean is released, jump signs, clean-landing and flip scores, and a finish line. Failed gaps end the run instead of allowing an endless fall.
+- Ferrari and Aston Martin road runs now have perspective scenery, bends, distinct handling, cruise/gas/brake controls, traffic, close-pass multipliers, three-contact tolerance, and endless checkpoint survival. The clock starts at 45 seconds; each 750-metre checkpoint adds 18 seconds and 250 points, with no final checkpoint. Running out of time or taking three hits ends the run. Traffic approach speed rises continuously with survival time, and spawn intervals shrink to a readable minimum. Leaving the road stops scoring and eventually damages the car.
+- The dirt-bike trail separates throttle and airborne lean, with recoverable front- or rear-wheel landings (including steep post-flip landings), frame/helmet collision checks, landing assistance when lean is released, jump signs, clean-landing and flip scores, and a finish line. Failed gaps end the run instead of allowing an endless fall.
 - Both use the shared `garage-games.js` controller, `garage-games.css`, and deterministic `garage-physics.js`. They provide start instructions, pause/resume, immediate replay, held touch controls, keyboard controls, and automatic pause when the page loses focus. Audio and inputs are released on pause or exit.
-- Best scores are stored per vehicle/trail under `wells.garage.v2`; the old scores are retained separately because the scoring systems differ. The previous `moto.js` is no longer loaded.
+- Endless road records use separate `:endless` entries so former route-completion scores do not compete with survival scores. Best scores are stored per vehicle/trail under `wells.garage.v2`; the old scores are retained separately because the scoring systems differ. The previous `moto.js` is no longer loaded.
 
 ### Verification
 
