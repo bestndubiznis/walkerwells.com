@@ -502,7 +502,7 @@
   const reset=q('#resetBtn');
   if(reset)reset.onclick=()=>{
     if(!confirm('Reset your collection, notebook, custom map pins, preferences, and game scores in this browser? This cannot be undone.'))return;
-    ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion','wells.living.v1','wells.driveBest','wells.motoBest','wells.encounters.v1',KEY]
+    ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion','wells.living.v1','wells.driveBest','wells.motoBest','wells.garage.v2','wells.encounters.v1',KEY]
       .forEach(k=>WellsStorage.removeItem(k));
     try{[SESSION,'wells.clock.chime','wells.living.session','wells.raven.gone','wells.event.manor','wells.event.window'].forEach(k=>WellsSession.removeItem(k))}catch(e){}
     location.reload();
