@@ -99,7 +99,7 @@
     document.body.classList.add('moto-playing');
     q('#motoStart').hidden=false;
     q('#motoCrash').hidden=true;
-    q('#motoBest').textContent=String(Number(localStorage.getItem(BEST_KEY)||0)).padStart(6,'0');
+    q('#motoBest').textContent=String(Number(WellsStorage.getItem(BEST_KEY)||0)).padStart(6,'0');
     q('#motoScore').textContent='000000';
     q('#motoDistance').textContent='0';
     q('#motoCombo').textContent='READY';
@@ -148,7 +148,7 @@
       running:true,hold:false,last:performance.now(),x:115,y:0,vx:92,vy:0,
       angle:0,omega:0,wheelbase:58,wheelR:12,
       airborne:false,airSpin:0,lastAngle:0,stuntScore:0,combo:0,
-      best:Number(localStorage.getItem(BEST_KEY)||0),distance:0,score:0,
+      best:Number(WellsStorage.getItem(BEST_KEY)||0),distance:0,score:0,
       dust:[],landFlash:0
     };
     g.y=(ground(g.x)||0)+g.wheelR+15;
@@ -261,7 +261,7 @@
     canvas.classList.add('crashed');
     setTimeout(()=>canvas.classList.remove('crashed'),280);
     const score=g.score||0,best=Math.max(g.best||0,score);
-    if(best>(g.best||0))localStorage.setItem(BEST_KEY,String(best));
+    if(best>(g.best||0))WellsStorage.setItem(BEST_KEY,String(best));
     q('#motoBest').textContent=String(best).padStart(6,'0');
     q('#motoFinalScore').textContent=score;
     q('#motoFinalBest').textContent=best;

@@ -6,9 +6,9 @@
   const now=new Date();
 
   function readJSON(key,fallback){
-    try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch(e){return fallback}
+    try{return JSON.parse(WellsStorage.getItem(key)||'null')||fallback}catch(e){return fallback}
   }
-  function saveMemory(){try{localStorage.setItem(MEM_KEY,JSON.stringify(memory))}catch(e){}}
+  function saveMemory(){try{WellsStorage.setItem(MEM_KEY,JSON.stringify(memory))}catch(e){}}
   function hash(str){
     let h=2166136261;
     for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
@@ -86,10 +86,10 @@
   memory.firstSeen=memory.firstSeen||now.toISOString();
   const priorLastSeen=memory.lastSeen;
   const gap=priorLastSeen?Date.now()-Date.parse(priorLastSeen):Infinity;
-  const sessionFresh=!sessionStorage.getItem(SESSION_KEY)&&gap>30*60*1000;
+  const sessionFresh=!WellsSession.getItem(SESSION_KEY)&&gap>30*60*1000;
   if(sessionFresh||!memory.visits){
     memory.visits=(memory.visits||0)+1;
-    try{sessionStorage.setItem(SESSION_KEY,today)}catch(e){}
+    try{WellsSession.setItem(SESSION_KEY,today)}catch(e){}
   }
   memory.lastSeen=now.toISOString();
   saveMemory();
@@ -218,7 +218,7 @@
     living.appendChild(d);
   }
   function addRaven(sceneName){
-    if(sessionStorage.getItem('wells.raven.gone'))return;
+    if(WellsSession.getItem('wells.raven.gone'))return;
     const dailyScene=(hash(today+'|raven')%2===0)?'estate':'camp';
     if(sceneName!==dailyScene)return;
     const pos=sceneName==='estate'?[73,42]:[81,36];
@@ -226,7 +226,7 @@
     r.innerHTML='<i class="raven-wing"></i><b></b>';
     r.onclick=()=>{
       memory.ravenSightings=(memory.ravenSightings||0)+1;saveMemory();
-      try{sessionStorage.setItem('wells.raven.gone','1')}catch(e){}
+      try{WellsSession.setItem('wells.raven.gone','1')}catch(e){}
       r.classList.add('depart');
       const msg=memory.ravenSightings===1?'THE RAVEN DOES NOT WAIT.':memory.ravenSightings===2?'IT HAS BEEN HERE BEFORE.':'A BLACK FEATHER IS LEFT BEHIND.';
       toast(msg);
@@ -243,17 +243,17 @@
   }
   function scheduleRoomEvent(sceneName){
     if(state.reduce)return;
-    if(sceneName==='manor'&&(daypart==='night'||daypart==='dusk')&&!sessionStorage.getItem('wells.event.manor')){
+    if(sceneName==='manor'&&(daypart==='night'||daypart==='dusk')&&!WellsSession.getItem('wells.event.manor')){
       ambientLater(()=>{
-        try{sessionStorage.setItem('wells.event.manor','1')}catch(e){}
+        try{WellsSession.setItem('wells.event.manor','1')}catch(e){}
         const layer=q('#livingLayer');if(!layer||state.scene!=='manor')return;
         layer.classList.add('power-flicker');
         ambientLater(()=>layer.classList.remove('power-flicker'),1500);
       },9000+(hash(today+'manor-event')%5000));
     }
-    if(sceneName==='estate'&&daypart==='night'&&!sessionStorage.getItem('wells.event.window')){
+    if(sceneName==='estate'&&daypart==='night'&&!WellsSession.getItem('wells.event.window')){
       ambientLater(()=>{
-        try{sessionStorage.setItem('wells.event.window','1')}catch(e){}
+        try{WellsSession.setItem('wells.event.window','1')}catch(e){}
         const w=q('.estate-window-glow');if(!w||state.scene!=='estate')return;
         w.classList.add('blink');
         ambientLater(()=>w.classList.remove('blink'),1900);
@@ -322,36 +322,16 @@
   }
   syncRememberedCopy();
 
-  const baseSceneTo=sceneTo;
-  sceneTo=function(name,instant=false){
-    const from=state.scene;
-    resetArmorPose();
-    syncRememberedCopy();
-    if(instant){
-      baseSceneTo(name,true);
-      markScene(name);renderLiving(name);
-      return;
-    }
+  addEventListener('estate:before-scene',({detail:{name,from,instant}})=>{
+    clearAmbientTimers();resetArmorPose();syncRememberedCopy();
     const tr=q('#transition');
-    const mode=transitionMode(from,name);
-    if(tr){
-      tr.dataset.mode=mode;
+    if(tr&&!instant){
+      tr.dataset.mode=transitionMode(from,name);
       tr.dataset.label=(scenes[name]?.eye||name).replace('WELLS / ','');
       tr.classList.add('living-travel');
     }
-    if(!state.reduce){
-      const scene=q('#scene');
-      scene?.animate(
-        mode==='woods'
-          ?[{transform:'scale(1)'},{transform:'scale(1.018) translateX(-.5%)'}]
-          :[{transform:'scale(1)'},{transform:'scale(1.022)'}],
-        {duration:470,easing:'cubic-bezier(.2,.7,.2,1)'}
-      );
-    }
-    baseSceneTo(name,false);
-    ambientLater(()=>{markScene(name);renderLiving(name)},470);
-    ambientLater(()=>tr?.classList.remove('living-travel'),760);
-  };
+  });
+  addEventListener('estate:scene',({detail:{name}})=>{markScene(name);renderLiving(name)});
 
   function rememberAction(name){
     memory.actions[name]=(memory.actions[name]||0)+1;saveMemory();
@@ -430,8 +410,8 @@
   const resetBtn=q('#resetBtn');
   if(resetBtn)resetBtn.onclick=()=>{
     ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion',MEM_KEY,'wells.driveBest']
-      .forEach(k=>localStorage.removeItem(k));
-    try{sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem('wells.raven.gone');sessionStorage.removeItem('wells.event.manor');sessionStorage.removeItem('wells.event.window')}catch(e){}
+      .forEach(k=>WellsStorage.removeItem(k));
+    try{WellsSession.removeItem(SESSION_KEY);WellsSession.removeItem('wells.raven.gone');WellsSession.removeItem('wells.event.manor');WellsSession.removeItem('wells.event.window')}catch(e){}
     location.reload();
   };
 

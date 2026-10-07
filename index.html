@@ -6,18 +6,27 @@
   <meta name="theme-color" content="#11150f"/>
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content"/>
   <meta name="description" content="WELLS — an explorable cinematic estate of capabilities, machines, weather, places and future stories."/>
-  <title>WELLS</title>
+  <title>WELLS — The Estate</title>
+  <link rel="canonical" href="https://walkerwells.com/"/>
+  <meta property="og:title" content="WELLS — The Estate"/>
+  <meta property="og:description" content="Explore a personal world of places, machines, memories, and things still worth doing."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://walkerwells.com/"/>
+  <meta property="og:image" content="https://walkerwells.com/assets/scenes/estate-hq.webp"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="preload" as="image" href="/assets/scenes/estate-hq.webp?v=estate2"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
   <link rel="shortcut icon" href="/favicon.svg"/>
   <link rel="preconnect" href="https://images.unsplash.com"/>
-  <link rel="stylesheet" href="/styles.css?v=20260924motogame1"/>
-  <link rel="stylesheet" href="/games.css?v=20260924motogame1"/>
-  <link rel="stylesheet" href="/living.css?v=20260924motogame1"/>
+  <link rel="stylesheet" href="/styles.css?v=20261007usability1"/>
+  <link rel="stylesheet" href="/games.css?v=20261007usability1"/>
+  <link rel="stylesheet" href="/living.css?v=20261007usability1"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <link rel="stylesheet" href="/estate-systems.css?v=20260924motogame1"/>
+  <link rel="stylesheet" href="/estate-systems.css?v=20261007usability1"/>
+  <link rel="stylesheet" href="/usability.css?v=20261007usability1"/>
 </head>
 <body data-season="autumn" data-storm="false">
-  <div id="boot" class="boot">
+  <div id="boot" class="boot" role="dialog" aria-modal="true" aria-labelledby="bootLead">
     <div class="boot-shade"></div>
     <div class="boot-card">
       <div class="coin-mark">W</div>
@@ -37,7 +46,7 @@
     </div>
   </div>
 
-  <main id="world" class="world">
+  <main id="world" class="world" inert>
     <div id="scene" class="scene">
       <div id="sceneBg" class="scene-bg"></div>
       <div class="scene-depth depth-a"></div>
@@ -53,6 +62,7 @@
 
     <header class="topbar">
       <button id="brandBtn" class="brand" aria-label="Return to estate"><span class="brand-w">W</span><span>WELLS</span></button>
+      <button id="controlsBtn" class="glass-btn mobile-control" aria-haspopup="dialog">ESTATE CONTROLS</button>
       <div class="top-actions">
         <button id="soundBtn" class="glass-btn">SOUND — OFF</button>
         <button id="ideasBtn" class="glass-btn">BAD IDEAS</button>
@@ -63,7 +73,7 @@
     </header>
     <div id="worldStatus" class="world-status"></div>
 
-    <aside class="rail">
+    <nav class="rail" aria-label="Rooms">
       <div class="rail-line"></div>
       <button data-nav="estate"><span>01</span>ESTATE</button>
       <button data-nav="manor"><span>02</span>MANOR</button>
@@ -76,14 +86,15 @@
       <button data-nav="nyc"><span>09</span>NYC</button>
       <div class="rail-rule"></div>
       <button id="settingsBtn"><span>•</span>SETTINGS</button>
-    </aside>
+    </nav>
+    <button id="roomsBtn" class="mobile-rooms" aria-haspopup="dialog"><span>ROOMS</span><strong id="currentRoom">The estate.</strong><span>⌃</span></button>
 
     <section class="scene-caption">
       <div id="sceneEyebrow" class="eyebrow">WELLS / ESTATE</div>
-      <h2 id="sceneTitle">The estate.</h2>
+      <h2 id="sceneTitle" tabindex="-1">The estate.</h2>
       <p id="sceneCopy">A place made out of future stories.</p>
       <div id="sceneHint" class="scene-hint">Move around. Click what looks interesting.</div>
-      <button id="revealBtn" class="reveal-btn" type="button">HOLD D — REVEAL INTERACTIONS</button>
+      <button id="revealBtn" class="reveal-btn" type="button" aria-pressed="false">SHOW INTERACTIONS</button>
     </section>
 
     <div id="mobileInteractions" class="mobile-interactions" aria-label="Scene interactions"></div>
@@ -100,7 +111,7 @@
 
     <section id="ideasPanel" class="panel wide-panel">
       <button class="panel-close" data-close>×</button><div class="panel-kicker">THE STUDY</div><h3>Bad Ideas Board</h3>
-      <p>Click a card to move it from idea → approved → active → done. The board remembers.</p><div id="ideasGrid" class="ideas-grid"></div>
+      <p>Your version of the board. Click a card to move it from idea → approved → active → done. Changes stay in this browser.</p><div id="ideasGrid" class="ideas-grid"></div>
     </section>
 
     <section id="suitPanel" class="panel">
@@ -165,13 +176,16 @@
       <button id="driveExit" class="drive-exit">EXIT RUN</button>
     </section>
 
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <p id="roomAnnouncement" class="sr-only" role="status" aria-live="polite"></p>
   </main>
-  <script src="/app.js?v=20260924motogame1" defer></script>
-  <script src="/enhancements.js?v=20260924motogame1" defer></script>
-  <script src="/living.js?v=20260924motogame1" defer></script>
+  <script src="/storage.js?v=20261007usability1" defer></script>
+  <script src="/estate-ui.js?v=20261007usability1" defer></script>
+  <script src="/app.js?v=20261007usability1" defer></script>
+  <script src="/enhancements.js?v=20261007usability1" defer></script>
+  <script src="/living.js?v=20261007usability1" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="/estate-systems.js?v=20260924motogame1" defer></script>
-  <script src="/moto.js?v=20260924motogame1" defer></script>
+  <script src="/estate-systems.js?v=20261007usability1" defer></script>
+  <script src="/moto.js?v=20261007usability1" defer></script>
 </body>
 </html>
