@@ -1,0 +1,82 @@
+[hidden]{display:none!important}
+/* Readable controls with the original estate palette and scene artwork. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold2);outline-offset:4px}
+#sceneTitle:focus{outline:none}
+.panel{transition-property:opacity,transform}
+.panel:not(.open),.estate-system-overlay:not(.open){visibility:hidden}
+.panel.open,.estate-system-overlay.open{visibility:visible}
+.panel-close{min-width:44px;min-height:44px;top:5px;right:7px}
+.panel h3{padding-right:36px}
+.panel p{font-size:14px;color:#d4cab6;line-height:1.65}
+.glass-btn,.reveal-btn{font-size:10px;min-height:44px;letter-spacing:.1em;background:rgba(12,15,11,.78)}
+.rail{width:164px;background:linear-gradient(90deg,rgba(8,11,8,.65),transparent);padding:6px 0}
+.rail button{font-size:10px;opacity:1;min-height:34px;letter-spacing:.12em;color:#d6ccb8}
+.rail button span{color:#b7a47f}
+.scene-hint{font-size:11px;line-height:1.5;letter-spacing:.04em;color:#ddd0b5;max-width:470px}
+.scene-caption{max-width:560px;padding:14px 18px;background:linear-gradient(90deg,rgba(8,11,8,.65),rgba(8,11,8,.15),transparent);border-left:1px solid rgba(229,204,141,.3)}
+.scene-caption .eyebrow,.panel-kicker{font-size:10px;letter-spacing:.2em}
+.world-status{font-size:9px;color:#ded3bd;top:76px}
+.room-card small{font-size:10px}
+.reveal-btn[aria-pressed=true]{border-color:var(--gold2);color:var(--cream)}
+.hotspot:focus-visible::before,.first-discovery::before{border-color:var(--gold2);background:rgba(229,204,141,.12);box-shadow:0 0 25px rgba(229,204,141,.15)}
+body.discover .hotspot::after,.hotspot:focus-visible::after,.first-discovery::after{content:attr(aria-label);width:max-content;max-width:180px;height:auto;bottom:0;padding:6px 9px;border:1px solid rgba(229,204,141,.4);background:rgba(10,13,9,.9);font:10px/1.4 "DM Sans",sans-serif;letter-spacing:.08em;color:var(--cream)}
+.toast{font-size:11px;max-width:calc(100vw - 32px);text-align:center;white-space:normal}
+.mobile-control,.mobile-rooms{display:none}
+.room-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.room-grid button{min-height:64px;border:1px solid var(--line);background:#151a13;color:var(--cream);text-align:left;padding:12px;cursor:pointer;font-size:12px;letter-spacing:.08em}
+.room-grid button span{display:block;font-size:10px;color:#bba273;margin-bottom:5px}
+.room-grid button[aria-current]{border-color:var(--gold2);background:#272a1d}
+.boot{overflow:auto;padding:20px 0}
+.boot-card .primary{min-height:48px;font-size:11px}
+.boot-world small{font-size:9px;color:#c4b79c}
+.boot-world strong{font-size:11px}
+.boot-return{font-size:9px!important;color:#c4b79c!important}
+@media(min-width:881px) and (max-height:760px){
+  .rail{top:104px;gap:0}
+  .rail button{min-height:28px;padding-top:5px;padding-bottom:5px}
+  .scene-caption{left:190px;bottom:28px}
+  .scene-caption h2{font-size:44px}
+}
+@media(max-width:880px){
+  .topbar{align-items:center;padding:calc(10px + env(safe-area-inset-top)) 12px 8px}
+  .brand{min-height:44px}
+  .mobile-control{display:block;pointer-events:auto;font-size:10px;padding:10px 12px}
+  .rail{display:none}
+  .mobile-rooms{display:flex;align-items:center;justify-content:space-between;gap:12px;position:absolute;z-index:48;bottom:0;left:0;right:0;width:100%;height:calc(var(--mobile-nav-h) + env(safe-area-inset-bottom));padding:10px 18px calc(10px + env(safe-area-inset-bottom));border:0;border-top:1px solid var(--line);background:rgba(9,13,9,.96);color:var(--cream);cursor:pointer}
+  .mobile-rooms span{font-size:10px;letter-spacing:.15em;color:#d0b780}
+  .mobile-rooms strong{font:17px "Playfair Display",serif;font-weight:500}
+  #controlsPanel .top-actions{display:grid;grid-template-columns:1fr 1fr;overflow:visible;max-width:none;padding:0;margin:18px 0 10px;gap:10px}
+  #controlsPanel .glass-btn{font-size:11px;min-height:48px;white-space:normal;text-align:left;padding:12px}
+  #controlsPanel>.glass-btn{width:100%}
+  .world-status{top:calc(70px + env(safe-area-inset-top));font-size:8px}
+  .scene-caption{left:14px;right:14px;max-width:none;padding:12px 13px}
+  .scene-caption h2{font-size:30px}
+  .scene-caption .eyebrow{font-size:8px}
+  .scene-caption p{font-size:13px;line-height:1.45;-webkit-line-clamp:3;max-width:100%}
+  .mobile-interaction{min-width:150px;max-width:190px;height:64px}
+  .mobile-interaction strong{font-size:13px}
+  .mobile-interaction span{font-size:10px;max-width:165px}
+  .mobile-interaction-kicker{font-size:8px}
+  .mobile-interaction-scroll{padding-bottom:4px;scrollbar-width:thin;scrollbar-color:#9f8a5e transparent}
+  .mobile-interaction-scroll::-webkit-scrollbar{display:block;height:3px}
+  .mobile-interaction-scroll::-webkit-scrollbar-thumb{background:#9f8a5e}
+  .panel p{font-size:14px}
+  .toast{white-space:normal}
+  .boot-card{margin:auto}
+  .boot-card h1{font-size:32px}
+  .boot-world div{padding:8px 10px}
+}
+@media(max-width:880px) and (max-height:500px){
+  .scene-caption{max-width:48vw;bottom:calc(var(--mobile-nav-h) + var(--mobile-interact-h) + 4px);padding:6px 10px}
+  .scene-caption h2{font-size:23px}
+  .scene-caption p{display:none}
+  .mobile-interaction{height:48px}
+  .world-status{display:none}
+}
+body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+
+body[data-scene="estate"] .hotspot[aria-label="WEST GROUNDS"]::after,body[data-scene="estate"] .hotspot[aria-label="EAST DRIVE"]::after{top:8px;bottom:auto}
+
+.panel-action,.weather-grid button{min-height:44px;font-size:11px}
+.panel .credits-copy{font-size:12px!important;line-height:1.6;color:#bdb39f!important}

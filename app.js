@@ -16,7 +16,7 @@ const IMG={
 const scenes={
   estate:{
     title:"The estate.",eye:"WELLS / ESTATE",copy:"A private world built from places, skills, machines, memories, and things still worth doing.",
-    hint:"Start with the house, then follow the grounds. Hold D to reveal the interaction zones.",
+    hint:"Start at the front door. Show interactions to find your next discovery, or hold D for a quick look.",
     bg:IMG.estate,
     bgPos:"center center",
     bgPosMobile:"center center",
@@ -187,33 +187,35 @@ const items=[
 const ideas=["70.3 Worlds / Kona pursuit","3-day expedition race","Mongolia moto","Pilot license","St. Moritz winter","BVI sailing passage","Via Ferrata","Blacksmith a blade","Adventure race","Backcountry ski tour","Track race license","Liveaboard wreck diving"];
 const suits=[["DINNER JACKET","♟"],["RACE SUIT","◫"],["SKI KIT","⛷"],["WETSUIT","◉"],["WESTERN","♞"],["SPIDER SUIT","◒"]];
 
+const savedCollection=WellsStorage.readJSON("wells.collection",[]);
+const savedIdeas=WellsStorage.readJSON("wells.ideas",{});
+const motionPreference=matchMedia("(prefers-reduced-motion: reduce)");
 const state={
   scene:"estate",
-  found:new Set(JSON.parse(localStorage.getItem("wells.collection")||"[]")),
-  ideas:JSON.parse(localStorage.getItem("wells.ideas")||"{}"),
-  suit:localStorage.getItem("wells.outfit")||"DINNER JACKET",
-  season:localStorage.getItem("wells.season")||"autumn",
-  storm:localStorage.getItem("wells.storm")==="true",
+  found:new Set(Array.isArray(savedCollection)?savedCollection.filter(id=>items.some(item=>item[0]===id)):[]),
+  ideas:savedIdeas && typeof savedIdeas==="object" && !Array.isArray(savedIdeas)?savedIdeas:{},
+  suit:WellsStorage.getItem("wells.outfit")||"DINNER JACKET",
+  season:WellsStorage.getItem("wells.season")||"autumn",
+  storm:WellsStorage.getItem("wells.storm")==="true",
   sound:false,
-  reduce:localStorage.getItem("wells.reduceMotion")==="true",
+  reduce:WellsStorage.getItem("wells.reduceMotion")===null?motionPreference.matches:WellsStorage.getItem("wells.reduceMotion")==="true",
   driveX:50,
   speed:72
 };
 
 function save(){
-  localStorage.setItem("wells.collection",JSON.stringify([...state.found]));
-  localStorage.setItem("wells.ideas",JSON.stringify(state.ideas));
-  localStorage.setItem("wells.outfit",state.suit);
-  localStorage.setItem("wells.season",state.season);
-  localStorage.setItem("wells.storm",String(state.storm));
-  localStorage.setItem("wells.reduceMotion",String(state.reduce));
+  WellsStorage.setItem("wells.collection",JSON.stringify([...state.found]));
+  WellsStorage.setItem("wells.ideas",JSON.stringify(state.ideas));
+  WellsStorage.setItem("wells.outfit",state.suit);
+  WellsStorage.setItem("wells.season",state.season);
+  WellsStorage.setItem("wells.storm",String(state.storm));
 }
 
 function toast(t){
   const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),1800);
 }
-function closePanels(){$$(".panel").forEach(p=>p.classList.remove("open"))}
-function openPanel(id){closePanels();$("#"+id+"Panel").classList.add("open")}
+function closePanels(){$$(".panel").forEach(p=>WellsUI.close(p))}
+function openPanel(id){WellsUI.open($("#"+id+"Panel"))}
 function info(eye,title,html){$("#infoEyebrow").textContent=eye;$("#infoTitle").textContent=title;$("#infoBody").innerHTML=html;openPanel("info")}
 
 function collect(id){
@@ -235,13 +237,13 @@ function renderIdeas(){
   }).join("");
   $$("[data-idea]").forEach(b=>b.onclick=()=>{
     const n=b.dataset.idea,cur=state.ideas[n]||"IDEA",next=statuses[(statuses.indexOf(cur)+1)%statuses.length];
-    state.ideas[n]=next;save();renderIdeas();toast(n+" — "+next);
+    state.ideas[n]=next;save();renderIdeas();$$("[data-idea]").find(card=>card.dataset.idea===n)?.focus();toast(n+" — "+next);
   });
 }
 function renderSuits(){
   $("#currentSuit").textContent="CURRENT: "+state.suit;
   $("#suitGrid").innerHTML=suits.map(([n,ic])=>'<button class="suit '+(state.suit===n?"on":"")+'" data-suit="'+n+'"><div class="icon">'+ic+'</div><strong>'+n+'</strong></button>').join("");
-  $$("[data-suit]").forEach(b=>b.onclick=()=>{state.suit=b.dataset.suit;save();renderSuits();toast("SUITED — "+state.suit);if(state.suit==="SPIDER SUIT")collect("spider-mask")});
+  $$("[data-suit]").forEach(b=>b.onclick=()=>{state.suit=b.dataset.suit;save();renderSuits();$$("[data-suit]").find(card=>card.dataset.suit===state.suit)?.focus();toast("SUITED — "+state.suit);if(state.suit==="SPIDER SUIT")collect("spider-mask")});
 }
 
 function sceneTo(name,instant=false){
@@ -416,14 +418,19 @@ function toggleSound(){
 }
 
 function parallax(e){
-  if(state.reduce)return;
+  if(state.reduce || matchMedia("(pointer: coarse)").matches)return;
   const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);
   $("#sceneBg").style.transform="scale(1.065) translate("+(-x*10)+"px,"+(-y*7)+"px)";
   $(".depth-a").style.transform="translate("+(x*8)+"px,"+(y*5)+"px)";
   $(".depth-b").style.transform="translate("+(-x*5)+"px,"+(-y*3)+"px)";
 }
 
-$("#enterBtn").onclick=()=>{$("#boot").classList.add("hide");setTimeout(()=>$("#boot").remove(),950)}
+$("#enterBtn").onclick=()=>{
+  const boot=$("#boot");WellsUI.close(boot);boot.classList.add("hide");
+  $("#sceneTitle").focus({preventScroll:true});
+  setTimeout(()=>boot.remove(),state.reduce?0:950);
+  if(!WellsStorage.available)toast("Progress is available for this visit only.");
+}
 $("#brandBtn").onclick=()=>sceneTo("estate");
 $$("[data-nav]").forEach(b=>b.onclick=()=>sceneTo(b.dataset.nav));
 $("#soundBtn").onclick=toggleSound;
@@ -435,25 +442,32 @@ $("#settingsBtn").onclick=()=>openPanel("settings");
 $$("[data-close]").forEach(b=>b.onclick=closePanels);
 Array.from(document.querySelectorAll("#weatherPanel [data-season]")).forEach(b=>b.onclick=e=>{e.stopPropagation();state.season=b.dataset.season;applyWeather();toast("SEASON — "+state.season.toUpperCase())});
 $("#stormBtn").onclick=()=>{state.storm=!state.storm;applyWeather();toast(state.storm?"STORM FRONT MOVING IN":"STORM CLEARED")};
-$("#reduceMotionBtn").onclick=()=>{state.reduce=!state.reduce;document.body.classList.toggle("reduce-motion",state.reduce);$("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");save()};
-$("#resetBtn").onclick=()=>{["wells.collection","wells.ideas","wells.outfit","wells.season","wells.storm","wells.reduceMotion"].forEach(k=>localStorage.removeItem(k));location.reload()};
-$("#revealBtn").onpointerdown=()=>document.body.classList.add("discover");
-$("#revealBtn").onpointerup=$("#revealBtn").onpointerleave=()=>document.body.classList.remove("discover");
+$("#reduceMotionBtn").onclick=()=>{state.reduce=!state.reduce;document.body.classList.toggle("reduce-motion",state.reduce);$("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");WellsStorage.setItem("wells.reduceMotion",String(state.reduce));save()};
+$("#resetBtn").onclick=()=>{["wells.collection","wells.ideas","wells.outfit","wells.season","wells.storm","wells.reduceMotion"].forEach(k=>WellsStorage.removeItem(k));location.reload()};
+let revealPinned=false,revealHeld=false;
+function syncReveal(){
+  const active=revealPinned||revealHeld;
+  document.body.classList.toggle("discover",active);
+  $("#revealBtn").setAttribute("aria-pressed",String(active));
+  $("#revealBtn").textContent=active?"HIDE INTERACTIONS":"SHOW INTERACTIONS";
+}
+$("#revealBtn").onclick=()=>{revealPinned=!revealPinned;syncReveal()};
 $("#driveExit").onclick=()=>$("#driveOverlay").classList.remove("open");
 addEventListener("mousemove",parallax);
 addEventListener("keydown",e=>{
-  if(e.key.toLowerCase()==="d" && !$("#driveOverlay").classList.contains("open"))document.body.classList.add("discover");
-  if(!$("#driveOverlay").classList.contains("open"))return;
-  const k=e.key.toLowerCase();
-  if(k==="a"||e.key==="ArrowLeft")state.driveX=Math.max(34,state.driveX-3);
-  if(k==="d"||e.key==="ArrowRight")state.driveX=Math.min(66,state.driveX+3);
-  if(k==="w"||e.key==="ArrowUp")state.speed=Math.min(140,state.speed+2);
-  if(k==="s"||e.key==="ArrowDown")state.speed=Math.max(35,state.speed-2);
-  $("#driveLaneCar").style.left=state.driveX+"%";$("#driveSpeed").textContent=state.speed;
+  if(e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.target.closest("input,textarea,select,[contenteditable]"))return;
+  if(e.key.toLowerCase()==="d" && !document.querySelector(".panel.open,.estate-system-overlay.open,.drive-overlay.open,.moto-overlay.open") && !$("#boot")){
+    revealHeld=true;syncReveal();
+  }
 });
-
+addEventListener("keyup",e=>{if(e.key.toLowerCase()==="d"){revealHeld=false;syncReveal()}});
+addEventListener("blur",()=>{revealHeld=false;syncReveal()});
+motionPreference.addEventListener("change",e=>{
+  if(WellsStorage.getItem("wells.reduceMotion")!==null)return;
+  state.reduce=e.matches;document.body.classList.toggle("reduce-motion",state.reduce);
+  $("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");
+});
 renderCollection();renderIdeas();renderSuits();applyWeather();
 document.body.classList.toggle("reduce-motion",state.reduce);
 $("#reduceMotionBtn").textContent="MOTION — "+(state.reduce?"REDUCED":"FULL");
 sceneTo("estate",true);
-addEventListener("keyup",e=>{if(e.key.toLowerCase()==="d")document.body.classList.remove("discover")});

@@ -8,11 +8,11 @@
     return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   };
   const nowISO=()=>new Date().toISOString();
-  const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')||{}}catch(e){return {}}};
+  const read=()=>{try{return JSON.parse(WellsStorage.getItem(KEY)||'null')||{}}catch(e){return {}}};
   const sys=Object.assign({lights:{},customPins:[],journal:[],moonWins:[],clockChimes:0,pinOverrides:{},hiddenPins:[]},read());
   sys.lights=sys.lights||{};sys.customPins=sys.customPins||[];sys.journal=sys.journal||[];sys.moonWins=sys.moonWins||[];
   sys.pinOverrides=sys.pinOverrides||{};sys.hiddenPins=sys.hiddenPins||[];
-  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(sys))}catch(e){}};
+  const save=()=>{try{WellsStorage.setItem(KEY,JSON.stringify(sys))}catch(e){}};
   const hash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
   const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
   const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -25,9 +25,9 @@
     if(sys.journal.length>240)sys.journal=sys.journal.slice(-240);
     save();
   }
-  if(!sessionStorage.getItem(SESSION)){
+  if(!WellsSession.getItem(SESSION)){
     log(sys.journal.length?'return':'arrival',sys.journal.length?'Returned to the estate':'First arrival at the estate',document.querySelector('#bootWeather')?.textContent||'');
-    try{sessionStorage.setItem(SESSION,today())}catch(e){}
+    try{WellsSession.setItem(SESSION,today())}catch(e){}
   }
 
   const corePins=[
@@ -122,7 +122,7 @@
   const journal=shell('journalPanel','panel journal-panel',`
     <button class="panel-close" data-journal-close>×</button>
     <div class="panel-kicker">THE STUDY / VISITOR NOTEBOOK</div>
-    <h3>Estate log.</h3>
+    <h3>Estate log.</h3><p>Your private notebook. Notes and discoveries stay in this browser.</p>
     <div class="journal-book">
       <div class="journal-date" id="journalDate"></div>
       <div id="journalEntries" class="journal-entries"></div>
@@ -170,8 +170,8 @@
     if(s)s.style.transform='translateX(-50%) rotate('+(sec*6)+'deg)';
     if(face)face.setAttribute('aria-label','Estate clock — '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}));
     const key=today()+'-'+d.getHours();
-    if(d.getMinutes()===0&&d.getSeconds()<2&&sessionStorage.getItem('wells.clock.chime')!==key){
-      sessionStorage.setItem('wells.clock.chime',key);face?.classList.add('chiming');setTimeout(()=>face?.classList.remove('chiming'),1700);
+    if(d.getMinutes()===0&&d.getSeconds()<2&&WellsSession.getItem('wells.clock.chime')!==key){
+      WellsSession.setItem('wells.clock.chime',key);face?.classList.add('chiming');setTimeout(()=>face?.classList.remove('chiming'),1700);
       if(state.sound)playClockChime();
       log('clock','The manor clock struck '+d.toLocaleTimeString([],{hour:'numeric'}));
     }
@@ -453,7 +453,7 @@
     q('#journalPrev').disabled=journalPage===0;q('#journalNext').disabled=journalPage===groups.length-1;
   }
   function openJournal(){
-    closePanels();journal.classList.add('open');journalPage=Math.max(0,groupedJournal().length-1);renderJournal();
+    WellsUI.open(journal);journalPage=Math.max(0,groupedJournal().length-1);renderJournal();
   }
   journalBtn.onclick=openJournal;
   q('[data-journal-close]').onclick=()=>journal.classList.remove('open');
@@ -488,12 +488,12 @@
     if(actionNames[a])log('interaction',actionNames[a]);
     return baseDo(a);
   };
-  const baseScene=sceneTo;
-  sceneTo=function(name,instant=false){
-    closeOverlay(mapOverlay);closeOverlay(obs);journal.classList.remove('open');
-    baseScene(name,instant);
-    setTimeout(()=>{renderSystems();if(!instant)log('room','Entered '+(scenes[name]?.title||name).replace(/\.$/,''))},instant?0:470);
-  };
+  addEventListener('estate:before-scene',()=>{
+    closeOverlay(mapOverlay);closeOverlay(obs);WellsUI.close(journal);
+  });
+  addEventListener('estate:scene',({detail:{name,instant}})=>{
+    renderSystems();if(!instant)log('room','Entered '+scenes[name].title.replace(/\.$/,''));
+  });
 
   // Current scene was rendered before this script loaded.
   renderSystems();
@@ -501,9 +501,10 @@
 
   const reset=q('#resetBtn');
   if(reset)reset.onclick=()=>{
-    ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion','wells.living.v1','wells.driveBest',KEY]
-      .forEach(k=>localStorage.removeItem(k));
-    try{sessionStorage.clear()}catch(e){}
+    if(!confirm('Reset your collection, notebook, custom map pins, preferences, and game scores in this browser? This cannot be undone.'))return;
+    ['wells.collection','wells.ideas','wells.outfit','wells.season','wells.storm','wells.reduceMotion','wells.living.v1','wells.driveBest','wells.motoBest',KEY]
+      .forEach(k=>WellsStorage.removeItem(k));
+    try{[SESSION,'wells.clock.chime','wells.living.session','wells.raven.gone','wells.event.manor','wells.event.window'].forEach(k=>WellsSession.removeItem(k))}catch(e){}
     location.reload();
   };
 

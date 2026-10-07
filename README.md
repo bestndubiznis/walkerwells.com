@@ -97,3 +97,18 @@ The second interactive systems layer deepens the estate without replacing the sc
 - tangible controls throughout the new systems: draggable pins, a focus wheel, light dimmers, physical notebook, telescope and manor clock
 
 Persistent Estate Systems data is stored locally in the browser under `wells.systems.v2`. The original map-room artwork and its existing hotspots remain intact.
+
+### Navigation and accessibility
+
+- Room URLs use fragments (for example `/#study`) and work with browser Back and Forward.
+- `enhancements.js` owns cancellable room transitions. `estate:before-scene` cancels old room work; `estate:scene` synchronizes lighting, atmosphere, the journal, and navigation after a room renders.
+- `estate-ui.js` manages dialog focus, Escape, hidden content, the phone room picker, and Estate Controls. Existing game overlays participate in the same lifecycle.
+- Show Interactions toggles discovery labels; holding D provides a temporary reveal outside forms and games.
+- Motion follows the operating system until a visitor explicitly changes it in Settings.
+- `storage.js` keeps the estate usable if browser storage is unavailable. Visitor notes and progress remain local to the browser; blocked storage falls back to the current visit.
+
+### Verification
+
+Run `node --test tests/*.test.cjs` for storage regression checks and `node --check` on changed JavaScript files. Preview with `python3 -m http.server 4173 --bind 127.0.0.1`.
+
+Browser smoke checks: enter the estate; rapidly switch rooms; use Back and Forward; reload a room link; open and close panels with Escape; cycle Tab in a panel; type D in the journal; use phone Rooms and Estate Controls; launch and exit both garage games.

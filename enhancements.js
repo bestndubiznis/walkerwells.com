@@ -3,13 +3,14 @@
   const $q=s=>document.querySelector(s), $$q=s=>Array.from(document.querySelectorAll(s));
   const timers=[];
   const later=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
+  addEventListener('estate:before-scene',()=>{while(timers.length)clearTimeout(timers.pop())});
 
   IMG.manor="/assets/scenes/manor-cinematic-hq.webp?v=hq2";
   IMG.nyc="/assets/scenes/nyc-christmas-hq.webp?v=hq2";
   IMG.archive="/assets/scenes/archive-hq.webp?v=archive2";
   IMG.map="/assets/scenes/map-room-hq.webp?v=map2";
   IMG.camp="/assets/scenes/camp-hq.webp?v=camp2";
-  [IMG.manor,IMG.nyc,IMG.archive,IMG.map,IMG.camp].forEach(src=>{const im=new Image();im.src=src});
+
 
   scenes.manor={
     title:"The manor.",
@@ -131,7 +132,33 @@
   };
   function renderProps(s){const layer=$q('#propLayer');if(!layer)return;layer.innerHTML=(s.props||[]).map((p,i)=>`<button class="scene-prop ${p.type}" data-prop="${i}" style="left:${p.x}%;top:${p.y}%" aria-label="${p.label}"></button>`).join('');$$q('[data-prop]').forEach(b=>{const p=s.props[+b.dataset.prop];b.onmouseenter=e=>showRoomCard(e,{label:p.label,sub:"Click to interact"});b.onmouseleave=hideRoomCard;b.onclick=()=>doAction(p.action)})}
 
-  sceneTo=function(name,instant=false){const s=scenes[name];if(!s)return;closePanels();const go=()=>{state.scene=name;document.body.dataset.scene=name;$q('#sceneBg').style.backgroundImage=`url("${s.bg}")`;$q('#sceneBg').style.backgroundPosition=bgPos(s);$q('#sceneEyebrow').textContent=s.eye;$q('#sceneTitle').textContent=s.title;$q('#sceneCopy').textContent=s.copy;$q('#sceneHint').textContent=s.hint;$$q('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));renderHotspots(s);renderProps(s);document.body.dataset.season=state.season;document.body.dataset.storm=String(state.storm);later(()=>$q('#transition').classList.remove('on'),60)};if(instant){go();return}$q('#transition').classList.add('on');later(go,420)};
+  let sceneTimer,transitionTimer;
+  sceneTo=function(name,instant=false){
+    const s=scenes[name];if(!s)return;
+    clearTimeout(sceneTimer);clearTimeout(transitionTimer);
+    closePanels();hideRoomCard();
+    const detail={name,from:state.scene,instant};
+    dispatchEvent(new CustomEvent('estate:before-scene',{detail}));
+    const go=()=>{
+      state.scene=name;document.body.dataset.scene=name;
+      $q('#sceneBg').style.backgroundImage=`url("${s.bg}")`;
+      $q('#sceneBg').style.backgroundPosition=bgPos(s);
+      $q('#sceneEyebrow').textContent=s.eye;$q('#sceneTitle').textContent=s.title;
+      $q('#sceneCopy').textContent=s.copy;$q('#sceneHint').textContent=s.hint;
+      $$q('[data-nav]').forEach(b=>{
+        b.classList.toggle('active',b.dataset.nav===name);
+        if(b.dataset.nav===name)b.setAttribute('aria-current','location');else b.removeAttribute('aria-current');
+      });
+      renderHotspots(s);renderProps(s);
+      document.body.dataset.season=state.season;document.body.dataset.storm=String(state.storm);
+      dispatchEvent(new CustomEvent('estate:scene',{detail}));
+      transitionTimer=setTimeout(()=>{
+        $q('#transition').classList.remove('on','living-travel');
+      },state.reduce?0:60);
+    };
+    if(instant||state.reduce){go();return}
+    $q('#transition').classList.add('on');sceneTimer=setTimeout(go,420);
+  };
   addEventListener('resize',()=>{const s=scenes[state.scene];if(s){$q('#sceneBg').style.backgroundPosition=bgPos(s);renderHotspots(s)}});
 
   function playTone(note,duration=.28){try{const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)()),freq={C:261.63,D:293.66,E:329.63,F:349.23,G:392,A:440,B:493.88}[note]||330,o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=freq;g.gain.setValueAtTime(.0001,ac.currentTime);g.gain.exponentialRampToValueAtTime(.12,ac.currentTime+.01);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+duration);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+duration+.03)}catch(e){}}
@@ -619,7 +646,7 @@
   function updateDriveHud(){
     $q('#driveTimer').textContent=driveElapsed.toFixed(1);
     $q('#driveScore').textContent=Math.floor(drivePoints);
-    $q('#driveBest').textContent=Number(localStorage.getItem('wells.driveBest')||0);
+    $q('#driveBest').textContent=Number(WellsStorage.getItem('wells.driveBest')||0);
     $q('#driveSpeed').textContent=Math.round(state.speed);
     $q('#driveSpeedSmall').textContent=Math.round(state.speed);
     $q('#driveLevel').textContent=driveLevel;
@@ -628,8 +655,8 @@
     if(!driveRunning)return;
     driveRunning=false;cancelAnimationFrame(driveRAF);
     const score=Math.floor(drivePoints),secs=driveElapsed.toFixed(1);
-    const best=Math.max(score,Number(localStorage.getItem('wells.driveBest')||0));
-    localStorage.setItem('wells.driveBest',String(best));
+    const best=Math.max(score,Number(WellsStorage.getItem('wells.driveBest')||0));
+    WellsStorage.setItem('wells.driveBest',String(best));
     $q('#driveOverlay').classList.add('hit');
     later(()=>$q('#driveOverlay').classList.remove('hit'),300);
     later(()=>{
