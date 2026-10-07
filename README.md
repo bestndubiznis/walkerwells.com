@@ -114,6 +114,13 @@ Persistent Estate Systems data is stored locally in the browser under `wells.sys
 - The campfire accepts dragged or tapped logs, grows warmer, releases embers, and remembers its warmth in the clearing.
 - `encounter-rules.js` isolates deterministic progression; `encounters.js` owns interaction lifecycles and cancels animation and observers when closed. Progress uses `wells.encounters.v1` and participates in Reset Progress.
 
+### Garage games
+
+- Ferrari and Aston Martin road runs now have perspective scenery, bends, distinct handling, cruise/gas/brake controls, traffic, close-pass multipliers, three-contact tolerance, and a three-kilometre finish. Checkpoints add time.
+- The dirt-bike trail separates throttle and airborne lean, with landing assistance when lean is released, jump signs, clean-landing and flip scores, and a finish line. Failed gaps end the run instead of allowing an endless fall.
+- Both use the shared `garage-games.js` controller, `garage-games.css`, and deterministic `garage-physics.js`. They provide start instructions, pause/resume, immediate replay, held touch controls, keyboard controls, and automatic pause when the page loses focus. Audio and inputs are released on pause or exit.
+- Best scores are stored per vehicle/trail under `wells.garage.v2`; the old scores are retained separately because the scoring systems differ. The previous `moto.js` is no longer loaded.
+
 ### Verification
 
 Run `node --test tests/*.test.cjs` for storage and encounter regression checks and `node --check` on changed JavaScript files. Preview with `python3 -m http.server 4173 --bind 127.0.0.1`.
