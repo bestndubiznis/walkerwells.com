@@ -80,3 +80,4 @@ body[data-scene="estate"] .hotspot[aria-label="WEST GROUNDS"]::after,body[data-s
 
 .panel-action,.weather-grid button{min-height:44px;font-size:11px}
 .panel .credits-copy{font-size:12px!important;line-height:1.6;color:#bdb39f!important}
+@media(min-width:881px){.scene-caption{left:max(190px,7vw)}}
