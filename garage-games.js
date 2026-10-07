@@ -4,21 +4,23 @@
   let session=null;
   const savedRecords=WellsStorage.readJSON(KEY,{});
   const records=savedRecords&&typeof savedRecords==='object'&&!Array.isArray(savedRecords)?savedRecords:{};
-  function saveBest(s){const key=s.kind==='road'?s.mode:'trail';records[key]=Math.max(Number(records[key])||0,Math.floor(s.game.score));WellsStorage.setItem(KEY,JSON.stringify(records));return records[key]}
+  const recordKey=s=>s.kind==='road'?s.mode+':endless':'trail';
+  const duration=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+  function saveBest(s){const key=recordKey(s);records[key]=Math.max(Number(records[key])||0,Math.floor(s.game.score));WellsStorage.setItem(KEY,JSON.stringify(records));return records[key]}
   function silence(s){if(s.engine){try{s.engine.osc.stop();s.engine.gain.disconnect()}catch{}s.engine=null}}
   function engine(s){
     if(!state.sound||s.engine)return;
     try{const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)());ac.resume();const osc=ac.createOscillator(),gain=ac.createGain();osc.type='sawtooth';gain.gain.value=.012;osc.connect(gain);gain.connect(ac.destination);osc.start();s.engine={osc,gain,ac}}catch{}
   }
   function clearInput(s){s.keys.clear();s.pointers.clear();s.el.querySelectorAll('[data-input]').forEach(b=>b.classList.remove('held'))}
-  function close(){if(!session)return;const s=session;session=null;cancelAnimationFrame(s.raf);s.resize.disconnect();silence(s);clearInput(s);WellsUI.close(s.el);s.el.remove()}
+  function close(){if(!session)return;const s=session;if(s.game.score>0)saveBest(s);session=null;cancelAnimationFrame(s.raf);s.resize.disconnect();silence(s);clearInput(s);WellsUI.close(s.el);s.el.remove()}
   function open(kind,mode='race'){
     close();closePanels();
     const cfg=P.cars[mode]||P.cars.race;
     const el=document.createElement('section');el.className=(kind==='road'?'drive-overlay':'moto-overlay')+' garage-run';el.id='garageRun';
     el.innerHTML=`<canvas class="garage-canvas" tabindex="0" aria-label="${kind==='road'?'Road driving':'Dirt bike'} game. Controls are described in the instructions."></canvas>
       <header class="run-header"><div><small>W / GARAGE</small><strong>${kind==='road'?cfg.name:'DIRT BIKE'}</strong></div><nav><button data-sound>SOUND — ${state.sound?'ON':'OFF'}</button><button data-pause disabled>PAUSE</button><button data-ui-close>EXIT ×</button></nav></header>
-      <div class="run-hud"><div><small>SCORE</small><strong data-score>000000</strong></div><div class="run-progress"><div><span>${kind==='road'?cfg.route:'RIDGELINE TRAIL'}</span><b data-distance>0 / ${kind==='road'?'3,000':'369'} M</b></div><i><em></em></i></div><div><small>${kind==='road'?'TIME LEFT':'BEST'}</small><strong data-clock>—</strong></div></div>
+      <div class="run-hud"><div><small>SCORE</small><strong data-score>000000</strong><small data-best></small></div><div class="run-progress"><div><span data-pace>${kind==='road'?'PACE 1 · 0:00':'RIDGELINE TRAIL'}</span><b data-distance>${kind==='road'?'0 M':'0 / 369 M'}</b></div><i><em></em></i></div><div><small>${kind==='road'?'TIME LEFT':'BEST'}</small><strong data-clock>—</strong></div></div>
       <div class="run-callout" role="status" aria-live="polite"></div>
       <div class="run-dashboard"><div class="run-speed"><strong data-speed>0</strong><small>${kind==='road'?'MPH':'KM/H'}</small></div><div class="run-condition"><span data-condition></span><small data-tip></small></div></div>
       <div class="run-controls">${kind==='road'?'<div><button data-input="left" aria-label="Steer left">←<small>A / ←</small></button><button data-input="right" aria-label="Steer right">→<small>D / →</small></button></div><div><button data-input="brake">BRAKE<small>S / ↓</small></button><button data-input="gas" class="gas">GAS<small>W / ↑</small></button></div>':'<div><button data-input="left" aria-label="Lean back">↶<small>LEAN BACK</small></button><button data-input="right" aria-label="Lean forward">↷<small>LEAN FORWARD</small></button></div><div><button data-input="brake">BRAKE<small>S / ↓</small></button><button data-input="gas" class="gas">GAS<small>SPACE / ↑</small></button></div>'}</div>
@@ -35,7 +37,7 @@
       clearInput(s);s.last=0;s.accumulator=0;card(s);s.canvas.focus();engine(s);
       collect(kind==='road'?'road-key':'race-token');
     };
-    el.querySelector('[data-retry]').onclick=()=>{s.game=kind==='road'?new P.RoadRun(mode):new P.TrailRun();clearInput(s);silence(s);card(s)};
+    el.querySelector('[data-retry]').onclick=()=>{if(s.game.score>0)saveBest(s);s.game=kind==='road'?new P.RoadRun(mode):new P.TrailRun();clearInput(s);silence(s);card(s)};
     el.querySelectorAll('[data-input]').forEach(button=>{
       button.onpointerdown=e=>{if(s.game.phase!=='running')return;e.preventDefault();button.setPointerCapture(e.pointerId);s.pointers.set(e.pointerId,button.dataset.input);button.classList.add('held')};
       const release=e=>{s.pointers.delete(e.pointerId);button.classList.remove('held')};button.onpointerup=release;button.onpointercancel=release;button.onlostpointercapture=release;
@@ -62,24 +64,28 @@
     const el=s.el,g=s.game,phase=g.phase,box=el.querySelector('.run-card');box.hidden=phase==='running';el.dataset.phase=phase;
     el.querySelector('[data-pause]').disabled=phase!=='running';
     if(phase==='running')return;
-    el.querySelector('[data-card-kicker]').textContent=phase==='paused'?'TAKE YOUR TIME':phase==='finished'?(g.won?'ROUTE COMPLETE':'RUN OVER'):s.kind==='road'?'THREE KILOMETRES / YOUR OWN PACE':'A LITTLE AIR / A LITTLE BALANCE';
+    el.querySelector('[data-card-kicker]').textContent=phase==='paused'?'TAKE YOUR TIME':phase==='finished'?(g.won?'ROUTE COMPLETE':'RUN OVER'):s.kind==='road'?'ENDLESS / BEAT THE CLOCK':'A LITTLE AIR / A LITTLE BALANCE';
     el.querySelector('h2').textContent=phase==='paused'?'Parked for a moment.':phase==='finished'?g.reason:s.kind==='road'?s.cfg.title:'Find your flow.';
-    el.querySelector('[data-card-copy]').textContent=phase==='paused'?'Your run is right where you left it.':phase==='finished'?(g.won?'One more run? There is always a cleaner line.':s.kind==='road'?'Try a cleaner line. Brake early, look ahead, and give yourself room.':'Keep the gas on approaching gaps. Release lean before touchdown to steady the bike.'):s.kind==='road'?'Cruise automatically, hold gas to push harder, and brake for traffic. Follow the bends. Close passes build a score multiplier. Checkpoints add time; three contacts end the run.':'The bike cruises for you. Hold gas for the gaps. Lean back or forward in the air; release both to steady the bike. Land on your wheels, link jumps, and bring it home. Flips are optional.';
+    el.querySelector('[data-card-copy]').textContent=phase==='paused'?'Your run is right where you left it.':phase==='finished'?(g.won?'One more run? There is always a cleaner line.':s.kind==='road'?'You lasted '+duration(g.elapsed)+'. Traffic gets faster the longer you survive. Find a cleaner line and beat your best.':'Keep the gas on approaching gaps. A wheel-first landing can be saved—release lean to settle, or counter-steer.'):s.kind==='road'?'Keep the clock alive. Every 750 metres, a checkpoint adds 18 seconds. There is always another checkpoint—and faster traffic. Close passes multiply your score. Run out of time or take three hits, and the run ends.':'The bike cruises for you. Hold gas for the gaps. Lean back or forward in the air; release both to steady the bike. Either wheel can catch a landing. Balance it out, link jumps, and bring it home. Flips are optional.';
     el.querySelector('[data-start]').textContent=phase==='paused'?'RESUME RUN →':phase==='finished'?'RUN IT AGAIN →':s.kind==='road'?'START ENGINE →':'HIT THE TRAIL →';
     el.querySelector('[data-retry]').hidden=phase!=='paused';
     const stats=el.querySelector('.run-stats');stats.hidden=phase!=='finished';
     hud(s);render(s);
-    if(phase==='finished')stats.innerHTML=`<span>SCORE<b>${Math.floor(g.score).toLocaleString()}</b></span><span>BEST<b>${Number(records[s.kind==='road'?s.mode:'trail']||0).toLocaleString()}</b></span><span>${s.kind==='road'?'CLOSE PASSES':'FLIPS'}<b>${s.kind==='road'?g.near:g.flips}</b></span>`;
+    if(phase==='finished')stats.innerHTML=`<span>SCORE<b>${Math.floor(g.score).toLocaleString()}</b></span><span>BEST<b>${Number(records[recordKey(s)]||0).toLocaleString()}</b></span><span>${s.kind==='road'?'CLOSE PASSES':'FLIPS'}<b>${s.kind==='road'?g.near:g.flips}</b></span>`;
   }
   function hud(s){
     const g=s.game,el=s.el,isRoad=s.kind==='road',distance=isRoad?g.distance:g.distance;
     el.querySelector('[data-score]').textContent=String(Math.floor(g.score)).padStart(6,'0');
-    el.querySelector('[data-distance]').textContent=(isRoad?Math.floor(distance):Math.round(distance)).toLocaleString()+' / '+(isRoad?'3,000':'369')+' M';
-    el.querySelector('.run-progress em').style.width=Math.min(100,distance/(isRoad?3000:368.5)*100)+'%';
-    el.querySelector('[data-clock]').textContent=isRoad?Math.ceil(g.time)+'s':String(records.trail||0).padStart(4,'0');
+    el.querySelector('[data-distance]').textContent=(isRoad?Math.max(0,Math.ceil(g.nextCheckpoint-distance))+' M TO GATE':Math.round(distance)+' / 369 M');
+    el.querySelector('.run-progress em').style.width=(isRoad?(distance%750)/750*100:Math.min(100,distance/368.5*100))+'%';
+    if(isRoad)el.querySelector('[data-pace]').textContent='PACE '+(1+Math.floor(g.elapsed/20))+' · '+duration(g.elapsed);
+    const best=Math.max(Number(records[recordKey(s)])||0,Math.floor(g.score));
+    el.querySelector('[data-best]').textContent=isRoad?'BEST '+best.toLocaleString():'';
+    el.querySelector('[data-clock]').textContent=isRoad?Math.ceil(g.time)+'s':String(best).padStart(4,'0');
+    el.querySelector('[data-clock]').style.color=isRoad&&g.time<10?'#ff9b7e':'';
     el.querySelector('[data-speed]').textContent=Math.round(isRoad?g.speed:g.vx*.12);
-    el.querySelector('[data-condition]').textContent=isRoad?'●'.repeat(g.health)+'○'.repeat(3-g.health):g.airborne?'AIRBORNE':'ON THE TRAIL';
-    el.querySelector('[data-tip]').textContent=isRoad?(Math.abs(g.x)>.91?'SHOULDER · LOSING SPEED':s.input?.brake?'BRAKING':s.input?.gas?'ON THE THROTTLE':'CRUISE · HOLD GAS TO PUSH'):g.airborne?'LEAN TO BALANCE · RELEASE TO STEADY':'GAS FOR GAPS · LEAN FOR FLIPS';
+    el.querySelector('[data-condition]').textContent=isRoad?'●'.repeat(g.health)+'○'.repeat(3-g.health):g.airborne?'AIRBORNE':g.recovering?'BALANCE IT OUT':'ON THE TRAIL';
+    el.querySelector('[data-tip]').textContent=isRoad?(Math.abs(g.x)>.91?'SHOULDER · RETURN TO ROAD':s.input?.brake?'BRAKING':s.input?.gas?'ON THE THROTTLE':'CRUISE · HOLD GAS TO PUSH'):g.airborne?'LEAN TO BALANCE · RELEASE TO STEADY':g.recovering?'RELEASE LEAN OR COUNTER-STEER':'GAS FOR GAPS · LEAN FOR FLIPS';
     const message=el.querySelector('.run-callout'),text=g.eventTime>0&&g.phase==='running'?g.event:'';if(message.textContent!==text)message.textContent=text;
   }
   function poly(c,points,color){c.fillStyle=color;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fill()}
@@ -110,6 +116,11 @@
     poly(c,[[foot.x-foot.half,foot.y],[foot.x+foot.half,foot.y],[behind.x+behind.half,behind.y],[behind.x-behind.half,behind.y]],'#303c40');
     // Roadside markers and pines supply a steady sense of speed without camera shake.
     for(let z=1100-(g.distance%35);z>8;z-=35){const p=project(z);for(const side of [-1,1]){const x=p.x+side*p.half*1.18;c.fillStyle='#bdc4ae';c.fillRect(x,p.y-30*p.p,3*p.p,30*p.p);c.fillStyle='#e3b877';c.fillRect(x,p.y-29*p.p,3*p.p,7*p.p);if(Math.floor((z+g.distance)/35)%3===0){const tx=p.x+side*p.half*1.55;poly(c,[[tx-24*p.p,p.y],[tx,p.y-115*p.p],[tx+24*p.p,p.y]],'#152c29')}}}
+    const gateZ=g.nextCheckpoint-g.distance;
+    if(gateZ<650){const gate=project(gateZ),height=180*gate.p;
+      c.strokeStyle='#c8d7a2';c.lineWidth=Math.max(2,7*gate.p);c.beginPath();c.moveTo(gate.x-gate.half,gate.y);c.lineTo(gate.x-gate.half,gate.y-height);c.lineTo(gate.x+gate.half,gate.y-height);c.lineTo(gate.x+gate.half,gate.y);c.stroke();
+      c.fillStyle='#bfcf94';c.fillRect(gate.x-gate.half,gate.y-height,gate.half*2,27*gate.p);c.fillStyle='#172b25';c.font='bold '+Math.max(7,15*gate.p)+'px sans-serif';c.textAlign='center';c.fillText('CHECKPOINT · +18s',gate.x,gate.y-height+19*gate.p);
+    }
     [...g.traffic].sort((a,b)=>b.z-a.z).forEach(v=>{if(v.z< -3)return;const p=project(v.z);car(c,p.x+v.x*p.half,p.y,p.half*.28,v.color)});
     const player=project(0);if(g.invincible<=0||Math.floor(g.invincible*8)%2===0||state.reduce)car(c,w*.5,player.y,Math.min(w*.12,152),cfg.color,s.input?.brake,g.steer);
     if(g.invincible>1.9&&!state.reduce){c.fillStyle='#c5513222';c.fillRect(0,0,w,h)}
