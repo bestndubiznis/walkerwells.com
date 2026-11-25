@@ -71,12 +71,12 @@ const scenes={
     bgPos:"center center",
     bgPosMobile:"center center",
     hotspots:[
-      {x:10,y:40,w:14,h:54,label:"WEB SUIT",sub:"Red / white masked acrobat rig",action:"suit-web"},
+      {x:10,y:40,w:14,h:54,label:"SPIDER SUIT",sub:"Red / white masked acrobat rig",action:"suit-web"},
       {x:24,y:40,w:14,h:54,label:"SKI KIT",sub:"Alpine storm gear",action:"suit-ski"},
-      {x:36,y:35,w:11,h:42,label:"FIELD OPERATIVE",sub:"Black-tie espionage loadout",action:"suit-operative"},
-      {x:64,y:38,w:12,h:46,label:"COWBOY RIG",sub:"Frontier chapter",action:"suit-cowboy"},
+      {x:36,y:35,w:11,h:42,label:"DINNER JACKET",sub:"Black-tie espionage loadout",action:"suit-operative"},
+      {x:64,y:38,w:12,h:46,label:"WESTERN",sub:"Frontier chapter",action:"suit-cowboy"},
       {x:78,y:40,w:13,h:52,label:"RACE SUIT",sub:"Track mode",action:"suit-race"},
-      {x:92,y:40,w:13,h:54,label:"DIVE RIG",sub:"Open water / scuba",action:"suit-dive"},
+      {x:92,y:40,w:13,h:54,label:"WETSUIT",sub:"Open water / scuba",action:"suit-dive"},
       {x:50,y:58,w:16,h:13,label:"WATCH CASE",sub:"Mechanical / small / expensive-looking",action:"wardrobe-watch"},
       {x:50,y:33,w:13,h:24,label:"HALL / MANOR",sub:"Back to the house",go:"manor"}
     ],

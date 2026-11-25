@@ -23,7 +23,7 @@ test('rooms, responsive canvas, panels and game retry work without JS errors',as
  expect(errors).toEqual([]);
 });
 test('room outfit and Suit Up share the equipped state and reward',async({page,isMobile})=>{
- await enter(page,'wardrobe');await object(page,'WEB SUIT',isMobile);
+ await enter(page,'wardrobe');await object(page,'SPIDER SUIT',isMobile);
  await page.getByRole('button',{name:'Close',exact:true}).click();
  if(isMobile)await page.getByRole('button',{name:'ESTATE CONTROLS',exact:true}).click();
  await page.getByRole('button',{name:'SUIT UP',exact:true}).click();

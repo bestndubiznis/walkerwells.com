@@ -559,12 +559,12 @@
     if(a==='map-route'){openRoute();return}
     if(a==='stars-game'){openStars();return}
     if(a==='wardrobe-watch'){openWatch();return}
-    if(a==='suit-web'){equipSuit('WEB SUIT');info('WEB SUIT','Urban acrobat loadout.','<p>A red-and-white masked suit built for vertical movement, quick reactions, and pure comic-book energy.</p><p>Less disguise, more alter ego.</p>');return}
+    if(a==='suit-web'){equipSuit('SPIDER SUIT');info('SPIDER SUIT','Urban acrobat loadout.','<p>A red-and-white masked suit built for vertical movement, quick reactions, and pure comic-book energy.</p><p>Less disguise, more alter ego.</p>');return}
     if(a==='suit-ski'){equipSuit('SKI KIT');info('SKI KIT','Alpine storm gear.','<p>Technical shell, helmet, goggles and boots for the mountain chapter.</p><p>Ski days, cold air, backflips, touring, and eventually much bigger mountains.</p>');return}
-    if(a==='suit-operative'){equipSuit('FIELD OPERATIVE');info('FIELD OPERATIVE','Black-tie espionage loadout.','<p>A dinner-jacket setup for casinos, impossible plans, old hotels and pretending everything is completely under control.</p><p>British field-agent energy without requiring an explanation.</p>');return}
-    if(a==='suit-cowboy'){equipSuit('COWBOY RIG');info('COWBOY RIG','Frontier chapter.','<p>Boots, denim, hat, leather and the version of the estate that owns a horse and has somewhere to ride it.</p><p>Western myth, ranch skills, open country and a few questionable decisions.</p>');return}
+    if(a==='suit-operative'){equipSuit('DINNER JACKET');info('DINNER JACKET','Black-tie espionage loadout.','<p>A dinner-jacket setup for casinos, impossible plans, old hotels and pretending everything is completely under control.</p><p>British field-agent energy without requiring an explanation.</p>');return}
+    if(a==='suit-cowboy'){equipSuit('WESTERN');info('WESTERN','Frontier chapter.','<p>Boots, denim, hat, leather and the version of the estate that owns a horse and has somewhere to ride it.</p><p>Western myth, ranch skills, open country and a few questionable decisions.</p>');return}
     if(a==='suit-race'){equipSuit('RACE SUIT');info('RACE SUIT','Track mode.','<p>Helmet, gloves and a full motorsport suit for race school, track days and the garage branch of the estate.</p><p>Apexes, braking points and machines that are much faster than necessary.</p>');return}
-    if(a==='suit-dive'){equipSuit('DIVE RIG');info('DIVE RIG','Open water / scuba.','<p>Wetsuit, mask, fins and dive gear for the underwater chapter.</p><p>Open-water swimming, scuba progression, boats, reefs and whatever is below the surface.</p>');return}
+    if(a==='suit-dive'){equipSuit('WETSUIT');info('WETSUIT','Open water / scuba.','<p>Wetsuit, mask, fins and dive gear for the underwater chapter.</p><p>Open-water swimming, scuba progression, boats, reefs and whatever is below the surface.</p>');return}
     if(a==='snowglobe'){openSnowGlobe();return}
     if(a==='portrait'){openManorPainting();return}
     if(a==='armor-display'){openArmorInspect();return}
