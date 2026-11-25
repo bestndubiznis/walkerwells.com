@@ -71,12 +71,12 @@ const scenes={
     bgPos:"center center",
     bgPosMobile:"center center",
     hotspots:[
-      {x:10,y:40,w:14,h:54,label:"WEB SUIT",sub:"Red / white masked acrobat rig",action:"suit-web"},
+      {x:10,y:40,w:14,h:54,label:"SPIDER SUIT",sub:"Red / white masked acrobat rig",action:"suit-web"},
       {x:24,y:40,w:14,h:54,label:"SKI KIT",sub:"Alpine storm gear",action:"suit-ski"},
-      {x:36,y:35,w:11,h:42,label:"FIELD OPERATIVE",sub:"Black-tie espionage loadout",action:"suit-operative"},
-      {x:64,y:38,w:12,h:46,label:"COWBOY RIG",sub:"Frontier chapter",action:"suit-cowboy"},
+      {x:36,y:35,w:11,h:42,label:"DINNER JACKET",sub:"Black-tie espionage loadout",action:"suit-operative"},
+      {x:64,y:38,w:12,h:46,label:"WESTERN",sub:"Frontier chapter",action:"suit-cowboy"},
       {x:78,y:40,w:13,h:52,label:"RACE SUIT",sub:"Track mode",action:"suit-race"},
-      {x:92,y:40,w:13,h:54,label:"DIVE RIG",sub:"Open water / scuba",action:"suit-dive"},
+      {x:92,y:40,w:13,h:54,label:"WETSUIT",sub:"Open water / scuba",action:"suit-dive"},
       {x:50,y:58,w:16,h:13,label:"WATCH CASE",sub:"Mechanical / small / expensive-looking",action:"wardrobe-watch"},
       {x:50,y:33,w:13,h:24,label:"HALL / MANOR",sub:"Back to the house",go:"manor"}
     ],
@@ -240,10 +240,19 @@ function renderIdeas(){
     state.ideas[n]=next;save();renderIdeas();$$("[data-idea]").find(card=>card.dataset.idea===n)?.focus();toast(n+" — "+next);
   });
 }
+function canonicalSuit(name){
+  return ({'WEB SUIT':'SPIDER SUIT','FIELD OPERATIVE':'DINNER JACKET','COWBOY RIG':'WESTERN','DIVE RIG':'WETSUIT'})[name]||name;
+}
+function equipSuit(name){
+  state.suit=canonicalSuit(name);save();renderSuits();
+  toast('SUITED — '+state.suit);
+  if(state.suit==='SPIDER SUIT')collect('spider-mask');
+}
 function renderSuits(){
+  state.suit=canonicalSuit(state.suit);
   $("#currentSuit").textContent="CURRENT: "+state.suit;
   $("#suitGrid").innerHTML=suits.map(([n,ic])=>'<button class="suit '+(state.suit===n?"on":"")+'" data-suit="'+n+'"><div class="icon">'+ic+'</div><strong>'+n+'</strong></button>').join("");
-  $$("[data-suit]").forEach(b=>b.onclick=()=>{state.suit=b.dataset.suit;save();renderSuits();$$("[data-suit]").find(card=>card.dataset.suit===state.suit)?.focus();toast("SUITED — "+state.suit);if(state.suit==="SPIDER SUIT")collect("spider-mask")});
+  $$("[data-suit]").forEach(b=>b.onclick=()=>{equipSuit(b.dataset.suit);$$("[data-suit]").find(card=>card.dataset.suit===state.suit)?.focus()});
 }
 
 function sceneTo(name,instant=false){
@@ -266,22 +275,11 @@ function sceneTo(name,instant=false){
   $("#transition").classList.add("on");setTimeout(go,420);
 }
 function hotspotRect(h,s){
-  let x=h.x,y=h.y,w=h.w||10,height=h.h||12;
-  if(s.hotspotAspect && innerWidth>880){
-    const rect=$("#scene").getBoundingClientRect(),cw=rect.width,ch=rect.height,ar=s.hotspotAspect;
-    let dw,dh;
-    if(cw/ch>ar){dw=cw;dh=cw/ar}else{dh=ch;dw=ch*ar}
-    const px=s.hotspotPositionX??.5,py=s.hotspotPositionY??.5;
-    const ox=(cw-dw)*px,oy=(ch-dh)*py;
-    x=(ox+dw*(h.x/100))/cw*100;
-    y=(oy+dh*(h.y/100))/ch*100;
-    w=dw*(w/100)/cw*100;
-    height=dh*(height/100)/ch*100;
-  }
-  return {x,y,w,height};
+  // All targets now live on the same 16:9 room canvas as the artwork.
+  return {x:h.x,y:h.y,w:h.w||10,height:h.h||12};
 }
 function renderHotspots(s){
-  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>{const r=hotspotRect(h,s);return '<button class="hotspot" data-hot="'+i+'" style="left:'+r.x+'%;top:'+r.y+'%;width:'+r.w+'%;height:'+r.height+'%" aria-label="'+h.label+'"></button>'}).join("");
+  $("#hotspotLayer").innerHTML=s.hotspots.map((h,i)=>{const r=hotspotRect(h,s);return '<button class="hotspot" data-hot="'+i+'" style="z-index:'+Math.max(1,1000-Math.round(r.w*r.height))+';left:'+r.x+'%;top:'+r.y+'%;width:'+r.w+'%;height:'+r.height+'%" aria-label="'+h.label+'"></button>'}).join("");
   $("#collectibleLayer").innerHTML="";
   $$("[data-hot]").forEach(b=>{
     const h=s.hotspots[+b.dataset.hot];
@@ -406,9 +404,10 @@ function applyWeather(){
   $("#stormBtn").textContent="STORM MODE — "+(state.storm?"ON":"OFF");save();
 }
 function toggleSound(){
-  if(state.sound){try{state.audio?.stop()}catch(e){}state.sound=false;$("#soundBtn").textContent="SOUND — OFF";return}
+  if(state.sound){try{state.audio?.stop();window._ac?.suspend().catch(()=>{})}catch(e){}state.sound=false;$("#soundBtn").textContent="SOUND — OFF";return}
   try{
     const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)());
+    ac.resume().catch(()=>{});
     const buf=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate),data=buf.getChannelData(0);
     for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.06;
     const src=ac.createBufferSource(),filter=ac.createBiquadFilter(),gain=ac.createGain();
@@ -420,7 +419,7 @@ function toggleSound(){
 function parallax(e){
   if(state.reduce || matchMedia("(pointer: coarse)").matches)return;
   const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);
-  $("#sceneBg").style.transform="scale(1.065) translate("+(-x*10)+"px,"+(-y*7)+"px)";
+  // Keep artwork and hit targets fixed together; depth overlays provide motion.
   $(".depth-a").style.transform="translate("+(x*8)+"px,"+(y*5)+"px)";
   $(".depth-b").style.transform="translate("+(-x*5)+"px,"+(-y*3)+"px)";
 }

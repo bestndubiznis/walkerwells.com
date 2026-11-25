@@ -180,6 +180,7 @@
     try{
       const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)());
       [0,430,860].forEach((delay,i)=>setTimeout(()=>{
+        if(!state.sound)return;
         const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=[523.25,659.25,783.99][i];
         g.gain.setValueAtTime(.0001,ac.currentTime);g.gain.exponentialRampToValueAtTime(.07,ac.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+.8);
         o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.9);
@@ -413,6 +414,7 @@
   }
   function updatePips(){qa('#signalPips i').forEach((x,i)=>x.classList.toggle('on',i<moonFound.size))}
   function ping(freq){
+    if(!state.sound)return;
     try{const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)()),o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;o.type='sine';g.gain.setValueAtTime(.0001,ac.currentTime);g.gain.exponentialRampToValueAtTime(.07,ac.currentTime+.01);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+.18);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.2)}catch(e){}
   }
   function completeMoonGame(){
