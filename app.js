@@ -404,9 +404,10 @@ function applyWeather(){
   $("#stormBtn").textContent="STORM MODE — "+(state.storm?"ON":"OFF");save();
 }
 function toggleSound(){
-  if(state.sound){try{state.audio?.stop()}catch(e){}state.sound=false;$("#soundBtn").textContent="SOUND — OFF";return}
+  if(state.sound){try{state.audio?.stop();window._ac?.suspend().catch(()=>{})}catch(e){}state.sound=false;$("#soundBtn").textContent="SOUND — OFF";return}
   try{
     const ac=window._ac||(window._ac=new (window.AudioContext||window.webkitAudioContext)());
+    ac.resume().catch(()=>{});
     const buf=ac.createBuffer(1,ac.sampleRate*2,ac.sampleRate),data=buf.getChannelData(0);
     for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*.06;
     const src=ac.createBufferSource(),filter=ac.createBiquadFilter(),gain=ac.createGain();
