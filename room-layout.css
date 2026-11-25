@@ -20,3 +20,10 @@
   .room-view-controls span{font-size:8px}
   .scene-caption{display:none}
 }
+/* Navigation and captions must not intercept clicks on room objects. */
+.scene-caption{pointer-events:none}.scene-caption button{pointer-events:auto}
+@media(min-width:881px){
+  .rail{display:none}
+  .mobile-rooms{display:flex;position:absolute;top:92px;left:24px;bottom:auto;right:auto;width:190px;min-height:44px;padding:10px 12px;gap:10px;align-items:center;justify-content:space-between;z-index:31;background:#11130fee;border:1px solid #c0a16688;cursor:pointer}
+  .mobile-rooms span{font-size:9px;letter-spacing:.08em}.mobile-rooms strong{font-size:12px;font-weight:400}
+}
