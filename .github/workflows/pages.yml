@@ -48,10 +48,6 @@ jobs:
           mkdir _site
           cp *.html *.js *.css CNAME _site/
           cp -R assets _site/
-      - name: Use verified workflow deployment
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api --method PUT "repos/${{ github.repository }}/pages" -f build_type=workflow
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
