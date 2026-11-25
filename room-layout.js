@@ -7,11 +7,11 @@
   controls.innerHTML='<button id="roomZoom" aria-pressed="false">ENLARGE ROOM</button><span id="roomViewHint">Full room · use Explore below</span>';
   viewport.after(controls);
   const button=controls.querySelector('button'),hint=controls.querySelector('span');
-  let enlarged=false;
+  let enlarged=innerWidth>880;
   function layout(){
     const mobile=matchMedia('(max-width:880px)').matches;
     const width=viewport.clientWidth,height=viewport.clientHeight,ratio=16/9;
-    const scale=mobile&&!enlarged?Math.min(width/ratio,height):Math.max(width/ratio,height);
+    const scale=!enlarged?Math.min(width/ratio,height):Math.max(width/ratio,height);
     const roomWidth=scale*ratio,roomHeight=scale;
     Object.assign(scene.style,{width:roomWidth+'px',height:roomHeight+'px',left:(mobile&&enlarged?0:(width-roomWidth)/2)+'px',top:(height-roomHeight)/2+'px',right:'auto',bottom:'auto'});
     viewport.classList.toggle('pannable',mobile&&enlarged);
@@ -22,6 +22,6 @@
   button.onclick=()=>{enlarged=!enlarged;layout()};
   new ResizeObserver(layout).observe(viewport);
   addEventListener('resize',layout);
-  addEventListener('estate:scene',()=>{enlarged=false;layout()});
+  addEventListener('estate:scene',()=>{enlarged=innerWidth>880;layout()});
   layout();
 })();
